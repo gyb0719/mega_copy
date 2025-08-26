@@ -1,0 +1,122 @@
+name: billage
+description: "우리 동네 테크 공유 빌리지 - P2P 기반 IT기기 렌탈 플랫폼"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+
+  # Navigation
+  go_router: ^14.0.0
+
+  # Supabase (Backend as a Service)
+  supabase_flutter: ^2.5.6
+
+  # UI Components
+  cupertino_icons: ^1.0.8
+  cached_network_image: ^3.3.1
+  shimmer: ^3.0.0
+  flutter_svg: ^2.0.10
+
+  # Authentication
+  kakao_flutter_sdk_user: ^1.9.1
+  sign_in_with_apple: ^6.1.0
+  google_sign_in: ^6.2.1
+
+  # Location Services
+  geolocator: ^11.0.0
+  geocoding: ^3.0.0
+
+  # Image & Media
+  image_picker: ^1.0.7
+  flutter_image_compress: ^2.2.0
+  photo_view: ^0.14.0
+
+  # Storage & Caching
+  shared_preferences: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # Utilities
+  intl: ^0.20.0
+  url_launcher: ^6.2.5
+  package_info_plus: ^6.0.0
+  device_info_plus: ^10.1.0
+  connectivity_plus: ^6.0.2
+
+  # Payment
+  iamport_flutter: ^0.10.0
+
+  # Chat & Notifications
+  firebase_core: ^2.27.0
+  firebase_messaging: ^14.7.19
+  flutter_local_notifications: ^17.0.0
+
+  # Forms & Validation
+  flutter_form_builder: ^10.2.0
+  form_builder_validators: ^11.1.2
+
+  # Animation
+  lottie: ^3.1.0
+  flutter_animate: ^4.5.0
+
+  # Permissions
+  permission_handler: ^11.3.0
+
+  # QR Code
+  qr_flutter: ^4.1.0
+  qr_code_scanner: ^1.0.1
+  
+  # Environment Variables
+  flutter_dotenv: ^5.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  build_runner: ^2.4.8
+  riverpod_generator: ^2.3.9
+  freezed: ^2.4.7
+  freezed_annotation: ^2.4.1
+  json_serializable: ^6.7.1
+  hive_generator: ^2.0.1
+  flutter_launcher_icons: ^0.13.1
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/animations/
+    - .env
+    
+  fonts:
+    - family: Pretendard
+      fonts:
+        - asset: assets/fonts/Pretendard-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Pretendard-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Pretendard-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Pretendard-Bold.ttf
+          weight: 700
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/app_icon.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/icons/app_icon_foreground.png"

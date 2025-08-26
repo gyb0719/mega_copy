@@ -3,50 +3,73 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../presentation/screens/auth/splash_screen.dart';
-import '../../presentation/screens/auth/onboarding_screen.dart';
+// Screens
+import '../../presentation/screens/splash/splash_screen.dart';
+import '../../presentation/screens/onboarding/onboarding_screen.dart';
 import '../../presentation/screens/auth/login_screen.dart';
 import '../../presentation/screens/auth/signup_screen.dart';
+import '../../presentation/screens/main/main_screen.dart';
 import '../../presentation/screens/home/home_screen.dart';
-import '../../presentation/screens/home/main_screen.dart';
-import '../../presentation/screens/product/product_list_screen.dart';
-import '../../presentation/screens/product/product_detail_screen.dart';
-import '../../presentation/screens/product/product_create_screen.dart';
+import '../../presentation/screens/products/product_list_screen.dart';
+import '../../presentation/screens/products/product_detail_screen.dart';
+import '../../presentation/screens/products/product_create_screen.dart';
 import '../../presentation/screens/chat/chat_list_screen.dart';
 import '../../presentation/screens/chat/chat_room_screen.dart';
+import '../../presentation/screens/search/search_screen.dart';
 import '../../presentation/screens/profile/profile_screen.dart';
 import '../../presentation/screens/profile/my_items_screen.dart';
 import '../../presentation/screens/profile/rental_history_screen.dart';
-import '../../presentation/screens/search/search_screen.dart';
+import '../../presentation/screens/debug/auth_debug_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/splash',
     debugLogDiagnostics: true,
-    refreshListenable: GoRouterRefreshStream(
-      Supabase.instance.client.auth.onAuthStateChange,
+    errorBuilder: (context, state) => Scaffold(
+      body: Center(
+        child: Text('Error: ${state.error}'),
+      ),
     ),
     redirect: (context, state) {
       final isLoggedIn = Supabase.instance.client.auth.currentUser != null;
-      final isAuthRoute = state.matchedLocation.startsWith('/auth');
-      final isSplashRoute = state.matchedLocation == '/splash';
-      final isOnboardingRoute = state.matchedLocation == '/onboarding';
+      final location = state.matchedLocation;
       
-      // Splash나 Onboarding은 항상 접근 가능
-      if (isSplashRoute || isOnboardingRoute) {
+      // 디버그 로그
+      debugPrint('=== Router Redirect ===');
+      debugPrint('Current location: $location');
+      debugPrint('Is logged in: $isLoggedIn');
+      
+      // 항상 접근 가능한 경로들
+      final publicRoutes = [
+        '/splash',
+        '/onboarding', 
+        '/auth/login',
+        '/auth/signup',
+        '/debug/auth',  // 디버그 화면
+      ];
+      
+      // 현재 경로가 public route인지 확인
+      final isPublicRoute = publicRoutes.any((route) => location == route);
+      
+      // Public route는 항상 접근 가능
+      if (isPublicRoute) {
+        debugPrint('Allowing access to public route: $location');
         return null;
       }
       
-      // 로그인하지 않았는데 보호된 라우트 접근 시
-      if (!isLoggedIn && !isAuthRoute) {
+      // /auth 경로 자체로 접근 시 login으로 리다이렉트
+      if (location == '/auth') {
         return '/auth/login';
       }
       
-      // 로그인했는데 인증 라우트 접근 시
-      if (isLoggedIn && isAuthRoute) {
-        return '/';
+      // 로그인하지 않은 경우 보호된 경로 접근 시 로그인으로
+      if (!isLoggedIn) {
+        debugPrint('Not logged in, redirecting to login');
+        return '/auth/login';
       }
       
+      // 로그인한 상태는 모든 경로 접근 가능
+      debugPrint('Access granted to: $location');
       return null;
     },
     routes: [
@@ -64,27 +87,23 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const OnboardingScreen(),
       ),
       
-      // Auth Routes
+      // Auth Routes - 별도 그룹으로 분리
       GoRoute(
-        path: '/auth',
-        redirect: (context, state) {
-          if (state.matchedLocation == '/auth') {
-            return '/auth/login';
-          }
-          return null;
-        },
-        routes: [
-          GoRoute(
-            path: 'login',
-            name: 'login',
-            builder: (context, state) => const LoginScreen(),
-          ),
-          GoRoute(
-            path: 'signup',
-            name: 'signup',
-            builder: (context, state) => const SignupScreen(),
-          ),
-        ],
+        path: '/auth/login',
+        name: 'login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/auth/signup',
+        name: 'signup',
+        builder: (context, state) => const SignupScreen(),
+      ),
+      
+      // Debug Route
+      GoRoute(
+        path: '/debug/auth',
+        name: 'auth-debug',
+        builder: (context, state) => const AuthDebugScreen(),
       ),
       
       // Main App Routes (Protected)
@@ -98,16 +117,12 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const HomeScreen(),
           ),
           
-          // Product List
+          // Products
           GoRoute(
             path: '/products',
             name: 'products',
-            builder: (context, state) {
-              final category = state.uri.queryParameters['category'];
-              return ProductListScreen(category: category);
-            },
+            builder: (context, state) => const ProductListScreen(),
             routes: [
-              // Product Detail
               GoRoute(
                 path: ':id',
                 name: 'product-detail',
@@ -119,7 +134,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             ],
           ),
           
-          // Product Create
+          // Create Product
           GoRoute(
             path: '/create',
             name: 'create',
@@ -136,8 +151,8 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: ':id',
                 name: 'chat-room',
                 builder: (context, state) {
-                  final chatId = state.pathParameters['id']!;
-                  return ChatRoomScreen(chatId: chatId);
+                  final roomId = state.pathParameters['id']!;
+                  return ChatRoomScreen(roomId: roomId);
                 },
               ),
             ],
@@ -147,10 +162,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/search',
             name: 'search',
-            builder: (context, state) {
-              final query = state.uri.queryParameters['q'];
-              return SearchScreen(initialQuery: query);
-            },
+            builder: (context, state) => const SearchScreen(),
           ),
           
           // Profile
@@ -174,53 +186,5 @@ final routerProvider = Provider<GoRouter>((ref) {
         ],
       ),
     ],
-    
-    // Error Page
-    errorBuilder: (context, state) => Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.error_outline,
-              size: 64,
-              color: Colors.red,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              '페이지를 찾을 수 없습니다',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              state.error?.toString() ?? 'Unknown error',
-              style: Theme.of(context).textTheme.bodyMedium,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () => context.go('/'),
-              child: const Text('홈으로 돌아가기'),
-            ),
-          ],
-        ),
-      ),
-    ),
   );
 });
-
-// Auth State Stream Helper
-class GoRouterRefreshStream extends ChangeNotifier {
-  GoRouterRefreshStream(Stream<AuthState> stream) {
-    notifyListeners();
-    _subscription = stream.listen((_) => notifyListeners());
-  }
-
-  late final StreamSubscription<AuthState> _subscription;
-
-  @override
-  void dispose() {
-    _subscription.cancel();
-    super.dispose();
-  }
-}

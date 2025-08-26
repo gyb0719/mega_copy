@@ -11,7 +11,8 @@ final chatRepositoryProvider = Provider<ChatRepository>((ref) {
 
 // Chat Rooms List Provider
 final chatRoomsProvider = StreamProvider<List<ChatRoomModel>>((ref) async* {
-  final currentUser = await ref.watch(currentUserProvider.future);
+  final currentUserAsync = ref.watch(currentUserProvider);
+  final currentUser = currentUserAsync.value;
   if (currentUser == null) {
     yield [];
     return;
@@ -26,15 +27,16 @@ final chatRoomsProvider = StreamProvider<List<ChatRoomModel>>((ref) async* {
   final supabase = ref.watch(supabaseClientProvider);
   await for (final _ in supabase
       .from('chat_rooms')
-      .stream(primaryKey: ['id'])
-      .or('participant1_id.eq.${currentUser.id},participant2_id.eq.${currentUser.id}')) {
+      .stream(primaryKey: ['id'])) {
+    // 변경이 있을 때마다 전체 채팅방 목록을 다시 가져옴
     yield await repository.getChatRooms(currentUser.id);
   }
 });
 
 // Specific Chat Room Provider
 final chatRoomProvider = FutureProvider.family<ChatRoomModel?, String>((ref, roomId) async {
-  final currentUser = await ref.watch(currentUserProvider.future);
+  final currentUserAsync = ref.watch(currentUserProvider);
+  final currentUser = currentUserAsync.value;
   if (currentUser == null) return null;
 
   final repository = ref.watch(chatRepositoryProvider);
@@ -136,7 +138,8 @@ class ChatMessagesNotifier extends StateNotifier<AsyncValue<List<ChatMessage>>> 
 
 // Unread Messages Count Provider
 final unreadMessagesCountProvider = StreamProvider.family<int, String>((ref, roomId) async* {
-  final currentUser = await ref.watch(currentUserProvider.future);
+  final currentUserAsync = ref.watch(currentUserProvider);
+  final currentUser = currentUserAsync.value;
   if (currentUser == null) {
     yield 0;
     return;
@@ -150,16 +153,20 @@ final unreadMessagesCountProvider = StreamProvider.family<int, String>((ref, roo
   // 실시간 업데이트
   final supabase = ref.watch(supabaseClientProvider);
   await for (final _ in supabase
-      .from('chat_messages:room_id=eq.$roomId')
-      .stream(primaryKey: ['id'])) {
+      .from('chat_messages')
+      .stream(primaryKey: ['id'])
+      .eq('room_id', roomId)) {
     yield await repository.getUnreadCount(roomId, currentUser.id);
   }
 });
 
 // Total Unread Count Provider
 final totalUnreadCountProvider = StreamProvider<int>((ref) async* {
-  final chatRooms = await ref.watch(chatRoomsProvider.future);
-  final currentUser = await ref.watch(currentUserProvider.future);
+  final chatRoomsAsync = ref.watch(chatRoomsProvider);
+  final currentUserAsync = ref.watch(currentUserProvider);
+  
+  final chatRooms = chatRoomsAsync.value ?? [];
+  final currentUser = currentUserAsync.value;
   
   if (currentUser == null) {
     yield 0;
@@ -168,7 +175,8 @@ final totalUnreadCountProvider = StreamProvider<int>((ref) async* {
 
   int total = 0;
   for (final room in chatRooms) {
-    final count = await ref.watch(unreadMessagesCountProvider(room.id).future);
+    final countAsync = ref.watch(unreadMessagesCountProvider(room.id));
+    final count = countAsync.value ?? 0;
     total += count;
   }
   

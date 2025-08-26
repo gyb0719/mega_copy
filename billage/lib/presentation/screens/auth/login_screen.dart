@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../providers/auth_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -31,26 +32,206 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     setState(() => _isLoading = true);
 
     try {
-      await Supabase.instance.client.auth.signInWithPassword(
+      print('\n=== 로그인 시도 ===');
+      print('Email: ${_emailController.text.trim()}');
+      print('Password Length: ${_passwordController.text.length}');
+      
+      // 직접 Supabase 호출 테스트
+      print('\n1단계: 직접 Supabase 호출 테스트');
+      try {
+        final directResponse = await Supabase.instance.client.auth.signInWithPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
+        print('직접 호출 성공!');
+        print('- User ID: ${directResponse.user?.id}');
+        print('- Session 존재: ${directResponse.session != null}');
+      } catch (directError) {
+        print('직접 호출 실패: $directError');
+        print('에러 타입: ${directError.runtimeType}');
+      }
+      
+      // AuthRepository를 통한 호출
+      print('\n2단계: AuthRepository를 통한 호출');
+      final authRepository = ref.read(authRepositoryProvider);
+      final user = await authRepository.signInWithEmail(
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
       
-      if (!mounted) return;
-      context.go('/');
+      print('\n로그인 결과:');
+      print('- User 반환: ${user != null}');
+      if (user != null) {
+        print('- Email: ${user.email}');
+        print('- Username: ${user.username}');
+        print('- Full Name: ${user.fullName}');
+      }
+      
+      if (user != null && mounted) {
+        print('\n로그인 성공! 홈으로 이동 시도...');
+        
+        // 세션 확인
+        final session = Supabase.instance.client.auth.currentSession;
+        print('현재 세션 존재: ${session != null}');
+        
+        // 라우팅
+        context.go('/');
+        print('라우팅 완료');
+      } else {
+        throw Exception('로그인 실패: 사용자 정보를 가져올 수 없습니다');
+      }
     } on AuthException catch (e) {
+      print('\nAuth 에러 발생:');
+      print('- 에러 코드: ${e.statusCode}');
+      print('- 에러 메시지: ${e.message}');
+      
       if (!mounted) return;
+      
+      String errorMessage = '로그인 실패';
+      if (e.message.contains('Invalid login credentials')) {
+        errorMessage = '이메일 또는 비밀번호가 올바르지 않습니다';
+      } else if (e.message.contains('Email not confirmed')) {
+        errorMessage = '이메일 인증이 필요합니다. 이메일을 확인해주세요';
+      } else {
+        errorMessage = e.message;
+      }
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(e.message),
+          content: Text(errorMessage),
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
+    } catch (e, stackTrace) {
+      print('\n일반 에러 발생:');
+      print('- 에러: $e');
+      print('- 스택: $stackTrace');
+      
+      if (!mounted) return;
+      
+      // 에러 메시지 파싱
+      String errorMessage = e.toString();
+      if (errorMessage.startsWith('Exception: ')) {
+        errorMessage = errorMessage.replaceAll('Exception: ', '');
+      }
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Theme.of(context).colorScheme.error,
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Future<void> _resetPassword() async {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('비밀번호를 재설정할 이메일을 입력해주세요'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+    
+    // 이메일 형식 검증
+    if (!email.contains('@')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('올바른 이메일 형식을 입력해주세요'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+    
+    setState(() => _isLoading = true);
+    
+    try {
+      print('\n=== 비밀번호 재설정 시도 ===');
+      print('이메일: $email');
+      
+      // 직접 Supabase 호출 테스트
+      print('직접 Supabase 호출 중...');
+      try {
+        await Supabase.instance.client.auth.resetPasswordForEmail(
+          email,
+          redirectTo: 'com.devyb.billage://reset-password',
+        );
+        print('직접 호출 성공!');
+      } catch (directError) {
+        print('직접 호출 실패: $directError');
+      }
+      
+      // AuthRepository를 통한 호출
+      print('\nAuthRepository를 통한 호출...');
+      final authRepository = ref.read(authRepositoryProvider);
+      await authRepository.resetPassword(email);
+      
+      print('비밀번호 재설정 이메일 전송 성공!');
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('$email로 비밀번호 재설정 링크를 전송했습니다\n이메일을 확인해주세요'),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
     } catch (e) {
+      print('\n비밀번호 재설정 오류:');
+      print('- 에러: $e');
+      print('- 에러 타입: ${e.runtimeType}');
+      
+      if (mounted) {
+        String errorMessage = e.toString().replaceAll('Exception: ', '');
+        
+        // 에러 메시지 개선
+        if (errorMessage.contains('User not found') || errorMessage.contains('등록되지 않은')) {
+          errorMessage = '등록되지 않은 이메일입니다. 회원가입을 먼저 진행해주세요';
+        } else if (errorMessage.contains('Rate limit')) {
+          errorMessage = '너무 많은 요청입니다. 잠시 후 다시 시도해주세요';
+        }
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Future<void> _signInWithGoogle() async {
+    setState(() => _isLoading = true);
+
+    try {
+      print('구글 로그인 시도');
+      await Supabase.instance.client.auth.signInWithOAuth(
+        OAuthProvider.google,
+        redirectTo: 'com.billage.billage://login-callback',
+        authScreenLaunchMode: LaunchMode.externalApplication,
+      );
+    } catch (e) {
+      print('구글 로그인 오류: $e');
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('로그인 중 오류가 발생했습니다: $e'),
+          content: Text('구글 로그인 실패: ${e.toString()}'),
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
@@ -62,40 +243,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _signInWithKakao() async {
-    // TODO: Implement Kakao login
+    // TODO: Kakao SDK 설정 후 구현
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('카카오 로그인 준비 중입니다')),
     );
   }
 
   Future<void> _signInWithNaver() async {
-    // TODO: Implement Naver login
+    // TODO: Naver SDK 설정 후 구현
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('네이버 로그인 준비 중입니다')),
     );
-  }
-
-  Future<void> _signInWithGoogle() async {
-    setState(() => _isLoading = true);
-
-    try {
-      await Supabase.instance.client.auth.signInWithOAuth(
-        OAuthProvider.google,
-        redirectTo: 'com.billage.billage://login-callback',
-      );
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('구글 로그인 실패: $e'),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
-      );
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
-    }
   }
 
   @override
@@ -209,9 +367,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () {
-                      // TODO: Implement forgot password
-                    },
+                    onPressed: _isLoading ? null : _resetPassword,
                     child: const Text('비밀번호를 잊으셨나요?'),
                   ),
                 ),
@@ -278,7 +434,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     _SocialLoginButton(
                       onPressed: _isLoading ? null : _signInWithKakao,
                       backgroundColor: const Color(0xFFFEE500),
-                      icon: 'assets/icons/kakao.svg',
+                      icon: Icons.chat_bubble,
                       text: '카카오로 시작하기',
                       textColor: Colors.black87,
                     ),
@@ -288,7 +444,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     _SocialLoginButton(
                       onPressed: _isLoading ? null : _signInWithNaver,
                       backgroundColor: const Color(0xFF03C75A),
-                      icon: 'assets/icons/naver.svg',
+                      icon: Icons.square,
                       text: '네이버로 시작하기',
                       textColor: Colors.white,
                     ),
@@ -298,7 +454,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     _SocialLoginButton(
                       onPressed: _isLoading ? null : _signInWithGoogle,
                       backgroundColor: Colors.white,
-                      icon: 'assets/icons/google.svg',
+                      icon: Icons.g_mobiledata,
                       text: 'Google로 시작하기',
                       textColor: Colors.black87,
                       hasBorder: true,
@@ -306,6 +462,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ],
                 ),
                 const SizedBox(height: 32),
+                
+                // 디버그 버튼 (개발용)
+                if (true) // 필요시 false로 변경
+                  TextButton(
+                    onPressed: () => context.go('/debug/auth'),
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.orange,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.bug_report, size: 16),
+                        SizedBox(width: 4),
+                        Text('로그인 문제 디버그', style: TextStyle(fontSize: 12)),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ),
@@ -318,7 +491,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 class _SocialLoginButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final Color backgroundColor;
-  final String icon;
+  final IconData icon;
   final String text;
   final Color textColor;
   final bool hasBorder;
@@ -351,9 +524,7 @@ class _SocialLoginButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Icon would be here if we had the assets
-            // SvgPicture.asset(icon, width: 24, height: 24),
-            const Icon(Icons.login, size: 20),
+            Icon(icon, size: 20, color: textColor),
             const SizedBox(width: 12),
             Text(
               text,

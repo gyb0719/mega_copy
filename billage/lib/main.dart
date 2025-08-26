@@ -3,17 +3,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'core/config/env_config.dart';
 import 'core/providers/router_provider.dart';
 import 'core/theme/app_theme.dart';
 
 // Notifications instance
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
 
 void main() async {
   // Flutter 바인딩 초기화
@@ -53,30 +53,30 @@ void main() async {
     );
     
     // Kakao SDK 초기화
-    if (EnvConfig.kakaoApiKey.isNotEmpty) {
-      KakaoSdk.init(nativeAppKey: EnvConfig.kakaoApiKey);
-    }
+    // if (EnvConfig.kakaoApiKey.isNotEmpty) {
+    //   KakaoSdk.init(nativeAppKey: EnvConfig.kakaoApiKey);
+    // }
     
     // Firebase 초기화 (푸시 알림용)
     // TODO: Firebase 설정 후 주석 해제
     // await Firebase.initializeApp();
     
     // 로컬 알림 초기화
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
-    const DarwinInitializationSettings initializationSettingsIOS =
-        DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
-    const InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-    );
+    // const AndroidInitializationSettings initializationSettingsAndroid =
+    //     AndroidInitializationSettings('app_icon');
+    // const DarwinInitializationSettings initializationSettingsIOS =
+    //     DarwinInitializationSettings(
+    //   requestAlertPermission: true,
+    //   requestBadgePermission: true,
+    //   requestSoundPermission: true,
+    // );
+    // const InitializationSettings initializationSettings =
+    //     InitializationSettings(
+    //   android: initializationSettingsAndroid,
+    //   iOS: initializationSettingsIOS,
+    // );
     
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    // await flutterLocalNotificationsPlugin.initialize(initializationSettings);
     
   } catch (e) {
     debugPrint('Initialization Error: $e');

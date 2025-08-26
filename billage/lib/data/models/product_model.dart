@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'user_model.dart';
 
 part 'product_model.freezed.dart';
 part 'product_model.g.dart';
@@ -72,6 +73,17 @@ class ProductModel with _$ProductModel {
       default: return condition;
     }
   }
+  
+  // Getter for compatibility
+  String get location => address ?? '위치 정보 없음';
+  double get ownerRating => owner?.trustScore ?? 0.0;
+  int get likeCount => favoriteCount;
+  String get categoryName => category?.name ?? '기타';
+  double? get distance => null; // TODO: Calculate from user location
+  String? get ownerName => owner?.username;
+  String? get ownerAvatarUrl => owner?.avatarUrl;
+  double? get ownerTrustScore => owner?.trustScore;
+  int? get ownerRentalCount => owner?.rentalCount;
   
   double getPrice(int days) {
     if (days >= 30 && monthlyPrice != null) {

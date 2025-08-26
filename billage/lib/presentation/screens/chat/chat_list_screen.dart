@@ -16,6 +16,12 @@ class ChatListScreen extends ConsumerStatefulWidget {
 }
 
 class _ChatListScreenState extends ConsumerState<ChatListScreen> {
+  // Demo data - will be replaced with real data from Supabase
+  final List<ChatRoomModel> _demoChatRooms = [];
+  
+  /*
+  // Demo data for testing UI
+  final List<ChatRoomModel> _demoChatRooms = [
     ChatRoomModel(
       id: '1',
       productId: 'prod1',
@@ -59,27 +65,7 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
       isActive: true,
     ),
   ];
-
-  String _formatTime(DateTime dateTime) {
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
-    
-    if (difference.inDays >= 1) {
-      if (difference.inDays == 1) {
-        return '어제';
-      } else if (difference.inDays < 7) {
-        return '${difference.inDays}일 전';
-      } else {
-        return DateFormat('MM/dd').format(dateTime);
-      }
-    } else if (difference.inHours >= 1) {
-      return '${difference.inHours}시간 전';
-    } else if (difference.inMinutes >= 1) {
-      return '${difference.inMinutes}분 전';
-    } else {
-      return '방금';
-    }
-  }
+  */
 
   String _formatTime(DateTime dateTime) {
     final now = DateTime.now();

@@ -72,8 +72,11 @@ class ChatRepository {
           .maybeSingle();
 
       if (existing != null) {
-        return await getChatRoom(existing['id'], participant1Id) ?? 
-               throw Exception('채팅방을 불러올 수 없습니다');
+        final room = await getChatRoom(existing['id'], participant1Id);
+        if (room == null) {
+          throw Exception('채팅방을 불러올 수 없습니다');
+        }
+        return room;
       }
 
       // 새 채팅방 생성
@@ -87,8 +90,11 @@ class ChatRepository {
           .select()
           .single();
 
-      return await getChatRoom(response['id'], participant1Id) ?? 
-             throw Exception('채팅방을 생성할 수 없습니다');
+      final newRoom = await getChatRoom(response['id'], participant1Id);
+      if (newRoom == null) {
+        throw Exception('채팅방을 생성할 수 없습니다');
+      }
+      return newRoom;
     } catch (e) {
       throw Exception('채팅방 생성 실패: $e');
     }
@@ -111,10 +117,7 @@ class ChatRepository {
           .order('created_at', ascending: false)
           .limit(limit);
 
-      if (before != null) {
-        query = query.lt('created_at', before);
-      }
-
+      // TODO: Implement pagination with before parameter
       final response = await query;
       
       return (response as List)

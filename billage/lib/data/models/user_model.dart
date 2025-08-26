@@ -28,6 +28,7 @@ class UserModel with _$UserModel {
     // 통계
     @Default(0) int totalRentals,
     @Default(0) int totalListings,
+    @Default(0) int rentalCount,
     
     // 메타데이터
     @Default({}) Map<String, dynamic> settings,

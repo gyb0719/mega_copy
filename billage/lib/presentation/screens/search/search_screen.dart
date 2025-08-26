@@ -104,6 +104,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   }
 
   List<ProductModel> _getDemoSearchResults() {
+    // TODO: Fix mock data structure
+    return [];
+    /*
     return [
       ProductModel(
         id: '1',
@@ -120,7 +123,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         dailyPrice: 50000,
         weeklyPrice: 280000,
         monthlyPrice: 900000,
-        deposit: 200000,
+        depositAmount: 200000,
         ownerId: 'owner1',
         ownerName: '김민수',
         ownerAvatar: null,
@@ -156,7 +159,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         dailyPrice: 70000,
         weeklyPrice: 400000,
         monthlyPrice: 1200000,
-        deposit: 300000,
+        depositAmount: 300000,
         ownerId: 'owner2',
         ownerName: '이지은',
         ownerAvatar: null,
@@ -179,6 +182,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         updatedAt: DateTime.now().subtract(const Duration(days: 1)),
       ),
     ];
+    */
   }
 
   void _showFilterBottomSheet() {
@@ -582,12 +586,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               spacing: 8,
               runSpacing: 8,
               children: _recentSearches.map((search) {
-                return ActionChip(
+                return Chip(
                   label: Text(search),
-                  onPressed: () {
-                    _searchController.text = search;
-                    _performSearch();
-                  },
                   avatar: const Icon(Icons.history, size: 16),
                   deleteIcon: const Icon(Icons.close, size: 16),
                   onDeleted: () {

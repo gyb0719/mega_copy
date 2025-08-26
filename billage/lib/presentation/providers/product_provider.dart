@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/product_repository.dart';
 import '../../data/models/product_model.dart';
+import '../../data/models/user_model.dart';
 import 'auth_provider.dart';
 
 // Product Repository Provider

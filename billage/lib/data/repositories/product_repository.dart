@@ -45,21 +45,19 @@ class ProductRepository {
         query = query.lte('daily_price', maxPrice);
       }
       
-      // 위치 기반 필터링 (PostGIS 사용)
-      if (latitude != null && longitude != null && radius != null) {
-        // ST_DWithin 함수를 사용한 거리 기반 필터링
-        query = query.rpc('nearby_products', params: {
-          'lat': latitude,
-          'lng': longitude,
-          'radius_km': radius,
-        });
-      }
+      // 위치 기반 필터링 (PostGIS 사용) - TODO: Supabase function 생성 필요
+      // if (latitude != null && longitude != null && radius != null) {
+      //   // ST_DWithin 함수를 사용한 거리 기반 필터링
+      //   query = query.rpc('nearby_products', params: {
+      //     'lat': latitude,
+      //     'lng': longitude,
+      //     'radius_km': radius,
+      //   });
+      // }
       
-      query = query
+      final response = await query
           .order('created_at', ascending: false)
-          .range(offset, offset + limit - 1);
-      
-      final response = await query;
+          .limit(limit);
       
       return (response as List)
           .map((json) => ProductModel.fromJson(json))

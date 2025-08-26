@@ -4,8 +4,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 
 class ChatRoomScreen extends ConsumerStatefulWidget {
+  final String roomId;
   final String chatId;
-  const ChatRoomScreen({super.key, required this.chatId});
+  const ChatRoomScreen({super.key, required this.roomId}) : chatId = roomId;
 
   @override
   ConsumerState<ChatRoomScreen> createState() => _ChatRoomScreenState();
