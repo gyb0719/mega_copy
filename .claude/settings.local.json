@@ -1,0 +1,55 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter pub:*)",
+      "Bash(flutter:*)",
+      "Bash(timeout:*)",
+      "Bash(wsl:*)",
+      "Bash(cat:*)",
+      "Bash(make:*)",
+      "Bash(sudo apt:*)",
+      "Bash(sudo apt install:*)",
+      "Bash(g++:*)",
+      "Bash(python3:*)",
+      "Bash(exit)",
+      "Bash(python:*)",
+      "Bash(grep:*)",
+      "Bash(mount)",
+      "Bash(./pso_algorithm:*)",
+      "Bash(apt:*)",
+      "Bash(powershell.exe:*)",
+      "Bash(emulator:*)",
+      "Bash(pip install:*)",
+      "Bash(start wsl -e bash -c \"cd ~ && claude\")",
+      "Bash(claude update)",
+      "Bash(claude migrate-installer:*)",
+      "Bash(claude doctor)",
+      "Bash(cmd /c:*)",
+      "mcp__filesystem__list_directory",
+      "mcp__filesystem__read_multiple_files",
+      "mcp__filesystem__read_text_file",
+      "Bash(where claude)",
+      "Bash(claude config --help)",
+      "Bash(claude config list)",
+      "Bash(claude config list:*)",
+      "Bash(claude config get:*)",
+      "Bash(claude config set --help)",
+      "Read(/C:\\Users\\gyb07\\.claude/**)",
+      "mcp__filesystem__list_allowed_directories",
+      "Bash(powershell:*)",
+      "Bash(claude_tokens.bat help)",
+      "Bash(del \"C:\\Users\\gyb07\\projects\\check_processes.ps1\" \"C:\\Users\\gyb07\\projects\\optimize_memory.ps1\")",
+      "Bash(dir:*)"
+    ],
+    "deny": [],
+    "ask": [],
+    "additionalDirectories": [
+      "C:\\mnt\\c\\Users\\gyb07\\workspace",
+      "C:\\mnt"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "google-auth"
+  ]
+}

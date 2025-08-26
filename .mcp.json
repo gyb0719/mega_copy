@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "google-auth": {
+      "command": "node",
+      "args": ["server.js"],
+      "cwd": "./mcp-server",
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "auth": {
+        "type": "oauth2",
+        "provider": "google",
+        "clientId": "${GOOGLE_CLIENT_ID}",
+        "clientSecret": "${GOOGLE_CLIENT_SECRET}",
+        "redirectUri": "http://localhost:3000/auth/callback",
+        "scopes": [
+          "openid",
+          "profile",
+          "email"
+        ]
+      }
+    }
+  },
+  "defaultTimeout": 30000,
+  "retryAttempts": 3,
+  "retryDelay": 1000
+}

@@ -1,0 +1,17 @@
+{
+  "project": {
+    "name": "vooster-k4hc",
+    "code": "K4HC",
+    "version": "1.0.0"
+  },
+  "environment": {
+    "development": {
+      "port": 3000,
+      "debug": true
+    },
+    "production": {
+      "port": 8080,
+      "debug": false
+    }
+  }
+}
