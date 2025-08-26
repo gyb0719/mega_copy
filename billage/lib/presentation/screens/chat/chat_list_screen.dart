@@ -5,6 +5,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/models/chat_model.dart';
+import '../../providers/chat_provider.dart';
+import '../../providers/auth_provider.dart';
 
 class ChatListScreen extends ConsumerStatefulWidget {
   const ChatListScreen({super.key});
@@ -14,8 +16,6 @@ class ChatListScreen extends ConsumerStatefulWidget {
 }
 
 class _ChatListScreenState extends ConsumerState<ChatListScreen> {
-  // Demo chat rooms
-  final List<ChatRoomModel> _chatRooms = [
     ChatRoomModel(
       id: '1',
       productId: 'prod1',
@@ -81,8 +81,32 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
     }
   }
 
+  String _formatTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+    
+    if (difference.inDays >= 1) {
+      if (difference.inDays == 1) {
+        return '어제';
+      } else if (difference.inDays < 7) {
+        return '${difference.inDays}일 전';
+      } else {
+        return DateFormat('MM/dd').format(dateTime);
+      }
+    } else if (difference.inHours >= 1) {
+      return '${difference.inHours}시간 전';
+    } else if (difference.inMinutes >= 1) {
+      return '${difference.inMinutes}분 전';
+    } else {
+      return '방금';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final currentUser = ref.watch(currentUserProvider).value;
+    final chatRoomsAsync = ref.watch(chatRoomsProvider);
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('채팅'),
@@ -97,8 +121,37 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
           ),
         ],
       ),
-      body: _chatRooms.isEmpty
-          ? Center(
+      body: chatRoomsAsync.when(
+        loading: () => const Center(
+          child: CircularProgressIndicator(),
+        ),
+        error: (error, stack) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error_outline,
+                size: 64,
+                color: Colors.red.shade400,
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                '채팅 목록을 불러올 수 없습니다',
+                style: TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () {
+                  ref.invalidate(chatRoomsProvider);
+                },
+                child: const Text('다시 시도'),
+              ),
+            ],
+          ),
+        ),
+        data: (chatRooms) {
+          if (chatRooms.isEmpty) {
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -126,46 +179,54 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
                   ),
                 ],
               ),
-            )
-          : ListView.separated(
-              itemCount: _chatRooms.length,
-              separatorBuilder: (context, index) => const Divider(
-                height: 1,
-                indent: 88,
-              ),
-              itemBuilder: (context, index) {
-                final chatRoom = _chatRooms[index];
-                return InkWell(
-                  onTap: () {
-                    context.push('/chat/${chatRoom.id}');
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    child: Row(
-                      children: [
-                        // Product Image
-                        Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: CachedNetworkImage(
-                                imageUrl: chatRoom.productImage,
-                                width: 56,
-                                height: 56,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) => Container(
-                                  color: Colors.grey.shade200,
-                                ),
-                                errorWidget: (context, url, error) => Container(
-                                  color: Colors.grey.shade200,
-                                  child: const Icon(Icons.image_not_supported),
-                                ),
+            );
+          }
+          
+          return ListView.separated(
+            itemCount: chatRooms.length,
+            separatorBuilder: (context, index) => const Divider(
+              height: 1,
+              indent: 88,
+            ),
+            itemBuilder: (context, index) {
+              final chatRoom = chatRooms[index];
+              final otherParticipant = chatRoom.getOtherParticipant(currentUser?.id ?? '');
+              final productImage = chatRoom.product?.images.isNotEmpty == true
+                  ? chatRoom.product!.images.first
+                  : 'https://via.placeholder.com/100';
+              
+              return InkWell(
+                onTap: () {
+                  context.push('/chat/${chatRoom.id}');
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  child: Row(
+                    children: [
+                      // Product Image
+                      Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: CachedNetworkImage(
+                              imageUrl: productImage,
+                              width: 56,
+                              height: 56,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => Container(
+                                color: Colors.grey.shade200,
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                color: Colors.grey.shade200,
+                                child: const Icon(Icons.image_not_supported),
                               ),
                             ),
-                            // User Avatar
+                          ),
+                          // User Avatar
+                          if (otherParticipant != null)
                             Positioned(
                               right: -4,
                               bottom: -4,
@@ -180,14 +241,13 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
                                 child: CircleAvatar(
                                   radius: 12,
                                   backgroundColor: Theme.of(context).primaryColor,
-                                  backgroundImage:
-                                      chatRoom.otherParticipantAvatar != null
-                                          ? CachedNetworkImageProvider(
-                                              chatRoom.otherParticipantAvatar!)
-                                          : null,
-                                  child: chatRoom.otherParticipantAvatar == null
+                                  backgroundImage: otherParticipant.avatarUrl != null
+                                      ? CachedNetworkImageProvider(
+                                          otherParticipant.avatarUrl!)
+                                      : null,
+                                  child: otherParticipant.avatarUrl == null
                                       ? Text(
-                                          chatRoom.otherParticipantName
+                                          otherParticipant.displayName
                                               .substring(0, 1),
                                           style: const TextStyle(
                                             color: Colors.white,
@@ -199,123 +259,95 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(width: 16),
-                        // Chat Info
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      chatRoom.otherParticipantName,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 15,
-                                      ),
+                        ],
+                      ),
+                      const SizedBox(width: 16),
+                      // Chat Info
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    otherParticipant?.displayName ?? 'Unknown',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15,
                                     ),
                                   ),
+                                ),
+                                if (chatRoom.lastMessageAt != null)
                                   Text(
-                                    _formatTime(chatRoom.lastMessageAt),
+                                    _formatTime(chatRoom.lastMessageAt!),
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.grey.shade600,
                                     ),
                                   ),
-                                ],
+                              ],
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              chatRoom.product?.title ?? '제품',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey.shade600,
                               ),
-                              const SizedBox(height: 2),
-                              Text(
-                                chatRoom.productTitle,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey.shade600,
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    chatRoom.lastMessage?.content ?? '대화를 시작해보세요',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: chatRoom.unreadCount > 0
+                                          ? Colors.black
+                                          : Colors.grey.shade600,
+                                      fontWeight: chatRoom.unreadCount > 0
+                                          ? FontWeight.w500
+                                          : FontWeight.normal,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 4),
-                              Row(
-                                children: [
-                                  Expanded(
+                                if (chatRoom.unreadCount > 0)
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 6,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                     child: Text(
-                                      chatRoom.lastMessage,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: chatRoom.unreadCount > 0
-                                            ? Colors.black
-                                            : Colors.grey.shade600,
-                                        fontWeight: chatRoom.unreadCount > 0
-                                            ? FontWeight.w500
-                                            : FontWeight.normal,
+                                      chatRoom.unreadCount.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                  if (chatRoom.unreadCount > 0)
-                                    Container(
-                                      margin: const EdgeInsets.only(left: 8),
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 6,
-                                        vertical: 2,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context).primaryColor,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Text(
-                                        chatRoom.unreadCount.toString(),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
-}
-
-// Temporary ChatRoom Model
-class ChatRoomModel {
-  final String id;
-  final String productId;
-  final String productTitle;
-  final String productImage;
-  final String participant1Id;
-  final String participant2Id;
-  final String otherParticipantName;
-  final String? otherParticipantAvatar;
-  final String lastMessage;
-  final DateTime lastMessageAt;
-  final int unreadCount;
-  final bool isActive;
-
-  ChatRoomModel({
-    required this.id,
-    required this.productId,
-    required this.productTitle,
-    required this.productImage,
-    required this.participant1Id,
-    required this.participant2Id,
-    required this.otherParticipantName,
-    this.otherParticipantAvatar,
-    required this.lastMessage,
-    required this.lastMessageAt,
-    required this.unreadCount,
-    required this.isActive,
-  });
 }
