@@ -5,6 +5,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/constants/app_constants.dart';
+import '../../../data/models/product_model.dart';
+import '../../providers/product_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -16,36 +18,17 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
   
-  // Demo Data (나중에 Provider로 교체)
-  final List<Product> _featuredProducts = [
-    Product(
-      id: '1',
-      title: 'Sony A7 III',
-      category: '카메라/렌즈',
-      price: 50000,
-      imageUrl: 'https://via.placeholder.com/200',
-      location: '강남구',
-      distance: 1.2,
-    ),
-    Product(
-      id: '2',
-      title: 'PlayStation 5',
-      category: '게임 콘솔',
-      price: 30000,
-      imageUrl: 'https://via.placeholder.com/200',
-      location: '서초구',
-      distance: 2.5,
-    ),
-    Product(
-      id: '3',
-      title: 'MacBook Pro M3',
-      category: '노트북/태블릿',
-      price: 80000,
-      imageUrl: 'https://via.placeholder.com/200',
-      location: '송파구',
-      distance: 3.0,
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    // 스크롤 끝에 도달하면 더 많은 제품 로드
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 200) {
+        ref.read(productsProvider.notifier).loadMore();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -214,23 +197,54 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           
           // Featured Products Grid
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.75,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final product = _featuredProducts[index % _featuredProducts.length];
-                  return _ProductCard(product: product);
-                },
-                childCount: 6,
-              ),
-            ),
+          Consumer(
+            builder: (context, ref, child) {
+              final productsAsync = ref.watch(productsProvider);
+              
+              return productsAsync.when(
+                loading: () => SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  sliver: SliverGrid(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.75,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) => _ShimmerCard(),
+                      childCount: 4,
+                    ),
+                  ),
+                ),
+                error: (error, stack) => SliverToBoxAdapter(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text('오류가 발생했습니다: $error'),
+                    ),
+                  ),
+                ),
+                data: (products) => SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  sliver: SliverGrid(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.75,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        if (index >= products.length) return const SizedBox();
+                        return _ProductCard(product: products[index]);
+                      },
+                      childCount: products.length > 6 ? 6 : products.length,
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
           
           // Section Title - Nearby
@@ -256,14 +270,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           
           // Nearby Products List
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final product = _featuredProducts[index % _featuredProducts.length];
-                return _ProductListTile(product: product);
-              },
-              childCount: 5,
-            ),
+          Consumer(
+            builder: (context, ref, child) {
+              final productsAsync = ref.watch(productsProvider);
+              
+              return productsAsync.when(
+                loading: () => SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => _ShimmerListTile(),
+                    childCount: 3,
+                  ),
+                ),
+                error: (error, stack) => const SliverToBoxAdapter(
+                  child: SizedBox(),
+                ),
+                data: (products) => SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      if (index >= products.length) return const SizedBox();
+                      return _ProductListTile(product: products[index]);
+                    },
+                    childCount: products.length > 5 ? 5 : products.length,
+                  ),
+                ),
+              );
+            },
           ),
           
           // Bottom Padding
@@ -276,9 +307,80 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 }
 
+// Shimmer Card Widget
+class _ShimmerCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
+}
+
+// Shimmer List Tile Widget
+class _ShimmerListTile extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      padding: const EdgeInsets.all(12),
+      child: Row(
+        children: [
+          Shimmer.fromColors(
+            baseColor: Colors.grey.shade300,
+            highlightColor: Colors.grey.shade100,
+            child: Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Shimmer.fromColors(
+                  baseColor: Colors.grey.shade300,
+                  highlightColor: Colors.grey.shade100,
+                  child: Container(
+                    height: 16,
+                    width: double.infinity,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Shimmer.fromColors(
+                  baseColor: Colors.grey.shade300,
+                  highlightColor: Colors.grey.shade100,
+                  child: Container(
+                    height: 12,
+                    width: 100,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 // Product Card Widget
 class _ProductCard extends StatelessWidget {
-  final Product product;
+  final ProductModel product;
 
   const _ProductCard({required this.product});
 
@@ -312,7 +414,9 @@ class _ProductCard extends StatelessWidget {
               child: AspectRatio(
                 aspectRatio: 1,
                 child: CachedNetworkImage(
-                  imageUrl: product.imageUrl,
+                  imageUrl: product.images.isNotEmpty 
+                      ? product.images.first 
+                      : 'https://via.placeholder.com/200',
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Shimmer.fromColors(
                     baseColor: Colors.grey.shade300,
@@ -342,7 +446,7 @@ class _ProductCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      product.category,
+                      product.categoryName ?? 'Other',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Colors.grey.shade600,
                           ),
@@ -351,7 +455,7 @@ class _ProductCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '${product.price.toStringAsFixed(0)}원',
+                          '${product.dailyPrice.toStringAsFixed(0)}원',
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
                                     color: Theme.of(context).primaryColor,
@@ -374,7 +478,7 @@ class _ProductCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 2),
                         Text(
-                          '${product.location} · ${product.distance}km',
+                          '${product.address ?? 'Unknown'} · ${product.distance?.toStringAsFixed(1) ?? '0.0'}km',
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: Colors.grey.shade600,
                               ),
@@ -394,7 +498,7 @@ class _ProductCard extends StatelessWidget {
 
 // Product List Tile Widget
 class _ProductListTile extends StatelessWidget {
-  final Product product;
+  final ProductModel product;
 
   const _ProductListTile({required this.product});
 
@@ -424,7 +528,9 @@ class _ProductListTile extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: CachedNetworkImage(
-                imageUrl: product.imageUrl,
+                imageUrl: product.images.isNotEmpty 
+                    ? product.images.first 
+                    : 'https://via.placeholder.com/200',
                 width: 80,
                 height: 80,
                 fit: BoxFit.cover,
@@ -454,7 +560,7 @@ class _ProductListTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    product.category,
+                    product.categoryName ?? 'Other',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Colors.grey.shade600,
                         ),
@@ -466,7 +572,7 @@ class _ProductListTile extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            '${product.price.toStringAsFixed(0)}원',
+                            '${product.dailyPrice.toStringAsFixed(0)}원',
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium
@@ -499,7 +605,7 @@ class _ProductListTile extends StatelessWidget {
                             ),
                             const SizedBox(width: 2),
                             Text(
-                              '${product.distance}km',
+                              '${product.distance?.toStringAsFixed(1) ?? '0.0'}km',
                               style:
                                   Theme.of(context).textTheme.bodySmall?.copyWith(
                                         color: Theme.of(context).primaryColor,
@@ -519,25 +625,4 @@ class _ProductListTile extends StatelessWidget {
       ),
     );
   }
-}
-
-// Temporary Product Model
-class Product {
-  final String id;
-  final String title;
-  final String category;
-  final double price;
-  final String imageUrl;
-  final String location;
-  final double distance;
-
-  Product({
-    required this.id,
-    required this.title,
-    required this.category,
-    required this.price,
-    required this.imageUrl,
-    required this.location,
-    required this.distance,
-  });
 }

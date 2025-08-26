@@ -1,0 +1,24 @@
+targets:
+  $default:
+    builders:
+      freezed:
+        options:
+          # Freezed 옵션 설정
+          # 모든 모델에 copyWith 메서드 생성
+          copy_with: true
+          # 모든 모델에 == 연산자와 hashCode 생성
+          equal: true
+          # toJson/fromJson 메서드 생성
+          from_json: true
+          # Map 리터럴 생성
+          map: true
+          # 불변 클래스 생성
+          immutable: true
+          
+      json_serializable:
+        options:
+          # JSON 직렬화 옵션
+          any_map: true
+          checked: true
+          explicit_to_json: true
+          field_rename: snake_case
