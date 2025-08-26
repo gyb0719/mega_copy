@@ -1,38 +1,95 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Header from '@/app/components/Header';
-import { MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MessageCircle, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+
+interface ProductImage {
+  id: string;
+  image_url: string;
+  display_order: number;
+}
+
+interface Product {
+  id: string;
+  name: string;
+  brand: string;
+  price: number;
+  category: string;
+  description: string | null;
+  stock: number;
+  product_images?: ProductImage[];
+}
 
 export default function ProductDetail() {
   const params = useParams();
+  const [product, setProduct] = useState<Product | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
   
-  // 임시 데이터
-  const product = {
-    id: params.id,
-    name: 'Classic Monogram Bag',
-    brand: 'LV Style',
-    price: 450000,
-    description: '최고급 레플리카 명품 가방입니다. 정품과 99% 동일한 퀄리티를 자랑합니다.',
-    images: Array(5).fill('/api/placeholder/600/600'),
-    details: [
-      '소재: 최고급 캔버스',
-      '사이즈: 30cm x 25cm x 15cm',
-      '구성품: 본품, 더스트백, 박스',
-      '원산지: Made in France 각인',
-    ]
+  useEffect(() => {
+    fetchProduct();
+  }, [params.id]);
+  
+  const fetchProduct = async () => {
+    try {
+      const response = await fetch(`/api/products/${params.id}`);
+      const result = await response.json();
+      
+      if (result.data) {
+        setProduct(result.data);
+      }
+    } catch (error) {
+      console.error('Error fetching product:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
+    if (product && product.product_images) {
+      setCurrentImageIndex((prev) => (prev + 1) % product.product_images.length);
+    }
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + product.images.length) % product.images.length);
+    if (product && product.product_images) {
+      setCurrentImageIndex((prev) => (prev - 1 + product.product_images.length) % product.product_images.length);
+    }
   };
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex items-center justify-center py-40">
+          <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
+        </div>
+      </div>
+    );
+  }
+  
+  if (!product) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="container mx-auto px-4 py-8">
+          <Link href="/" className="inline-flex items-center text-gray-600 mb-6 hover:text-black">
+            <ChevronLeft className="w-5 h-5" />
+            뒤로가기
+          </Link>
+          <div className="text-center py-20">
+            <p className="text-gray-500">상품을 찾을 수 없습니다.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  const images = product.product_images || [];
+  const currentImage = images[currentImageIndex]?.image_url;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -48,39 +105,59 @@ export default function ProductDetail() {
           {/* 이미지 섹션 */}
           <div className="space-y-4">
             <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
-              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                <span className="text-gray-400">상품 이미지 {currentImageIndex + 1}</span>
-              </div>
+              {currentImage ? (
+                <img
+                  src={currentImage}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                  <span className="text-gray-400">상품 이미지</span>
+                </div>
+              )}
               
-              <button 
-                onClick={prevImage}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-              
-              <button 
-                onClick={nextImage}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
+              {images.length > 1 && (
+                <>
+                  <button 
+                    onClick={prevImage}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white"
+                  >
+                    <ChevronLeft className="w-6 h-6" />
+                  </button>
+                  
+                  <button 
+                    onClick={nextImage}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white"
+                  >
+                    <ChevronRight className="w-6 h-6" />
+                  </button>
+                </>
+              )}
             </div>
             
             {/* 썸네일 */}
-            <div className="flex gap-2 overflow-x-auto">
-              {product.images.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentImageIndex(index)}
-                  className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 ${
-                    currentImageIndex === index ? 'border-mega-black' : 'border-gray-200'
-                  }`}
-                >
-                  <div className="w-full h-full bg-gray-200" />
-                </button>
-              ))}
-            </div>
+            {images.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto">
+                {images
+                  .sort((a, b) => a.display_order - b.display_order)
+                  .map((image, index) => (
+                    <button
+                      key={image.id}
+                      onClick={() => setCurrentImageIndex(index)}
+                      className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 ${
+                        currentImageIndex === index ? 'border-mega-black' : 'border-gray-200'
+                      }`}
+                    >
+                      <img
+                        src={image.image_url}
+                        alt={`${product.name} ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+              </div>
+            )}
           </div>
 
           {/* 상품 정보 */}
@@ -93,17 +170,19 @@ export default function ProductDetail() {
               </p>
             </div>
 
-            <div className="border-t pt-6">
-              <h3 className="font-semibold mb-3">상품 설명</h3>
-              <p className="text-gray-600 leading-relaxed">{product.description}</p>
-            </div>
+            {product.description && (
+              <div className="border-t pt-6">
+                <h3 className="font-semibold mb-3">상품 설명</h3>
+                <p className="text-gray-600 leading-relaxed whitespace-pre-wrap">{product.description}</p>
+              </div>
+            )}
 
             <div className="border-t pt-6">
-              <h3 className="font-semibold mb-3">상품 상세</h3>
+              <h3 className="font-semibold mb-3">상품 정보</h3>
               <ul className="space-y-2 text-gray-600">
-                {product.details.map((detail, index) => (
-                  <li key={index}>• {detail}</li>
-                ))}
+                <li>• 카테고리: {product.category}</li>
+                <li>• 브랜드: {product.brand}</li>
+                <li>• 재고: {product.stock > 0 ? `${product.stock}개` : '품절'}</li>
               </ul>
             </div>
 

@@ -1,9 +1,21 @@
 'use client';
 
+import { useState } from 'react';
 import { Search, Coffee } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 bg-white shadow-md">
       <div className="container mx-auto px-4">
@@ -18,19 +30,24 @@ export default function Header() {
           </Link>
 
           {/* Search Bar */}
-          <div className="hidden md:flex items-center bg-black rounded-lg overflow-hidden">
+          <form onSubmit={handleSearch} className="hidden md:flex items-center bg-black rounded-lg overflow-hidden">
             <input
               type="text"
-              placeholder="검색"
+              placeholder="상품명, 브랜드 검색"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="bg-black text-white px-4 py-2 outline-none w-64"
             />
-            <button className="bg-black px-4 py-2">
+            <button type="submit" className="bg-black px-4 py-2 hover:bg-gray-800">
               <Search className="w-5 h-5 text-white" />
             </button>
-          </div>
+          </form>
 
           {/* Mobile Search Button */}
-          <button className="md:hidden bg-black p-2 rounded-lg">
+          <button 
+            onClick={() => router.push('/search')}
+            className="md:hidden bg-black p-2 rounded-lg hover:bg-gray-800"
+          >
             <Search className="w-5 h-5 text-white" />
           </button>
         </div>
