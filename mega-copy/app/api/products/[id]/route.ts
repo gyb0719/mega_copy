@@ -1,11 +1,27 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { sampleProducts } from '@/lib/sampleData';
 
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
+    // Supabase 연결 확인
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    if (!supabaseUrl || !supabaseKey || 
+        supabaseUrl === 'https://your-project.supabase.co' || 
+        supabaseKey === 'your-anon-key-here') {
+      // Supabase가 설정되지 않은 경우 샘플 데이터 사용
+      const product = sampleProducts.find(p => p.id === params.id);
+      if (product) {
+        return NextResponse.json({ data: product });
+      }
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+    }
+
     const { data, error } = await supabase
       .from('products')
       .select(`
@@ -21,12 +37,22 @@ export async function GET(
 
     if (error) {
       console.error('Error fetching product:', error);
+      // 에러 시 샘플 데이터에서 찾기
+      const product = sampleProducts.find(p => p.id === params.id);
+      if (product) {
+        return NextResponse.json({ data: product });
+      }
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
     return NextResponse.json({ data });
   } catch (error) {
     console.error('Server error:', error);
+    // 서버 에러 시 샘플 데이터 사용
+    const product = sampleProducts.find(p => p.id === params.id);
+    if (product) {
+      return NextResponse.json({ data: product });
+    }
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }

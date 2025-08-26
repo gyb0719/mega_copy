@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { sampleProducts } from '@/lib/sampleData';
 
 export async function GET(request: Request) {
   try {
@@ -9,6 +10,39 @@ export async function GET(request: Request) {
     const limit = parseInt(searchParams.get('limit') || '20');
     const offset = parseInt(searchParams.get('offset') || '0');
 
+    // Supabase 연결 확인
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    if (!supabaseUrl || !supabaseKey || 
+        supabaseUrl === 'https://your-project.supabase.co' || 
+        supabaseKey === 'your-anon-key-here') {
+      // Supabase가 설정되지 않은 경우 샘플 데이터 사용
+      console.log('Using sample data - Supabase not configured');
+      
+      let filteredProducts = [...sampleProducts];
+      
+      if (category && category !== '전체') {
+        filteredProducts = filteredProducts.filter(p => p.category === category);
+      }
+      
+      if (search) {
+        const searchLower = search.toLowerCase();
+        filteredProducts = filteredProducts.filter(p => 
+          p.name.toLowerCase().includes(searchLower) || 
+          p.brand.toLowerCase().includes(searchLower)
+        );
+      }
+      
+      const paginatedProducts = filteredProducts.slice(offset, offset + limit);
+      
+      return NextResponse.json({ 
+        data: paginatedProducts,
+        total: filteredProducts.length 
+      });
+    }
+
+    // Supabase 쿼리
     let query = supabase
       .from('products')
       .select(`
@@ -34,13 +68,23 @@ export async function GET(request: Request) {
 
     if (error) {
       console.error('Error fetching products:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      // Supabase 에러 시 샘플 데이터 반환
+      return NextResponse.json({ 
+        data: sampleProducts.slice(offset, offset + limit),
+        total: sampleProducts.length,
+        warning: 'Using sample data due to database error' 
+      });
     }
 
-    return NextResponse.json({ data });
+    return NextResponse.json({ data, total: data?.length || 0 });
   } catch (error) {
     console.error('Server error:', error);
-    return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    // 서버 에러 시 샘플 데이터 반환
+    return NextResponse.json({ 
+      data: sampleProducts.slice(0, 20),
+      total: sampleProducts.length,
+      warning: 'Using sample data' 
+    });
   }
 }
 

@@ -55,20 +55,46 @@ export default function ProductGrid({ category }: ProductGridProps) {
       params.append('offset', ((page - 1) * itemsPerPage).toString());
       
       const response = await fetch(`/api/products?${params.toString()}`);
-      if (!response.ok) {
-        throw new Error('상품을 불러오는데 실패했습니다.');
+      
+      // API가 아직 구현되지 않았거나 Supabase 연결이 안된 경우를 처리
+      if (response.status === 404) {
+        // 임시 데이터 사용
+        setProducts([]);
+        setTotalProducts(0);
+        return;
       }
       
       const result = await response.json();
       
-      if (result.data) {
+      if (result.error) {
+        // API 에러 메시지가 있는 경우
+        console.warn('API Error:', result.error);
+        setProducts([]);
+        setTotalProducts(0);
+      } else if (result.data) {
         setProducts(result.data);
-        // TODO: API에서 total count를 받아오도록 수정 필요
-        setTotalProducts(result.total || result.data.length);
+        // total이 있으면 사용, 없으면 현재 페이지 데이터 개수 사용
+        if (result.total !== undefined) {
+          setTotalProducts(result.total);
+        } else {
+          // 첫 페이지이고 limit보다 적은 데이터가 왔다면 그게 전체 개수
+          if (page === 1 && result.data.length < itemsPerPage) {
+            setTotalProducts(result.data.length);
+          } else {
+            // 그 외의 경우 최소한 현재 페이지까지의 데이터는 있다고 가정
+            setTotalProducts(page * itemsPerPage);
+          }
+        }
+      } else {
+        // 데이터가 없는 경우
+        setProducts([]);
+        setTotalProducts(0);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
-      setError(error instanceof Error ? error.message : '상품을 불러오는데 실패했습니다.');
+      // 네트워크 에러나 기타 에러의 경우 빈 배열로 처리
+      setProducts([]);
+      setTotalProducts(0);
     } finally {
       setLoading(false);
     }

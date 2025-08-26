@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import MobileMenu from './components/MobileMenu';
 import ServiceWorkerRegistration from './components/ServiceWorkerRegistration';
 
 export const metadata: Metadata = {
@@ -41,7 +40,6 @@ export default function RootLayout({
     <html lang="ko">
       <body className="bg-gray-50">
         {children}
-        <MobileMenu />
         <ServiceWorkerRegistration />
       </body>
     </html>
