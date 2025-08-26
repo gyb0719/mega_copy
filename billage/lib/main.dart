@@ -7,7 +7,7 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import 'core/constants/app_constants.dart';
+import 'core/config/env_config.dart';
 import 'core/providers/router_provider.dart';
 import 'core/theme/app_theme.dart';
 
@@ -36,13 +36,16 @@ void main() async {
   );
   
   try {
+    // 환경 변수 로드
+    await EnvConfig.init();
+    
     // Hive 초기화 (로컬 저장소)
     await Hive.initFlutter();
     
     // Supabase 초기화
     await Supabase.initialize(
-      url: AppConstants.supabaseUrl,
-      anonKey: AppConstants.supabaseAnonKey,
+      url: EnvConfig.supabaseUrl,
+      anonKey: EnvConfig.supabaseAnonKey,
       authOptions: const FlutterAuthClientOptions(
         authFlowType: AuthFlowType.pkce,
         autoRefreshToken: true,
@@ -50,7 +53,9 @@ void main() async {
     );
     
     // Kakao SDK 초기화
-    KakaoSdk.init(nativeAppKey: AppConstants.kakaoApiKey);
+    if (EnvConfig.kakaoApiKey.isNotEmpty) {
+      KakaoSdk.init(nativeAppKey: EnvConfig.kakaoApiKey);
+    }
     
     // Firebase 초기화 (푸시 알림용)
     // TODO: Firebase 설정 후 주석 해제
