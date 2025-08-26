@@ -39,7 +39,10 @@
       "Bash(powershell:*)",
       "Bash(claude_tokens.bat help)",
       "Bash(del \"C:\\Users\\gyb07\\projects\\check_processes.ps1\" \"C:\\Users\\gyb07\\projects\\optimize_memory.ps1\")",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "mcp__sqlite__list_tables",
+      "Bash(npm run dev:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": [],
