@@ -1,0 +1,27 @@
+{
+  "name": "MEGA COPY - 명품 레플리카 쇼핑몰",
+  "short_name": "MEGA COPY",
+  "description": "최고급 명품 레플리카 전문 쇼핑몰",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping"],
+  "lang": "ko-KR",
+  "dir": "ltr"
+}

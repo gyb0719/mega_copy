@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import Pagination from './Pagination';
+import LoadingSpinner from './LoadingSpinner';
+import ErrorMessage from './ErrorMessage';
 
 interface ProductImage {
   id: string;
@@ -26,47 +29,69 @@ interface ProductGridProps {
 export default function ProductGrid({ category }: ProductGridProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const itemsPerPage = 20;
 
   useEffect(() => {
-    fetchProducts();
+    setCurrentPage(1);
+    fetchProducts(1);
   }, [category]);
 
-  const fetchProducts = async () => {
+  useEffect(() => {
+    fetchProducts(currentPage);
+  }, [currentPage]);
+
+  const fetchProducts = async (page: number) => {
     try {
       setLoading(true);
+      setError(null);
       const params = new URLSearchParams();
       if (category && category !== '전체') {
         params.append('category', category);
       }
+      params.append('limit', itemsPerPage.toString());
+      params.append('offset', ((page - 1) * itemsPerPage).toString());
       
       const response = await fetch(`/api/products?${params.toString()}`);
+      if (!response.ok) {
+        throw new Error('상품을 불러오는데 실패했습니다.');
+      }
+      
       const result = await response.json();
       
       if (result.data) {
         setProducts(result.data);
+        // TODO: API에서 total count를 받아오도록 수정 필요
+        setTotalProducts(result.total || result.data.length);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
+      setError(error instanceof Error ? error.message : '상품을 불러오는데 실패했습니다.');
     } finally {
       setLoading(false);
     }
   };
 
+  const totalPages = Math.ceil(totalProducts / itemsPerPage);
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className="animate-pulse">
-              <div className="aspect-square bg-gray-200 rounded-lg mb-3" />
-              <div className="space-y-2">
-                <div className="h-4 bg-gray-200 rounded w-3/4" />
-                <div className="h-4 bg-gray-200 rounded" />
-                <div className="h-4 bg-gray-200 rounded w-1/2" />
-              </div>
-            </div>
-          ))}
-        </div>
+        <LoadingSpinner size="lg" message="상품을 불러오는 중..." />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <ErrorMessage
+          title="상품 로드 실패"
+          message={error}
+          onRetry={() => fetchProducts(currentPage)}
+        />
       </div>
     );
   }
@@ -124,6 +149,17 @@ export default function ProductGrid({ category }: ProductGridProps) {
         <div className="text-center py-20">
           <p className="text-gray-500">해당 카테고리에 상품이 없습니다.</p>
         </div>
+      )}
+
+      {/* 페이지네이션 */}
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalProducts}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+        />
       )}
     </div>
   );
