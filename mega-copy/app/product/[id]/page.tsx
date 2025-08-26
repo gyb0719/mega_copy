@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Header from '@/app/components/Header';
-import { MessageCircle, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { MessageCircle, ChevronLeft, ChevronRight, Loader2, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
+import { useInventoryStore } from '@/lib/stores/useInventoryStore';
 
 interface ProductImage {
   id: string;
@@ -29,9 +30,18 @@ export default function ProductDetail() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   
+  const { stocks, loadStock, subscribeToStockUpdates } = useInventoryStore();
+  const productId = params.id as string;
+  const currentStock = stocks.get(productId) || product?.stock || 0;
+  
   useEffect(() => {
     fetchProduct();
-  }, [params.id]);
+    loadStock(productId);
+    
+    // 실시간 재고 업데이트 구독
+    const unsubscribe = subscribeToStockUpdates(productId);
+    return () => unsubscribe();
+  }, [productId]);
   
   const fetchProduct = async () => {
     try {
@@ -182,20 +192,48 @@ export default function ProductDetail() {
               <ul className="space-y-2 text-gray-600">
                 <li>• 카테고리: {product.category}</li>
                 <li>• 브랜드: {product.brand}</li>
-                <li>• 재고: {product.stock > 0 ? `${product.stock}개` : '품절'}</li>
+                <li className="flex items-center gap-2">
+                  • 재고: 
+                  {currentStock > 0 ? (
+                    <>
+                      <span className={`font-semibold ${currentStock <= 5 ? 'text-red-600' : ''}`}>
+                        {currentStock}개
+                      </span>
+                      {currentStock <= 5 && (
+                        <span className="text-red-600 text-sm">(품절 임박)</span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="text-red-600 font-semibold">품절</span>
+                  )}
+                </li>
               </ul>
             </div>
 
             {/* 구매 버튼 */}
             <div className="border-t pt-6">
+              {currentStock <= 0 && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 flex items-start gap-2">
+                  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-red-600 font-semibold">현재 품절된 상품입니다</p>
+                    <p className="text-red-600 text-sm mt-1">재입고 문의는 카카오톡으로 해주세요</p>
+                  </div>
+                </div>
+              )}
+              
               <a
                 href="http://pf.kakao.com/_xjxexdG"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3 w-full bg-mega-yellow text-black py-4 rounded-lg font-bold text-lg hover:bg-yellow-400 transition-colors"
+                className={`flex items-center justify-center gap-3 w-full py-4 rounded-lg font-bold text-lg transition-colors ${
+                  currentStock > 0 
+                    ? 'bg-mega-yellow text-black hover:bg-yellow-400' 
+                    : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                }`}
               >
                 <MessageCircle className="w-6 h-6" />
-                카카오톡으로 구매 상담하기
+                {currentStock > 0 ? '카카오톡으로 구매 상담하기' : '재입고 문의하기'}
               </a>
               <p className="text-sm text-gray-500 text-center mt-3">
                 모든 주문 및 상담은 카카오톡을 통해 진행됩니다

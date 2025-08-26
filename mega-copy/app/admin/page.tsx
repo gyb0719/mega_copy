@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Upload, Trash2, Edit, Plus, X, Loader2 } from 'lucide-react';
+import { Upload, Trash2, Edit, Plus, X, Loader2, Package } from 'lucide-react';
 import Header from '../components/Header';
+import { useInventoryStore } from '@/lib/stores/useInventoryStore';
 
 interface ProductImage {
   id: string;
@@ -38,6 +39,9 @@ export default function AdminPage() {
   const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [editingStock, setEditingStock] = useState<string | null>(null);
+  const [stockValue, setStockValue] = useState('');
+  const { updateStock } = useInventoryStore();
   const [formData, setFormData] = useState({
     name: '',
     brand: '',
@@ -136,6 +140,24 @@ export default function AdminPage() {
     } catch (error) {
       console.error('Error deleting product:', error);
       alert('상품 삭제에 실패했습니다.');
+    }
+  };
+
+  const handleStockUpdate = async (productId: string) => {
+    const newStock = parseInt(stockValue);
+    if (isNaN(newStock) || newStock < 0) {
+      alert('올바른 재고 수량을 입력해주세요.');
+      return;
+    }
+
+    try {
+      await updateStock(productId, newStock);
+      alert('재고가 업데이트되었습니다.');
+      setEditingStock(null);
+      setStockValue('');
+      fetchProducts();
+    } catch (error) {
+      alert('재고 업데이트에 실패했습니다.');
     }
   };
 
@@ -272,7 +294,50 @@ export default function AdminPage() {
                       <td className="px-4 py-3">{product.brand}</td>
                       <td className="px-4 py-3">{product.category}</td>
                       <td className="px-4 py-3">₩{product.price.toLocaleString()}</td>
-                      <td className="px-4 py-3">{product.stock}개</td>
+                      <td className="px-4 py-3">
+                        {editingStock === product.id ? (
+                          <div className="flex items-center gap-1">
+                            <input
+                              type="number"
+                              value={stockValue}
+                              onChange={(e) => setStockValue(e.target.value)}
+                              className="w-16 px-2 py-1 border rounded text-sm"
+                              autoFocus
+                              onKeyPress={(e) => {
+                                if (e.key === 'Enter') {
+                                  handleStockUpdate(product.id);
+                                }
+                              }}
+                            />
+                            <button
+                              onClick={() => handleStockUpdate(product.id)}
+                              className="text-green-600 hover:text-green-800"
+                            >
+                              ✓
+                            </button>
+                            <button
+                              onClick={() => {
+                                setEditingStock(null);
+                                setStockValue('');
+                              }}
+                              className="text-gray-600 hover:text-gray-800"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setEditingStock(product.id);
+                              setStockValue(product.stock.toString());
+                            }}
+                            className="flex items-center gap-1 hover:text-blue-600"
+                          >
+                            {product.stock}개
+                            <Package className="w-4 h-4" />
+                          </button>
+                        )}
+                      </td>
                       <td className="px-4 py-3">
                         <div className="flex gap-2">
                           <button className="text-blue-600 hover:text-blue-800">
