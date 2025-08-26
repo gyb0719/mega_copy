@@ -10,7 +10,7 @@ import argparse
 from twilio.rest import Client
 
 # Twilio 계정 정보 (환경변수로 설정하거나 직접 입력)
-ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID', 'AC2e5ee8e91fa60d8198e79b7e0122da12')
+ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID', 'YOUR_ACCOUNT_SID')
 AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN', 'ebef292640d3116e5a513cf46c8fd886')
 FROM_NUMBER = os.getenv('TWILIO_FROM_NUMBER', '+821038255659')  # 한국 번호 형식
 

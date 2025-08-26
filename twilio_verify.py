@@ -12,7 +12,7 @@ import argparse
 from twilio.rest import Client
 
 # Twilio 계정 정보
-ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID', 'AC2e5ee8e91fa60d8198e79b7e0122da12')
+ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID', 'YOUR_ACCOUNT_SID')
 AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN', 'ebef292640d3116e5a513cf46c8fd886')
 
 # Verify Service SID (자동 생성 또는 기존 것 사용)
