@@ -1,6 +1,6 @@
 'use client';
 
-import { Search } from 'lucide-react';
+import { Search, Coffee } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Header() {
@@ -11,8 +11,8 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-1">
             <span className="text-2xl font-black">MEGA</span>
-            <span className="bg-mega-yellow px-2 py-0.5 rounded text-black font-black text-xl">
-              C
+            <span className="bg-mega-yellow px-2 py-1 rounded flex items-center justify-center">
+              <Coffee className="w-5 h-5 text-black" />
             </span>
             <span className="text-2xl font-black">COPY</span>
           </Link>
