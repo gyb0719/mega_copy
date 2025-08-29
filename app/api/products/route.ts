@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { productsAPI } from '../../lib/supabase-rpc-api';
 
+export const runtime = 'edge';
+
 // GET: 상품 목록 조회
 export async function GET(request: NextRequest) {
   try {
