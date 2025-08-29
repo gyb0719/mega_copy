@@ -6,10 +6,12 @@ export const runtime = 'edge';
 // GET: 특정 상품 조회
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: { id: string } | Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    // Next.js 15와 Edge Runtime 모두 지원
+    const resolvedParams = 'then' in context.params ? await context.params : context.params;
+    const { id } = resolvedParams;
     console.log('[GET /api/products/[id]] Fetching product with ID:', id);
     
     const data = await productsAPI.getById(id);
@@ -53,10 +55,12 @@ export async function GET(
 // PUT: 상품 수정
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: { id: string } | Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    // Next.js 15와 Edge Runtime 모두 지원
+    const resolvedParams = 'then' in context.params ? await context.params : context.params;
+    const { id } = resolvedParams;
     const body = await request.json();
     const data = await productsAPI.update(id, body);
     
@@ -79,10 +83,12 @@ export async function PUT(
 // DELETE: 상품 삭제
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: { id: string } | Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    // Next.js 15와 Edge Runtime 모두 지원
+    const resolvedParams = 'then' in context.params ? await context.params : context.params;
+    const { id } = resolvedParams;
     const data = await productsAPI.delete(id);
     
     return NextResponse.json({ 
