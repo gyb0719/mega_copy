@@ -47,7 +47,7 @@ export default function CategorySection({ selectedCategory, onCategorySelect, pr
         <h2 className="text-2xl font-bold text-center mb-6">CATEGORY</h2>
         
         {/* Desktop Grid */}
-        <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-5 gap-2">
+        <div className="hidden md:grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
           {categories.map((category) => (
             <button
               key={category}

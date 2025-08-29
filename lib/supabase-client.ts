@@ -14,10 +14,9 @@ export const productsAPI = {
       let query = supabase
         .from('products')
         .select('*', { count: 'exact' })
-        .eq('is_available', true)
         .order('created_at', { ascending: false })
 
-      if (params?.category) {
+      if (params?.category && params.category !== '전체') {
         query = query.eq('category', params.category)
       }
 
@@ -82,9 +81,16 @@ export const productsAPI = {
   // 상품 생성
   async create(productData: any) {
     try {
+      // is_available 기본값 설정
+      const dataWithDefaults = {
+        ...productData,
+        is_available: productData.is_available !== undefined ? productData.is_available : true,
+        stock: productData.stock || 0
+      }
+      
       const { data, error } = await supabase
         .from('products')
-        .insert(productData)
+        .insert(dataWithDefaults)
         .select()
         .single()
 
