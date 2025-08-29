@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { X, Upload, Plus, Loader2, Camera, Images } from 'lucide-react';
-import { storageAPI } from '../lib/supabase-rpc-api';
+import { productsAPI, uploadImage } from '../../lib/supabase-client';
 import { compressMainImage, compressDetailImage, formatFileSize } from '../lib/image-utils';
 
 interface ProductAddModalProps {
@@ -128,31 +128,27 @@ export default function ProductAddModal({ onClose, onSave }: ProductAddModalProp
       
       // 1. 메인 이미지 업로드
       console.log('메인 이미지 업로드 시작...');
-      const mainImageUpload = await storageAPI.uploadMultipleImages([mainImage]);
+      const mainImageResult = await uploadImage(mainImage);
       
-      // 메인 이미지는 필수이므로 실패하면 에러
-      if (mainImageUpload.uploaded.length === 0) {
-        console.error('메인 이미지 업로드 실패:', mainImageUpload.failed);
-        const errorMsg = mainImageUpload.failed[0]?.message || '이미지 업로드 실패';
-        throw new Error(`메인 이미지 업로드 실패: ${errorMsg}`);
+      if (mainImageResult.error || !mainImageResult.url) {
+        throw new Error(mainImageResult.error || '메인 이미지 업로드 실패');
       }
       
-      const mainImageUrl = mainImageUpload.uploaded[0];
+      const mainImageUrl = mainImageResult.url;
       console.log('메인 이미지 업로드 성공:', mainImageUrl);
       
       // 2. 세부 이미지 업로드 (있는 경우)
       let detailImageUrls: string[] = [];
       if (detailImages.length > 0) {
         console.log(`세부 이미지 ${detailImages.length}개 업로드 시작...`);
-        const detailImageUpload = await storageAPI.uploadMultipleImages(detailImages);
-        detailImageUrls = detailImageUpload.uploaded;
-        
-        // 일부 실패한 경우 경고만 표시
-        if (detailImageUpload.failed.length > 0) {
-          console.warn(`세부 이미지 중 ${detailImageUpload.failed.length}개 업로드 실패`);
-          console.warn('실패한 이미지:', detailImageUpload.failed);
+        for (const image of detailImages) {
+          const result = await uploadImage(image);
+          if (result.url) {
+            detailImageUrls.push(result.url);
+          } else {
+            console.warn('세부 이미지 업로드 실패:', result.error);
+          }
         }
-        
         console.log(`세부 이미지 ${detailImageUrls.length}개 업로드 성공`);
       }
       
@@ -171,18 +167,10 @@ export default function ProductAddModal({ onClose, onSave }: ProductAddModalProp
         additional_images: detailImageUrls // 세부 이미지들
       };
 
-      // 4. API 호출
-      const response = await fetch('/api/products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(productData)
-      });
+      // 4. Supabase에 직접 상품 생성
+      const result = await productsAPI.create(productData);
 
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
+      if (!result.success) {
         throw new Error(result.error || '상품 등록에 실패했습니다.');
       }
 

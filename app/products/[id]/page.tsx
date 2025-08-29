@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Share2 } from 'lucide-react';
 import Link from 'next/link';
+import { productsAPI } from '../../../lib/supabase-client';
 
 interface Product {
   id: string;
@@ -63,20 +64,10 @@ export default function ProductDetailPage() {
         throw new Error('상품 ID가 없습니다');
       }
       
-      const response = await fetch(`/api/products/${productId}`);
+      const data = await productsAPI.getById(productId);
       
-      if (!response.ok) {
-        throw new Error('상품을 불러올 수 없습니다');
-      }
-      
-      const result = await response.json();
-      
-      if (result.success && result.data) {
-        setProduct(result.data);
-      } else if (result.success === false && result.data) {
-        setProduct(result.data);
-      } else if (!result.success && !result.data && result.id) {
-        setProduct(result);
+      if (data) {
+        setProduct(data);
       } else {
         throw new Error('상품 정보가 없습니다');
       }

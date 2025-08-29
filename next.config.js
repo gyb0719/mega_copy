@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // 정적 내보내기 설정 (Cloudflare Pages)
+  output: 'export',
+  
   // 이미지 도메인 허용
   images: {
     domains: [
@@ -23,7 +26,10 @@ const nextConfig = {
   // TypeScript 에러 무시 (배포용)
   typescript: {
     ignoreBuildErrors: true
-  }
+  },
+
+  // Trailing slashes 추가
+  trailingSlash: true
 }
 
 module.exports = nextConfig

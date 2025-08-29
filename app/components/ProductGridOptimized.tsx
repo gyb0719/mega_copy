@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import LoadingSpinner from './LoadingSpinner';
+import { productsAPI } from '../../lib/supabase-client';
 
 interface ProductImage {
   id: string;
@@ -72,8 +73,7 @@ export default function ProductGridOptimized({ category }: ProductGridOptimizedP
   const fetchProducts = useCallback(async () => {
     try {
       console.log('[ProductGrid] Fetching products...');
-      const response = await fetch('/api/products?limit=1000');
-      const result = await response.json();
+      const result = await productsAPI.getAll({ limit: 1000 });
       
       console.log('[ProductGrid] API Response:', result);
       console.log('[ProductGrid] Response success:', result.success);
