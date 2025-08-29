@@ -55,7 +55,7 @@ export default function CategorySection({ selectedCategory, onCategorySelect, pr
               className={`
                 py-3 px-4 rounded-lg font-medium transition-all duration-200 relative
                 ${selectedCategory === category 
-                  ? 'bg-mega-black text-white' 
+                  ? 'bg-black text-white' 
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }
               `}
@@ -83,7 +83,7 @@ export default function CategorySection({ selectedCategory, onCategorySelect, pr
               className={`
                 py-2 px-1 rounded-lg font-medium text-xs transition-all duration-200 relative
                 ${selectedCategory === category 
-                  ? 'bg-mega-black text-white' 
+                  ? 'bg-black text-white' 
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }
               `}

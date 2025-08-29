@@ -317,6 +317,25 @@ export default function ProductManagementMobile() {
                   </div>
                 </div>
 
+                {/* 편집/삭제 버튼 */}
+                <div className="flex flex-col gap-1">
+                  <button
+                    onClick={() => {
+                      setEditingProduct(product);
+                      setShowEditModal(true);
+                    }}
+                    className="p-1.5 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                  >
+                    <Edit className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(product.id)}
+                    className="p-1.5 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+
               </div>
             </div>
           ))}
