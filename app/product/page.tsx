@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Share2 } from 'lucide-react';
 import Link from 'next/link';
-import { productsAPI } from '../../../lib/supabase-client';
+import { productsAPI } from '../../lib/supabase-client';
 
 interface Product {
   id: string;
@@ -25,11 +25,14 @@ interface Product {
 }
 
 export default function ProductDetailPage() {
-  const params = useParams();
+  const searchParams = useSearchParams();
   const router = useRouter();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // URL에서 id 파라미터 가져오기
+  const productId = searchParams.get('id');
   
   // 모든 이미지 배열 (product_images 우선 사용, 없으면 additional_images 사용)
   const allImages = product ? (
@@ -44,21 +47,18 @@ export default function ProductDetailPage() {
   ) : [];
 
   useEffect(() => {
-    // Handle both string and array params (Next.js can return either)
-    const productId = Array.isArray(params?.id) ? params.id[0] : params?.id;
-    
     if (productId) {
       fetchProduct();
+    } else {
+      setError('상품 ID가 없습니다');
+      setLoading(false);
     }
-  }, [params?.id]);
+  }, [productId]);
 
   const fetchProduct = async () => {
     try {
       setLoading(true);
       setError(null);
-      
-      // Handle both string and array params
-      const productId = Array.isArray(params?.id) ? params.id[0] : params?.id;
       
       if (!productId) {
         throw new Error('상품 ID가 없습니다');

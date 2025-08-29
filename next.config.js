@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 정적 내보내기 설정 (Cloudflare Pages)
   output: 'export',
   
   // 이미지 도메인 허용
@@ -27,8 +26,8 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true
   },
-
-  // Trailing slashes 추가
+  
+  // 동적 라우트 처리
   trailingSlash: true
 }
 

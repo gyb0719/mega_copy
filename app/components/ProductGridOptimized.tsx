@@ -32,7 +32,7 @@ function ProductCard({ product }: { product: Product }) {
   const mainImage = product.product_images?.[0]?.image_url || product.image_url;
 
   return (
-    <Link href={`/products/${product.id}`} className="group cursor-pointer block h-full">
+    <Link href={`/product?id=${product.id}`} className="group cursor-pointer block h-full">
       <div className="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
         <div className="aspect-square bg-gray-100 relative overflow-hidden">
           {mainImage ? (
