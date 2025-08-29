@@ -22,7 +22,7 @@ export default function Home() {
         onCategorySelect={setSelectedCategory}
       />
       <NoticeBanner />
-      <ProductGridOptimized category={selectedCategory} />
+      <ProductGridOptimized category={selectedCategory} searchTerm={searchTerm} />
     </div>
   );
 }

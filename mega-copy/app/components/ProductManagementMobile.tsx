@@ -48,21 +48,41 @@ export default function ProductManagementMobile() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const itemsPerPage = 20;
 
-  // 상품 목록 불러오기
+  // 상품 목록 불러오기 - Supabase 직접 호출
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/products?limit=1000');
-      const result = await response.json();
-      if (result.data) {
-        const data = Array.isArray(result.data) ? result.data : [];
-        const sortedData = data.sort((a: Product, b: Product) => {
-          const dateA = new Date(a.created_at || '').getTime();
-          const dateB = new Date(b.created_at || '').getTime();
-          return dateB - dateA;
-        });
-        setProducts(sortedData);
-        setFilteredProducts(sortedData);
+      const { supabase } = await import('../../lib/supabase');
+      
+      // 상품 데이터 가져오기
+      const { data: products, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(1000);
+      
+      if (error) throw error;
+      
+      if (products) {
+        // 상품 이미지 가져오기
+        const productsWithImages = await Promise.all(
+          products.map(async (product) => {
+            const { data: images } = await supabase
+              .from('product_images')
+              .select('*')
+              .eq('product_id', product.id)
+              .order('display_order');
+            
+            return {
+              ...product,
+              product_images: images || [],
+              additional_images: images?.map(img => img.image_url) || []
+            };
+          })
+        );
+        
+        setProducts(productsWithImages);
+        setFilteredProducts(productsWithImages);
       } else {
         setProducts([]);
         setFilteredProducts([]);
@@ -124,19 +144,31 @@ export default function ProductManagementMobile() {
     }
   };
 
-  // 단일 삭제
+  // 단일 삭제 - Supabase 직접 호출
   const handleSingleDelete = async (productId: string) => {
     if (!confirm('이 상품을 삭제하시겠습니까?')) return;
     
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/products/${productId}`, {
-        method: 'DELETE'
-      });
+      const { supabase } = await import('../../lib/supabase');
       
-      if (response.ok) {
+      // 상품 이미지 먼저 삭제
+      await supabase
+        .from('product_images')
+        .delete()
+        .eq('product_id', productId);
+      
+      // 상품 삭제
+      const { error } = await supabase
+        .from('products')
+        .delete()
+        .eq('id', productId);
+      
+      if (!error) {
         setProducts(prev => prev.filter(p => p.id !== productId));
         setSelectedProducts(prev => prev.filter(id => id !== productId));
+      } else {
+        throw error;
       }
     } catch (error) {
       alert('삭제 중 오류가 발생했습니다.');
@@ -145,14 +177,26 @@ export default function ProductManagementMobile() {
     }
   };
 
-  // 일괄 삭제
+  // 일괄 삭제 - Supabase 직접 호출
   const handleBulkDelete = async () => {
     if (!confirm(`선택한 ${selectedProducts.length}개 상품을 삭제하시겠습니까?`)) return;
     
     setIsLoading(true);
     try {
+      const { supabase } = await import('../../lib/supabase');
+      
       for (const id of selectedProducts) {
-        await fetch(`/api/products/${id}`, { method: 'DELETE' });
+        // 상품 이미지 삭제
+        await supabase
+          .from('product_images')
+          .delete()
+          .eq('product_id', id);
+        
+        // 상품 삭제
+        await supabase
+          .from('products')
+          .delete()
+          .eq('id', id);
       }
       
       setProducts(prev => prev.filter(p => !selectedProducts.includes(p.id)));
@@ -165,24 +209,22 @@ export default function ProductManagementMobile() {
     }
   };
 
-  // 카테고리 일괄 변경
+  // 카테고리 일괄 변경 - Supabase 직접 호출
   const handleBulkCategoryUpdate = async (category: string) => {
     if (!confirm(`선택한 ${selectedProducts.length}개 상품을 "${category}" 카테고리로 이동하시겠습니까?`)) return;
     
     setIsLoading(true);
     try {
+      const { supabase } = await import('../../lib/supabase');
+      
       for (const id of selectedProducts) {
-        const product = products.find(p => p.id === id);
-        if (product) {
-          await fetch(`/api/products/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              ...product,
-              category,
-              images: product.product_images?.map(img => img.image_url) || []
-            })
-          });
+        const { error } = await supabase
+          .from('products')
+          .update({ category })
+          .eq('id', id);
+          
+        if (error) {
+          console.error('Failed to update product category:', error);
         }
       }
       
@@ -316,6 +358,18 @@ export default function ProductManagementMobile() {
                     </span>
                   </div>
                 </div>
+
+                {/* 편집 버튼 */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setEditingProduct(product);
+                    setShowEditModal(true);
+                  }}
+                  className="p-2 hover:bg-gray-100 rounded-lg"
+                >
+                  <Edit className="w-4 h-4 text-gray-600" />
+                </button>
 
               </div>
             </div>

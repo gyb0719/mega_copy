@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Cloudflare Pages 배포를 위한 설정 제거 (기본값 사용)
+  // Cloudflare Pages 배포를 위한 설정
+  output: 'export',
+  trailingSlash: true,
   
   // 이미지 도메인 허용
   images: {

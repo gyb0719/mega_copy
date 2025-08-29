@@ -42,7 +42,16 @@
       "Bash(dir:*)",
       "mcp__sqlite__list_tables",
       "Bash(npm run dev:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npm run build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(if [ -d \"mega-copy\" ])",
+      "Bash(then echo \"Found nested mega-copy folder\")",
+      "Bash(else echo \"No nested folder\")",
+      "Bash(fi)",
+      "Bash(npm install)"
     ],
     "deny": [],
     "ask": [],

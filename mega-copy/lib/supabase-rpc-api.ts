@@ -253,40 +253,37 @@ export const ordersAPI = {
 
 export const storageAPI = {
   /**
-   * 이미지 업로드
+   * 이미지를 base64로 변환하여 반환
    */
   async uploadImage(file: File) {
     try {
       // 파일 검증
       if (!file) throw new Error('파일이 없습니다')
-      if (file.size > 5 * 1024 * 1024) throw new Error('파일 크기는 5MB 이하여야 합니다')
+      if (file.size > 10 * 1024 * 1024) throw new Error('파일 크기는 10MB 이하여야 합니다')
       
-      // 파일명 생성 (타임스탬프 + 랜덤 문자열)
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`
+      console.log('이미지를 base64로 변환 중:', {
+        fileName: file.name,
+        fileSize: file.size,
+        fileType: file.type
+      })
       
-      // Storage 업로드 (버킷명: product-images)
-      const { data, error } = await supabase.storage
-        .from('product-images')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: false
-        })
-
-      if (error) {
-        console.error('Storage upload error:', error)
-        throw error
-      }
-
-      // Public URL 가져오기
-      const { data: { publicUrl } } = supabase.storage
-        .from('product-images')
-        .getPublicUrl(fileName)
-
-      return publicUrl
+      // File을 base64로 변환
+      return new Promise<string>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onloadend = () => {
+          const base64String = reader.result as string
+          console.log('Base64 변환 성공')
+          resolve(base64String)
+        }
+        reader.onerror = (error) => {
+          console.error('Base64 변환 실패:', error)
+          reject(new Error('이미지 변환 실패'))
+        }
+        reader.readAsDataURL(file)
+      })
     } catch (error: any) {
-      console.error('Image upload failed:', error)
-      throw new Error(error.message || '이미지 업로드 실패')
+      console.error('Image processing failed:', error)
+      throw error
     }
   },
 

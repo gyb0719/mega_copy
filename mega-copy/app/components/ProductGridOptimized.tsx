@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import LoadingSpinner from './LoadingSpinner';
+import { productsAPI } from '../../lib/supabase-rpc-api';
 
 interface ProductImage {
   id: string;
@@ -16,6 +17,7 @@ interface Product {
   brand: string;
   price: number;
   category: string;
+  description?: string;
   created_at: string;
   image_url?: string;
   additional_images?: string[];
@@ -24,6 +26,7 @@ interface Product {
 
 interface ProductGridOptimizedProps {
   category: string;
+  searchTerm?: string;
 }
 
 function ProductCard({ product }: { product: Product }) {
@@ -31,7 +34,7 @@ function ProductCard({ product }: { product: Product }) {
   const mainImage = product.product_images?.[0]?.image_url || product.image_url;
 
   return (
-    <Link href={`/products/${product.id}`} className="group cursor-pointer block h-full">
+    <Link href={`/product?id=${product.id}`} className="group cursor-pointer block h-full">
       <div className="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
         <div className="aspect-square bg-gray-100 relative overflow-hidden">
           {mainImage ? (
@@ -58,7 +61,7 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-export default function ProductGridOptimized({ category }: ProductGridOptimizedProps) {
+export default function ProductGridOptimized({ category, searchTerm = '' }: ProductGridOptimizedProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [displayProducts, setDisplayProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -72,8 +75,7 @@ export default function ProductGridOptimized({ category }: ProductGridOptimizedP
   const fetchProducts = useCallback(async () => {
     try {
       console.log('[ProductGrid] Fetching products...');
-      const response = await fetch('/api/products?limit=1000');
-      const result = await response.json();
+      const result = await productsAPI.getAll({ limit: 1000 });
       
       console.log('[ProductGrid] API Response:', result);
       console.log('[ProductGrid] Response success:', result.success);
@@ -108,11 +110,20 @@ export default function ProductGridOptimized({ category }: ProductGridOptimizedP
     fetchProducts();
   }, [fetchProducts]);
 
-  // 카테고리 필터링 및 페이지네이션
+  // 카테고리 및 검색어 필터링, 페이지네이션
   useEffect(() => {
-    const filtered = category === '전체' 
+    let filtered = category === '전체' 
       ? products 
       : products.filter(p => p.category === category);
+    
+    // 검색어 필터링 (제목과 설명에서 검색)
+    if (searchTerm.trim()) {
+      const searchLower = searchTerm.toLowerCase();
+      filtered = filtered.filter(p => 
+        p.name.toLowerCase().includes(searchLower) ||
+        (p.description && p.description.toLowerCase().includes(searchLower))
+      );
+    }
     
     const startIndex = 0;
     const endIndex = page * itemsPerPage;
@@ -120,7 +131,7 @@ export default function ProductGridOptimized({ category }: ProductGridOptimizedP
     
     setDisplayProducts(paginatedProducts);
     setHasMore(filtered.length > endIndex);
-  }, [products, category, page]);
+  }, [products, category, searchTerm, page]);
 
   // 더 많은 아이템 로드
   const loadMore = useCallback(() => {
@@ -156,10 +167,10 @@ export default function ProductGridOptimized({ category }: ProductGridOptimizedP
     };
   }, [loadMore]);
 
-  // 카테고리 변경 시 페이지 리셋
+  // 카테고리 또는 검색어 변경 시 페이지 리셋
   useEffect(() => {
     setPage(1);
-  }, [category]);
+  }, [category, searchTerm]);
 
   if (isLoading) {
     return (
@@ -172,7 +183,9 @@ export default function ProductGridOptimized({ category }: ProductGridOptimizedP
   if (!displayProducts || displayProducts.length === 0) {
     return (
       <div className="text-center py-20 px-4">
-        <p className="text-gray-500 font-bold">해당 카테고리에 상품이 없습니다.</p>
+        <p className="text-gray-500 font-bold">
+          {searchTerm ? '검색 결과가 없습니다.' : '해당 카테고리에 상품이 없습니다.'}
+        </p>
       </div>
     );
   }

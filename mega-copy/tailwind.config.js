@@ -9,6 +9,7 @@ module.exports = {
     extend: {
       colors: {
         'mega-yellow': '#FFD700',
+        'mega-black': '#1a1a1a',
         'mega-red': '#FF0000',
       },
       backgroundImage: {

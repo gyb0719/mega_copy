@@ -128,12 +128,20 @@ export default function ProductAddModal({ onClose, onSave }: ProductAddModalProp
       
       // 1. 메인 이미지 업로드
       console.log('메인 이미지 업로드 시작...');
+      console.log('메인 이미지 정보:', {
+        name: mainImage.name,
+        size: mainImage.size,
+        type: mainImage.type
+      });
+      
       const mainImageUpload = await storageAPI.uploadMultipleImages([mainImage]);
       
       // 메인 이미지는 필수이므로 실패하면 에러
       if (mainImageUpload.uploaded.length === 0) {
         console.error('메인 이미지 업로드 실패:', mainImageUpload.failed);
-        const errorMsg = mainImageUpload.failed[0]?.message || '이미지 업로드 실패';
+        const errorDetail = mainImageUpload.failed[0];
+        const errorMsg = errorDetail?.message || errorDetail?.toString() || '이미지 업로드 실패';
+        console.error('에러 상세:', errorDetail);
         throw new Error(`메인 이미지 업로드 실패: ${errorMsg}`);
       }
       
@@ -158,32 +166,47 @@ export default function ProductAddModal({ onClose, onSave }: ProductAddModalProp
       
       setUploadingImages(false);
 
-      // 3. 상품 데이터 생성
-      const productData = {
-        name: formData.name,
-        brand: '',
-        price: parseFloat(formData.price),
-        original_price: null,
-        category: formData.category,
-        description: formData.description || '',
-        stock: 0,
-        image_url: mainImageUrl, // 메인 이미지
-        additional_images: detailImageUrls // 세부 이미지들
-      };
+      // 3. Supabase 직접 호출로 상품 등록
+      const { supabase } = await import('../../lib/supabase');
+      
+      // 3-1. products 테이블에 상품 등록
+      const { data: newProduct, error: productError } = await supabase
+        .from('products')
+        .insert({
+          name: formData.name,
+          brand: '',
+          price: parseFloat(formData.price),
+          original_price: null,
+          category: formData.category,
+          description: formData.description || '',
+          stock: 0,
+          image_url: mainImageUrl, // 메인 이미지
+          is_available: true
+        })
+        .select()
+        .single();
 
-      // 4. API 호출
-      const response = await fetch('/api/products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(productData)
-      });
+      if (productError) {
+        console.error('상품 등록 오류:', productError);
+        throw new Error('상품 등록에 실패했습니다: ' + productError.message);
+      }
 
-      const result = await response.json();
+      // 3-2. product_images 테이블에 세부 이미지 등록
+      if (newProduct && detailImageUrls.length > 0) {
+        const imageInserts = detailImageUrls.map((url, index) => ({
+          product_id: newProduct.id,
+          image_url: url,
+          display_order: index + 1
+        }));
 
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || '상품 등록에 실패했습니다.');
+        const { error: imagesError } = await supabase
+          .from('product_images')
+          .insert(imageInserts);
+
+        if (imagesError) {
+          console.error('이미지 정보 저장 오류:', imagesError);
+          // 이미지 저장 실패는 경고만 하고 진행
+        }
       }
 
       alert('상품이 성공적으로 등록되었습니다!');

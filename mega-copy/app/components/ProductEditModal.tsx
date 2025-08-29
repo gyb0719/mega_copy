@@ -88,30 +88,56 @@ export default function ProductEditModal({ product, onClose, onSave }: ProductEd
         }
       }
 
-      // 기존 이미지 URL 추출
-      const existingImageUrls = existingImages.map(img => img.image_url);
+      // Supabase 직접 호출로 상품 수정
+      const { supabase } = await import('../../lib/supabase');
       
-      // 모든 이미지 URL 합치기
-      const allImageUrls = [...existingImageUrls, ...uploadedImageUrls];
-
-      // API를 통해 상품 수정
-      const response = await fetch(`/api/products/${product.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          brand: '',
-          images: allImageUrls
+      // 1. products 테이블 업데이트
+      const mainImageUrl = existingImages[0]?.image_url || uploadedImageUrls[0] || null;
+      
+      const { error: updateError } = await supabase
+        .from('products')
+        .update({
+          name: formData.name,
+          price: formData.price,
+          category: formData.category,
+          description: formData.description,
+          image_url: mainImageUrl // 첫 번째 이미지를 메인 이미지로
         })
-      });
+        .eq('id', product.id);
 
-      if (!response.ok) {
-        throw new Error('상품 수정에 실패했습니다.');
+      if (updateError) {
+        throw new Error('상품 수정에 실패했습니다: ' + updateError.message);
       }
 
-      // 삭제된 이미지는 DB에서만 제거 (스토리지는 유지)
+      // 2. 기존 product_images 삭제
+      if (deletedImageIds.length > 0) {
+        const { error: deleteError } = await supabase
+          .from('product_images')
+          .delete()
+          .in('id', deletedImageIds);
+          
+        if (deleteError) {
+          console.error('이미지 삭제 오류:', deleteError);
+        }
+      }
+
+      // 3. 새로운 이미지 추가
+      if (uploadedImageUrls.length > 0) {
+        const currentMaxOrder = existingImages.length;
+        const newImages = uploadedImageUrls.map((url, index) => ({
+          product_id: product.id,
+          image_url: url,
+          display_order: currentMaxOrder + index + 1
+        }));
+
+        const { error: insertError } = await supabase
+          .from('product_images')
+          .insert(newImages);
+          
+        if (insertError) {
+          console.error('이미지 추가 오류:', insertError);
+        }
+      }
 
       alert('상품이 성공적으로 수정되었습니다!');
       onSave();
