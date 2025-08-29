@@ -1,12 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import ServiceWorkerRegistration from './components/ServiceWorkerRegistration';
 
 export const metadata: Metadata = {
   title: "MEGA COPY - 명품 레플리카 쇼핑몰",
   description: "최고급 명품 레플리카 전문 쇼핑몰 MEGA COPY",
   keywords: "명품 레플리카, 명품 복제품, 럭셔리 브랜드",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/mega_copy_logo.png",
+    apple: "/mega_copy_logo.png"
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -26,9 +29,11 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 5,
-  userScalable: true,
-  themeColor: "#000000",
+  maximumScale: 1,
+  minimumScale: 1,
+  userScalable: false,
+  themeColor: "#FFD700",
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -38,9 +43,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <link rel="icon" href="/mega_copy_logo.png" />
+        <link rel="apple-touch-icon" href="/mega_copy_logo.png" />
+        <link rel="shortcut icon" href="/mega_copy_logo.png" />
+      </head>
       <body className="bg-gray-50">
         {children}
-        <ServiceWorkerRegistration />
+        {}
       </body>
     </html>
   );

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega Copy - 진단 페이지</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover { background: #0056b3; }
+        .log {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Mega Copy 진단 페이지</h1>
+    
+    <div class="card">
+        <h2>1. 서버 연결 테스트</h2>
+        <button onclick="testServers()">서버 테스트</button>
+        <div id="server-status"></div>
+    </div>
+
+    <div class="card">
+        <h2>2. Supabase API 테스트</h2>
+        <button onclick="testSupabase()">API 테스트</button>
+        <button onclick="testRPCFunctions()">RPC Functions 테스트</button>
+        <div id="api-status"></div>
+    </div>
+
+    <div class="card">
+        <h2>3. 상품 목록 테스트</h2>
+        <button onclick="loadProducts()">상품 불러오기</button>
+        <div id="products-list"></div>
+    </div>
+
+    <div class="card">
+        <h2>4. 실시간 로그</h2>
+        <div class="log" id="log"></div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://nzmscqfrmxqcukhshsok.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56bXNjcWZybXhxY3VraHNoc29rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyMTg1NDMsImV4cCI6MjA3MTc5NDU0M30.o0zQtPEjsuJnfQnY2MiakuM2EvTlVuRO9yeoajrwiLU';
+        
+        function log(message, type = 'info') {
+            const logEl = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            const color = {
+                info: '#58a6ff',
+                success: '#56d364',
+                error: '#f85149',
+                warning: '#d29922'
+            }[type] || '#8b949e';
+            
+            logEl.innerHTML += `<div style="color: ${color}">[${time}] ${message}</div>`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        async function testServers() {
+            const statusEl = document.getElementById('server-status');
+            statusEl.innerHTML = '<p>테스트 중...</p>';
+            
+            const servers = [
+                { name: 'localhost:3004', url: 'http://localhost:3004' },
+                { name: 'localhost:3007', url: 'http://localhost:3007' },
+                { name: 'Cloudflare Pages', url: 'https://mega-copy3.pages.dev' }
+            ];
+            
+            let html = '';
+            for (const server of servers) {
+                try {
+                    log(`${server.name} 연결 시도...`, 'info');
+                    const response = await fetch(server.url, { 
+                        mode: 'no-cors',
+                        signal: AbortSignal.timeout(3000)
+                    });
+                    html += `<p>${server.name}: <span class="status success">연결됨</span></p>`;
+                    log(`${server.name} 연결 성공`, 'success');
+                } catch (error) {
+                    html += `<p>${server.name}: <span class="status error">연결 실패</span></p>`;
+                    log(`${server.name} 연결 실패: ${error.message}`, 'error');
+                }
+            }
+            
+            statusEl.innerHTML = html;
+        }
+
+        async function testSupabase() {
+            const statusEl = document.getElementById('api-status');
+            statusEl.innerHTML = '<p>Supabase 연결 테스트 중...</p>';
+            
+            try {
+                log('Supabase API 연결 시도...', 'info');
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/`, {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                    }
+                });
+                
+                if (response.ok) {
+                    statusEl.innerHTML = '<p>Supabase: <span class="status success">연결 성공</span></p>';
+                    log('Supabase 연결 성공!', 'success');
+                } else {
+                    statusEl.innerHTML = `<p>Supabase: <span class="status error">오류 ${response.status}</span></p>`;
+                    log(`Supabase 오류: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                statusEl.innerHTML = `<p>Supabase: <span class="status error">연결 실패</span></p>`;
+                log(`Supabase 연결 실패: ${error.message}`, 'error');
+            }
+        }
+
+        async function testRPCFunctions() {
+            const statusEl = document.getElementById('api-status');
+            statusEl.innerHTML = '<p>RPC Functions 테스트 중...</p>';
+            
+            try {
+                log('RPC get_products 함수 호출...', 'info');
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_products`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        limit_count: 5,
+                        offset_count: 0
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    statusEl.innerHTML = `
+                        <p>RPC Functions: <span class="status success">작동 중</span></p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                    log('RPC Functions 정상 작동!', 'success');
+                } else {
+                    statusEl.innerHTML = `
+                        <p>RPC Functions: <span class="status error">오류</span></p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                    log(`RPC 오류: ${data.message || 'Unknown error'}`, 'error');
+                    
+                    if (data.message && data.message.includes('does not exist')) {
+                        statusEl.innerHTML += `
+                            <div class="status warning" style="margin-top: 10px; padding: 10px;">
+                                ⚠️ SQL Functions가 생성되지 않았습니다!<br>
+                                1. <a href="https://supabase.com/dashboard/project/nzmscqfrmxqcukhshsok/sql/new" target="_blank">SQL Editor 열기</a><br>
+                                2. database-functions.sql 내용 복사 후 실행
+                            </div>
+                        `;
+                    }
+                }
+            } catch (error) {
+                statusEl.innerHTML = `<p>RPC Functions: <span class="status error">실패</span></p>`;
+                log(`RPC 실패: ${error.message}`, 'error');
+            }
+        }
+
+        async function loadProducts() {
+            const listEl = document.getElementById('products-list');
+            listEl.innerHTML = '<p>상품 불러오는 중...</p>';
+            
+            try {
+                log('상품 목록 조회 중...', 'info');
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_products`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        limit_count: 10,
+                        offset_count: 0,
+                        search_query: '',
+                        category_filter: ''
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.data) {
+                    const products = result.data;
+                    log(`${products.length}개 상품 조회 성공`, 'success');
+                    
+                    if (products.length === 0) {
+                        listEl.innerHTML = `
+                            <p class="status info">상품이 없습니다. 샘플 데이터를 추가하세요.</p>
+                            <button onclick="addSampleProduct()">샘플 상품 추가</button>
+                        `;
+                    } else {
+                        let html = '<h3>상품 목록</h3><ul>';
+                        products.forEach(p => {
+                            html += `<li>${p.name} - ${p.price}원 (재고: ${p.stock})</li>`;
+                        });
+                        html += '</ul>';
+                        listEl.innerHTML = html;
+                    }
+                } else {
+                    listEl.innerHTML = '<p class="status error">상품 조회 실패</p>';
+                    log('상품 조회 실패', 'error');
+                }
+            } catch (error) {
+                listEl.innerHTML = `<p class="status error">오류: ${error.message}</p>`;
+                log(`오류: ${error.message}`, 'error');
+            }
+        }
+
+        async function addSampleProduct() {
+            try {
+                log('샘플 상품 추가 중...', 'info');
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/add_product`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        product_name: '테스트 상품 ' + Date.now(),
+                        product_price: 10000,
+                        product_description: '테스트 설명',
+                        product_category: '기타',
+                        product_stock: 10
+                    })
+                });
+                
+                if (response.ok) {
+                    log('샘플 상품 추가 성공!', 'success');
+                    loadProducts();
+                } else {
+                    log('샘플 상품 추가 실패', 'error');
+                }
+            } catch (error) {
+                log(`오류: ${error.message}`, 'error');
+            }
+        }
+
+        // 페이지 로드 시 자동 테스트
+        window.onload = () => {
+            log('진단 페이지 로드 완료', 'success');
+            log('서버 및 API 테스트를 시작하세요', 'info');
+        };
+    </script>
+</body>
+</html>

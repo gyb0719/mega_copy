@@ -6,10 +6,10 @@ interface LoadingSpinnerProps {
   fullScreen?: boolean;
 }
 
-export default function LoadingSpinner({ 
-  size = 'md', 
-  message = '로딩 중...', 
-  fullScreen = false 
+export default function LoadingSpinner({
+  size = 'md',
+  message = '로딩 중...',
+  fullScreen = false
 }: LoadingSpinnerProps) {
   const sizeClasses = {
     sm: 'w-4 h-4',

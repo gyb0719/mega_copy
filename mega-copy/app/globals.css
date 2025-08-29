@@ -12,6 +12,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 html,
@@ -21,6 +29,50 @@ body {
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 
     'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 
     'Malgun Gothic', sans-serif;
+}
+
+/* 안드로이드 및 모바일 최적화 */
+@media screen and (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+  
+  body {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  /* 입력 필드 줌 방지 */
+  input, textarea, select, button {
+    font-size: 16px !important;
+  }
+  
+  /* 버튼 터치 영역 확대 - 관리자 페이지 및 특정 버튼 제외 */
+  .home-page button:not(.inline-button), 
+  .home-page a:not(.inline-link):not([href="/admin"]) {
+    min-height: 44px;
+  }
+  
+  /* 관리자 페이지 버튼은 기본 크기 유지 */
+  .admin-page button {
+    min-height: unset;
+  }
+  
+  /* 텍스트 가독성 향상 */
+  .text-xs {
+    font-size: 0.75rem !important;
+  }
+  
+  .text-sm {
+    font-size: 0.875rem !important;
+  }
+}
+
+/* 안드로이드 Chrome 스크롤 최적화 */
+@supports (-webkit-overflow-scrolling: touch) {
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 @layer utilities {

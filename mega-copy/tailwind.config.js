@@ -9,18 +9,13 @@ module.exports = {
     extend: {
       colors: {
         'mega-yellow': '#FFD700',
-        'mega-black': '#1a1a1a',
-        'mega-red': '#DC2626',
+        'mega-red': '#FF0000',
       },
-      animation: {
-        'slide': 'slide 15s linear infinite',
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic':
+          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
-      keyframes: {
-        slide: {
-          '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-100%)' },
-        }
-      }
     },
   },
   plugins: [],
