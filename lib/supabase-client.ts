@@ -81,10 +81,9 @@ export const productsAPI = {
   // 상품 생성
   async create(productData: any) {
     try {
-      // is_available 기본값 설정
+      // 기본값 설정 (is_available 제거)
       const dataWithDefaults = {
         ...productData,
-        is_available: productData.is_available !== undefined ? productData.is_available : true,
         stock: productData.stock || 0
       }
       
