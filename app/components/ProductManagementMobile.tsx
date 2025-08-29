@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import ProductAddModal from './ProductAddModal';
 import ProductEditModal from './ProductEditModal';
+import { productsAPI } from '../../lib/supabase-client';
 
 interface Product {
   id: string;
@@ -52,8 +53,7 @@ export default function ProductManagementMobile() {
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/products?limit=1000');
-      const result = await response.json();
+      const result = await productsAPI.getAll({ limit: 1000 });
       if (result.data) {
         const data = Array.isArray(result.data) ? result.data : [];
         const sortedData = data.sort((a: Product, b: Product) => {
@@ -130,13 +130,13 @@ export default function ProductManagementMobile() {
     
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/products/${productId}`, {
-        method: 'DELETE'
-      });
+      const result = await productsAPI.delete(productId);
       
-      if (response.ok) {
+      if (result.success) {
         setProducts(prev => prev.filter(p => p.id !== productId));
         setSelectedProducts(prev => prev.filter(id => id !== productId));
+      } else {
+        alert('삭제에 실패했습니다.');
       }
     } catch (error) {
       alert('삭제 중 오류가 발생했습니다.');
@@ -152,7 +152,7 @@ export default function ProductManagementMobile() {
     setIsLoading(true);
     try {
       for (const id of selectedProducts) {
-        await fetch(`/api/products/${id}`, { method: 'DELETE' });
+        await productsAPI.delete(id);
       }
       
       setProducts(prev => prev.filter(p => !selectedProducts.includes(p.id)));

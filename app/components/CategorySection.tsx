@@ -74,48 +74,32 @@ export default function CategorySection({ selectedCategory, onCategorySelect, pr
           ))}
         </div>
 
-        {/* Mobile Horizontal Scroll */}
-        <div className="md:hidden relative">
-          {showLeftArrow && (
+        {/* Mobile Grid - 모든 카테고리가 한 화면에 보이도록 */}
+        <div className="md:hidden grid grid-cols-3 gap-1.5">
+          {categories.map((category) => (
             <button
-              onClick={() => scroll('left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-1 rounded-full shadow-md"
+              key={category}
+              onClick={() => onCategorySelect(category)}
+              className={`
+                py-2 px-1 rounded-lg font-medium text-xs transition-all duration-200 relative
+                ${selectedCategory === category 
+                  ? 'bg-mega-black text-white' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }
+              `}
             >
-              <ChevronLeft className="w-5 h-5" />
+              {category}
+              {productCounts[category] !== undefined && productCounts[category] > 0 && (
+                <span className={`absolute -top-1 -right-1 text-[10px] px-1 py-0.5 rounded-full ${
+                  selectedCategory === category 
+                    ? 'bg-mega-yellow text-black' 
+                    : 'bg-mega-red text-white'
+                }`}>
+                  {productCounts[category]}
+                </span>
+              )}
             </button>
-          )}
-          
-          <div
-            ref={scrollRef}
-            onScroll={handleScroll}
-            className="flex gap-2 overflow-x-auto scrollbar-hide pb-2"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => onCategorySelect(category)}
-                className={`
-                  flex-shrink-0 py-2 px-4 rounded-lg font-medium transition-all duration-200
-                  ${selectedCategory === category 
-                    ? 'bg-mega-black text-white' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }
-                `}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-          
-          {showRightArrow && (
-            <button
-              onClick={() => scroll('right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 p-1 rounded-full shadow-md"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          )}
+          ))}
         </div>
       </div>
     </div>

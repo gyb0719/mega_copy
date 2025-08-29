@@ -149,9 +149,27 @@ export default function ProductDetailPage() {
         </div>
       </header>
 
-      {/* 상품 정보 섹션 (글이 먼저) */}
+      {/* 메인 사진과 상품 정보 섹션 */}
       <div className="bg-white">
         <div className="container mx-auto px-4 py-6">
+          {/* 메인 이미지 */}
+          {allImages.length > 0 && (
+            <div className="mb-6">
+              <div className="aspect-square relative overflow-hidden rounded-lg bg-gray-50">
+                <img
+                  src={allImages[0]}
+                  alt={`${product.name} - 메인 이미지`}
+                  className="w-full h-full object-contain"
+                  loading="lazy"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/placeholder.jpg';
+                  }}
+                />
+              </div>
+            </div>
+          )}
+          
           {/* 카테고리 */}
           <p className="text-sm text-gray-500 mb-2">{product.category}</p>
           
@@ -160,7 +178,7 @@ export default function ProductDetailPage() {
           
           {/* 가격 */}
           <div className="flex items-baseline gap-2 mb-6">
-            <span className="text-3xl font-black text-mega-red">
+            <span className="text-3xl font-black text-black">
               ₩{Number(product.price || 0).toLocaleString()}
             </span>
           </div>
@@ -175,16 +193,19 @@ export default function ProductDetailPage() {
         </div>
       </div>
 
-      {/* 이미지 섹션 (무한 스크롤 형태) */}
-      <div className="mt-2">
-        {allImages.length > 0 ? (
-          <div className="space-y-2">
-            {allImages.map((imageUrl, index) => (
+      {/* 세부 사진 섹션 */}
+      {allImages.length > 1 && (
+        <div className="mt-6">
+          <div className="bg-gray-100 px-4 py-3">
+            <h2 className="font-bold text-lg text-center">📸 상세 이미지</h2>
+          </div>
+          <div className="space-y-2 mt-2">
+            {allImages.slice(1).map((imageUrl, index) => (
               <div key={index} className="bg-white">
                 <div className="aspect-square md:aspect-[4/3] lg:aspect-[16/9] relative overflow-hidden">
                   <img
                     src={imageUrl}
-                    alt={`${product.name} - 이미지 ${index + 1}`}
+                    alt={`${product.name} - 상세 이미지 ${index + 1}`}
                     className="w-full h-full object-contain bg-gray-50"
                     loading="lazy"
                     onError={(e) => {
@@ -194,20 +215,14 @@ export default function ProductDetailPage() {
                   />
                   {/* 이미지 번호 표시 */}
                   <div className="absolute top-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-                    {index + 1} / {allImages.length}
+                    상세 {index + 1} / {allImages.length - 1}
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        ) : (
-          <div className="bg-white">
-            <div className="aspect-square bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-400 font-bold">이미지 없음</span>
-            </div>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* 하단 고정 버튼 */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t">
