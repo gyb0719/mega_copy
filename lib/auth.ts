@@ -10,35 +10,42 @@ export async function hashPassword(password: string): Promise<string> {
   return hashHex;
 }
 
-// 관리자 인증 함수 - RPC 함수 사용
+// 관리자 인증 함수
 export async function authenticateAdmin(username: string, password: string) {
   try {
     console.log('인증 시도:', username);
     
-    // 비밀번호 해시 생성
-    const hashedPassword = await hashPassword(password);
-    console.log('생성된 해시:', hashedPassword);
+    // 세션 캐시 정리 (이전 세션이 남아있을 수 있음)
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('adminSession');
+    }
     
-    // RPC 함수 호출로 인증
-    const { data, error } = await supabase.rpc('verify_admin_login', {
-      input_username: username,
-      input_password_hash: hashedPassword
-    });
+    // Supabase에서 관리자 정보 조회
+    const { data, error } = await supabase
+      .from('admins')
+      .select('*')
+      .eq('username', username)
+      .single();
 
-    console.log('RPC 결과:', data, error);
+    console.log('DB 조회 결과:', data, error);
 
-    if (error) {
-      console.error('RPC 오류:', error);
+    if (error || !data) {
+      console.error('DB 조회 실패:', error);
       return { success: false, message: '인증 실패' };
     }
 
-    // 결과 확인
-    if (!data || data.length === 0 || !data[0].is_valid) {
-      console.error('인증 실패: 잘못된 자격 증명');
+    // 비밀번호 검증
+    const hashedPassword = await hashPassword(password);
+    console.log('입력된 비밀번호 해시:', hashedPassword);
+    console.log('DB 비밀번호 해시:', data.password_hash);
+    console.log('일치 여부:', data.password_hash === hashedPassword);
+    
+    if (data.password_hash !== hashedPassword) {
+      console.error('비밀번호 불일치');
       return { success: false, message: '인증 실패' };
     }
 
-    const adminData = data[0];
+    const adminData = data;
 
     // 세션 토큰 생성 (브라우저용)
     const tokenString = `${username}-${Date.now()}-${Math.random()}`;
@@ -88,11 +95,22 @@ export function validateSession() {
 }
 
 // 로그아웃 함수
-export function logout() {
+export async function logout() {
   if (typeof window !== 'undefined') {
-    sessionStorage.removeItem('adminSession');
+    // 모든 세션 및 로컬 스토리지 정리
+    sessionStorage.clear();
     localStorage.removeItem('isAdmin');
     localStorage.removeItem('adminRole');
     localStorage.removeItem('adminUsername');
+    
+    // Supabase 세션도 정리 (혹시 있다면)
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {
+      // 무시 - Supabase Auth를 사용하지 않을 수도 있음
+    }
+    
+    // 페이지 새로고침으로 메모리 정리
+    window.location.reload();
   }
 }
