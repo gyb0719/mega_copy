@@ -1,36 +1,59 @@
--- Supabase RLS 정책 수정 (모든 사용자가 상품을 읽을 수 있도록)
--- 이 SQL을 Supabase SQL Editor에서 실행하세요
+-- ========================================
+-- RLS 정책 및 테이블 권한 설정
+-- ========================================
 
--- 1. products 테이블 RLS 비활성화 (개발용)
+-- 1. products 테이블에 additional_images 컬럼 확인/추가
+ALTER TABLE products 
+ADD COLUMN IF NOT EXISTS additional_images JSONB DEFAULT '[]'::jsonb;
+
+-- 2. RLS 비활성화 (임시)
 ALTER TABLE products DISABLE ROW LEVEL SECURITY;
 
--- 또는 RLS를 활성화한 채로 모든 사용자에게 읽기 권한 부여
--- ALTER TABLE products ENABLE ROW LEVEL SECURITY;
--- 
--- -- 기존 정책 삭제
--- DROP POLICY IF EXISTS "Products are viewable by everyone" ON products;
--- DROP POLICY IF EXISTS "Enable read access for all users" ON products;
--- DROP POLICY IF EXISTS "Enable insert for all users" ON products;
--- DROP POLICY IF EXISTS "Enable update for all users" ON products;
--- DROP POLICY IF EXISTS "Enable delete for all users" ON products;
--- 
--- -- 새로운 정책 생성 (모든 사용자 읽기 가능)
--- CREATE POLICY "Enable read access for all users" ON products
---   FOR SELECT USING (true);
--- 
--- -- 인증된 사용자만 생성/수정/삭제 가능 (선택사항)
--- CREATE POLICY "Enable insert for authenticated users" ON products
---   FOR INSERT WITH CHECK (true);
--- 
--- CREATE POLICY "Enable update for authenticated users" ON products
---   FOR UPDATE USING (true);
--- 
--- CREATE POLICY "Enable delete for authenticated users" ON products
---   FOR DELETE USING (true);
+-- 3. 테이블 권한 부여
+GRANT ALL ON products TO anon;
+GRANT ALL ON products TO authenticated;
+GRANT SELECT ON products TO anon;
+GRANT INSERT, UPDATE, DELETE ON products TO authenticated;
 
--- 2. product_images 테이블도 동일하게 처리
-ALTER TABLE product_images DISABLE ROW LEVEL SECURITY;
+-- 4. RLS 정책 삭제 (기존 정책 제거)
+DROP POLICY IF EXISTS "Enable read access for all users" ON products;
+DROP POLICY IF EXISTS "Enable insert for authenticated users only" ON products;
+DROP POLICY IF EXISTS "Enable update for authenticated users only" ON products;
+DROP POLICY IF EXISTS "Enable delete for authenticated users only" ON products;
+DROP POLICY IF EXISTS "Public read access" ON products;
+DROP POLICY IF EXISTS "Authenticated write access" ON products;
 
--- 3. Storage 버킷 권한 설정
--- Supabase 대시보드 > Storage > product-images 버킷에서
--- Public 버킷으로 설정하거나 RLS 정책을 수정하세요
+-- 5. 새로운 RLS 정책 생성
+-- 읽기: 모든 사용자 허용
+CREATE POLICY "Allow public read"
+ON products FOR SELECT
+TO public
+USING (true);
+
+-- 쓰기: 모든 사용자 허용 (개발 환경용 - 프로덕션에서는 수정 필요)
+CREATE POLICY "Allow public insert"
+ON products FOR INSERT
+TO public
+WITH CHECK (true);
+
+CREATE POLICY "Allow public update"
+ON products FOR UPDATE
+TO public
+USING (true)
+WITH CHECK (true);
+
+CREATE POLICY "Allow public delete"
+ON products FOR DELETE
+TO public
+USING (true);
+
+-- 6. RLS 활성화
+ALTER TABLE products ENABLE ROW LEVEL SECURITY;
+
+-- 7. 인덱스 추가 (성능 향상)
+CREATE INDEX IF NOT EXISTS idx_products_is_active ON products(is_active);
+CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);
+CREATE INDEX IF NOT EXISTS idx_products_created_at ON products(created_at DESC);
+
+-- 8. 확인
+SELECT 'RLS policies and permissions set successfully!' as message;

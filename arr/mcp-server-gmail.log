@@ -1,0 +1,412 @@
+2025-08-30T09:54:50.647Z [gmail] [info] Initializing server... { metadata: undefined }
+2025-08-30T09:54:50.651Z [gmail] [info] Initializing server... { metadata: undefined }
+2025-08-30T09:54:50.730Z [gmail] [info] Using MCP server command: C:\Windows\System32\cmd.exe with args and path: {
+  metadata: {
+    args: [
+      '/C',
+      'C:\\Program Files\\nodejs\\npx.cmd',
+      '-y',
+      '@gongrzhe/server-gmail-autoauth-mcp',
+      [length]: 4
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Program Files\\Google\\Chrome\\Application',
+      'C:\\Program Files\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Program Files\\PuTTY\\',
+      'C:\\Program Files\\GitHub CLI\\',
+      'C:\\Users\\gyb07\\.venv\\Scripts',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WindowsApps',
+      'C:\\Users\\gyb07\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\GitHubDesktop\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe\\platform-tools',
+      '',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\Pandoc\\',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      [length]: 45
+    ]
+  }
+} %o
+2025-08-30T09:54:50.762Z [gmail] [info] Using MCP server command: C:\Windows\System32\cmd.exe with args and path: {
+  metadata: {
+    args: [
+      '/C',
+      'C:\\Program Files\\nodejs\\npx.cmd',
+      '-y',
+      '@gongrzhe/server-gmail-autoauth-mcp',
+      [length]: 4
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Program Files\\Google\\Chrome\\Application',
+      'C:\\Program Files\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Program Files\\PuTTY\\',
+      'C:\\Program Files\\GitHub CLI\\',
+      'C:\\Users\\gyb07\\.venv\\Scripts',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WindowsApps',
+      'C:\\Users\\gyb07\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\GitHubDesktop\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe\\platform-tools',
+      '',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\Pandoc\\',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      [length]: 45
+    ]
+  }
+} %o
+2025-08-30T09:54:50.733Z [gmail] [info] Server started and connected successfully { metadata: undefined }
+2025-08-30T09:54:50.807Z [gmail] [info] Message from client: {"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"claude-ai","version":"0.1.0"}},"jsonrpc":"2.0","id":0} { metadata: undefined }
+2025-08-30T09:54:50.765Z [gmail] [info] Server started and connected successfully { metadata: undefined }
+2025-08-30T09:54:50.808Z [gmail] [info] Message from client: {"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"claude-ai","version":"0.1.0"}},"jsonrpc":"2.0","id":0} { metadata: undefined }
+Error: OAuth keys file not found. Please place gcp-oauth.keys.json in current directory or C:\Users\gyb07\.gmail-mcp
+2025-08-30T09:54:55.273Z [gmail] [info] Server transport closed { metadata: undefined }
+2025-08-30T09:54:55.273Z [gmail] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:54:55.273Z [gmail] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2025-08-30T09:54:55.273Z [gmail] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2025-08-30T09:54:55.274Z [gmail] [info] Client transport closed { metadata: undefined }
+Error: OAuth keys file not found. Please place gcp-oauth.keys.json in current directory or C:\Users\gyb07\.gmail-mcp
+2025-08-30T09:54:55.322Z [gmail] [info] Server transport closed { metadata: undefined }
+2025-08-30T09:54:55.322Z [gmail] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:54:55.322Z [gmail] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2025-08-30T09:54:55.322Z [gmail] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2025-08-30T09:54:55.322Z [gmail] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:55:09.723Z [gmail] [info] Initializing server... { metadata: undefined }
+2025-08-30T09:55:09.726Z [gmail] [info] Initializing server... { metadata: undefined }
+2025-08-30T09:55:09.792Z [gmail] [info] Using MCP server command: C:\Windows\System32\cmd.exe with args and path: {
+  metadata: {
+    args: [
+      '/C',
+      'C:\\Program Files\\nodejs\\npx.cmd',
+      '-y',
+      '@gongrzhe/server-gmail-autoauth-mcp',
+      [length]: 4
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Program Files\\Google\\Chrome\\Application',
+      'C:\\Program Files\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Program Files\\PuTTY\\',
+      'C:\\Program Files\\GitHub CLI\\',
+      'C:\\Users\\gyb07\\.venv\\Scripts',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WindowsApps',
+      'C:\\Users\\gyb07\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\GitHubDesktop\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe\\platform-tools',
+      '',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\Pandoc\\',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      [length]: 45
+    ]
+  }
+} %o
+2025-08-30T09:55:09.795Z [gmail] [info] Server started and connected successfully { metadata: undefined }
+2025-08-30T09:55:09.832Z [gmail] [info] Using MCP server command: C:\Windows\System32\cmd.exe with args and path: {
+  metadata: {
+    args: [
+      '/C',
+      'C:\\Program Files\\nodejs\\npx.cmd',
+      '-y',
+      '@gongrzhe/server-gmail-autoauth-mcp',
+      [length]: 4
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Program Files\\Google\\Chrome\\Application',
+      'C:\\Program Files\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Program Files\\PuTTY\\',
+      'C:\\Program Files\\GitHub CLI\\',
+      'C:\\Users\\gyb07\\.venv\\Scripts',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WindowsApps',
+      'C:\\Users\\gyb07\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\GitHubDesktop\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe\\platform-tools',
+      '',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\Pandoc\\',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      [length]: 45
+    ]
+  }
+} %o
+2025-08-30T09:55:09.835Z [gmail] [info] Server started and connected successfully { metadata: undefined }
+2025-08-30T09:55:09.908Z [gmail] [info] Message from client: {"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"claude-ai","version":"0.1.0"}},"jsonrpc":"2.0","id":0} { metadata: undefined }
+2025-08-30T09:55:09.910Z [gmail] [info] Message from client: {"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"claude-ai","version":"0.1.0"}},"jsonrpc":"2.0","id":0} { metadata: undefined }
+Error: OAuth keys file not found. Please place gcp-oauth.keys.json in current directory or C:\Users\gyb07\.gmail-mcp
+Error: OAuth keys file not found. Please place gcp-oauth.keys.json in current directory or C:\Users\gyb07\.gmail-mcp
+2025-08-30T09:55:12.522Z [gmail] [info] Server transport closed { metadata: undefined }
+2025-08-30T09:55:12.522Z [gmail] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:55:12.522Z [gmail] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2025-08-30T09:55:12.522Z [gmail] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2025-08-30T09:55:12.522Z [gmail] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:55:12.542Z [gmail] [info] Server transport closed { metadata: undefined }
+2025-08-30T09:55:12.542Z [gmail] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:55:12.542Z [gmail] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2025-08-30T09:55:12.542Z [gmail] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2025-08-30T09:55:12.542Z [gmail] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:55:48.858Z [gmail] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:55:48.858Z [gmail] [info] Shutting down server... { metadata: undefined }
+2025-08-30T09:55:48.890Z [gmail] [info] Initializing server... { metadata: undefined }
+2025-08-30T09:55:48.941Z [gmail] [info] Using MCP server command: C:\Windows\System32\cmd.exe with args and path: {
+  metadata: {
+    args: [
+      '/C',
+      'C:\\Program Files\\nodejs\\npx.cmd',
+      '-y',
+      '@gongrzhe/server-gmail-autoauth-mcp',
+      [length]: 4
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Program Files\\Google\\Chrome\\Application',
+      'C:\\Program Files\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Program Files\\PuTTY\\',
+      'C:\\Program Files\\GitHub CLI\\',
+      'C:\\Users\\gyb07\\.venv\\Scripts',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WindowsApps',
+      'C:\\Users\\gyb07\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\GitHubDesktop\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe\\platform-tools',
+      '',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\Pandoc\\',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      [length]: 45
+    ]
+  }
+} %o
+2025-08-30T09:55:48.947Z [gmail] [info] Server started and connected successfully { metadata: undefined }
+2025-08-30T09:55:48.969Z [gmail] [info] Message from client: {"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"claude-ai","version":"0.1.0"}},"jsonrpc":"2.0","id":0} { metadata: undefined }
+Error: OAuth keys file not found. Please place gcp-oauth.keys.json in current directory or C:\Users\gyb07\.gmail-mcp
+2025-08-30T09:55:51.652Z [gmail] [info] Server transport closed { metadata: undefined }
+2025-08-30T09:55:51.652Z [gmail] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:55:51.652Z [gmail] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2025-08-30T09:55:51.652Z [gmail] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2025-08-30T09:55:51.652Z [gmail] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:56:04.258Z [gmail] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:56:04.258Z [gmail] [info] Shutting down server... { metadata: undefined }
+2025-08-30T09:56:04.286Z [gmail] [info] Initializing server... { metadata: undefined }
+2025-08-30T09:56:04.345Z [gmail] [info] Using MCP server command: C:\Windows\System32\cmd.exe with args and path: {
+  metadata: {
+    args: [
+      '/C',
+      'C:\\Program Files\\nodejs\\npx.cmd',
+      '-y',
+      '@gongrzhe/server-gmail-autoauth-mcp',
+      [length]: 4
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Program Files\\Google\\Chrome\\Application',
+      'C:\\Program Files\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Program Files\\PuTTY\\',
+      'C:\\Program Files\\GitHub CLI\\',
+      'C:\\Users\\gyb07\\.venv\\Scripts',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WindowsApps',
+      'C:\\Users\\gyb07\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\GitHubDesktop\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe\\platform-tools',
+      '',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\Pandoc\\',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      [length]: 45
+    ]
+  }
+} %o
+2025-08-30T09:56:04.348Z [gmail] [info] Server started and connected successfully { metadata: undefined }
+2025-08-30T09:56:04.362Z [gmail] [info] Message from client: {"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"claude-ai","version":"0.1.0"}},"jsonrpc":"2.0","id":0} { metadata: undefined }
+Error: OAuth keys file not found. Please place gcp-oauth.keys.json in current directory or C:\Users\gyb07\.gmail-mcp
+2025-08-30T09:56:06.859Z [gmail] [info] Server transport closed { metadata: undefined }
+2025-08-30T09:56:06.859Z [gmail] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:56:06.859Z [gmail] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2025-08-30T09:56:06.859Z [gmail] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2025-08-30T09:56:06.859Z [gmail] [info] Client transport closed { metadata: undefined }

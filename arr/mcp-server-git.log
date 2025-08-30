@@ -1,0 +1,518 @@
+2025-08-30T09:54:50.643Z [git] [info] Initializing server... { metadata: undefined }
+2025-08-30T09:54:50.650Z [git] [info] Initializing server... { metadata: undefined }
+2025-08-30T09:54:50.692Z [git] [info] Using MCP server command: C:\Program Files\nodejs\node.exe with args and path: {
+  metadata: {
+    args: [
+      'C:/Users/gyb07/projects/mcp-servers/servers/src/git/dist/index.js',
+      'C:/Users/gyb07/projects',
+      [length]: 2
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Program Files\\Google\\Chrome\\Application',
+      'C:\\Program Files\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Program Files\\PuTTY\\',
+      'C:\\Program Files\\GitHub CLI\\',
+      'C:\\Users\\gyb07\\.venv\\Scripts',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WindowsApps',
+      'C:\\Users\\gyb07\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\GitHubDesktop\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe\\platform-tools',
+      '',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\Pandoc\\',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      [length]: 45
+    ]
+  }
+} %o
+2025-08-30T09:54:50.766Z [git] [info] Using MCP server command: C:\Program Files\nodejs\node.exe with args and path: {
+  metadata: {
+    args: [
+      'C:/Users/gyb07/projects/mcp-servers/servers/src/git/dist/index.js',
+      'C:/Users/gyb07/projects',
+      [length]: 2
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Program Files\\Google\\Chrome\\Application',
+      'C:\\Program Files\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Program Files\\PuTTY\\',
+      'C:\\Program Files\\GitHub CLI\\',
+      'C:\\Users\\gyb07\\.venv\\Scripts',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WindowsApps',
+      'C:\\Users\\gyb07\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\GitHubDesktop\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe\\platform-tools',
+      '',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\Pandoc\\',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      [length]: 45
+    ]
+  }
+} %o
+node:internal/modules/cjs/loader:1368
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\gyb07\projects\mcp-servers\servers\src\git\dist\index.js'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
+    at Function._load (node:internal/modules/cjs/loader:1175:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.18.0
+2025-08-30T09:54:50.697Z [git] [info] Server started and connected successfully { metadata: undefined }
+2025-08-30T09:54:50.802Z [git] [info] Message from client: {"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"claude-ai","version":"0.1.0"}},"jsonrpc":"2.0","id":0} { metadata: undefined }
+2025-08-30T09:54:50.803Z [git] [error] write EPIPE {
+  metadata: {
+    context: 'connection',
+    stack: 'Error: write EPIPE\n' +
+      '    at afterWriteDispatched (node:internal/stream_base_commons:159:15)\n' +
+      '    at writeGeneric (node:internal/stream_base_commons:150:3)\n' +
+      '    at Socket._writeGeneric (node:net:966:11)\n' +
+      '    at Socket._write (node:net:978:8)\n' +
+      '    at writeOrBuffer (node:internal/streams/writable:572:12)\n' +
+      '    at _write (node:internal/streams/writable:501:10)\n' +
+      '    at Writable.write (node:internal/streams/writable:510:10)\n' +
+      '    at C:\\Users\\gyb07\\AppData\\Local\\AnthropicClaude\\app-0.12.129\\resources\\app.asar\\.vite\\build\\index.js:215:2601\n' +
+      '    at new Promise (<anonymous>)\n' +
+      '    at Fwe.send (C:\\Users\\gyb07\\AppData\\Local\\AnthropicClaude\\app-0.12.129\\resources\\app.asar\\.vite\\build\\index.js:215:2456)'
+  }
+}
+2025-08-30T09:54:50.770Z [git] [info] Server started and connected successfully { metadata: undefined }
+2025-08-30T09:54:50.809Z [git] [info] Message from client: {"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"claude-ai","version":"0.1.0"}},"jsonrpc":"2.0","id":0} { metadata: undefined }
+2025-08-30T09:54:50.817Z [git] [info] Server transport closed { metadata: undefined }
+2025-08-30T09:54:50.817Z [git] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:54:50.818Z [git] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2025-08-30T09:54:50.818Z [git] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2025-08-30T09:54:50.818Z [git] [info] Client transport closed { metadata: undefined }
+node:internal/modules/cjs/loader:1368
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\gyb07\projects\mcp-servers\servers\src\git\dist\index.js'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
+    at Function._load (node:internal/modules/cjs/loader:1175:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.18.0
+2025-08-30T09:54:51.180Z [git] [info] Server transport closed { metadata: undefined }
+2025-08-30T09:54:51.180Z [git] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:54:51.180Z [git] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2025-08-30T09:54:51.180Z [git] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2025-08-30T09:54:51.181Z [git] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:55:09.720Z [git] [info] Initializing server... { metadata: undefined }
+2025-08-30T09:55:09.726Z [git] [info] Initializing server... { metadata: undefined }
+2025-08-30T09:55:09.796Z [git] [info] Using MCP server command: C:\Program Files\nodejs\node.exe with args and path: {
+  metadata: {
+    args: [
+      'C:/Users/gyb07/projects/mcp-servers/servers/src/git/dist/index.js',
+      'C:/Users/gyb07/projects',
+      [length]: 2
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Program Files\\Google\\Chrome\\Application',
+      'C:\\Program Files\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Program Files\\PuTTY\\',
+      'C:\\Program Files\\GitHub CLI\\',
+      'C:\\Users\\gyb07\\.venv\\Scripts',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WindowsApps',
+      'C:\\Users\\gyb07\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\GitHubDesktop\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe\\platform-tools',
+      '',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\Pandoc\\',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      [length]: 45
+    ]
+  }
+} %o
+2025-08-30T09:55:09.800Z [git] [info] Server started and connected successfully { metadata: undefined }
+2025-08-30T09:55:09.825Z [git] [info] Using MCP server command: C:\Program Files\nodejs\node.exe with args and path: {
+  metadata: {
+    args: [
+      'C:/Users/gyb07/projects/mcp-servers/servers/src/git/dist/index.js',
+      'C:/Users/gyb07/projects',
+      [length]: 2
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Program Files\\Google\\Chrome\\Application',
+      'C:\\Program Files\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Program Files\\PuTTY\\',
+      'C:\\Program Files\\GitHub CLI\\',
+      'C:\\Users\\gyb07\\.venv\\Scripts',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WindowsApps',
+      'C:\\Users\\gyb07\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\GitHubDesktop\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe\\platform-tools',
+      '',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\Pandoc\\',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      [length]: 45
+    ]
+  }
+} %o
+2025-08-30T09:55:09.829Z [git] [info] Server started and connected successfully { metadata: undefined }
+2025-08-30T09:55:09.908Z [git] [info] Message from client: {"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"claude-ai","version":"0.1.0"}},"jsonrpc":"2.0","id":0} { metadata: undefined }
+2025-08-30T09:55:09.909Z [git] [info] Message from client: {"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"claude-ai","version":"0.1.0"}},"jsonrpc":"2.0","id":0} { metadata: undefined }
+node:internal/modules/cjs/loader:1368
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\gyb07\projects\mcp-servers\servers\src\git\dist\index.js'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
+    at Function._load (node:internal/modules/cjs/loader:1175:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.18.0
+2025-08-30T09:55:10.029Z [git] [info] Server transport closed { metadata: undefined }
+2025-08-30T09:55:10.029Z [git] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:55:10.029Z [git] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2025-08-30T09:55:10.029Z [git] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2025-08-30T09:55:10.029Z [git] [info] Client transport closed { metadata: undefined }
+node:internal/modules/cjs/loader:1368
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\gyb07\projects\mcp-servers\servers\src\git\dist\index.js'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
+    at Function._load (node:internal/modules/cjs/loader:1175:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.18.0
+2025-08-30T09:55:10.095Z [git] [info] Server transport closed { metadata: undefined }
+2025-08-30T09:55:10.095Z [git] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:55:10.095Z [git] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2025-08-30T09:55:10.095Z [git] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2025-08-30T09:55:10.096Z [git] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:55:48.855Z [git] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:55:48.855Z [git] [info] Shutting down server... { metadata: undefined }
+2025-08-30T09:55:48.888Z [git] [info] Initializing server... { metadata: undefined }
+2025-08-30T09:55:48.926Z [git] [info] Using MCP server command: C:\Program Files\nodejs\node.exe with args and path: {
+  metadata: {
+    args: [
+      'C:/Users/gyb07/projects/mcp-servers/servers/src/git/dist/index.js',
+      'C:/Users/gyb07/projects',
+      [length]: 2
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Program Files\\Google\\Chrome\\Application',
+      'C:\\Program Files\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Program Files\\PuTTY\\',
+      'C:\\Program Files\\GitHub CLI\\',
+      'C:\\Users\\gyb07\\.venv\\Scripts',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WindowsApps',
+      'C:\\Users\\gyb07\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\GitHubDesktop\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe\\platform-tools',
+      '',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\Pandoc\\',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      [length]: 45
+    ]
+  }
+} %o
+2025-08-30T09:55:48.929Z [git] [info] Server started and connected successfully { metadata: undefined }
+2025-08-30T09:55:48.963Z [git] [info] Message from client: {"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"claude-ai","version":"0.1.0"}},"jsonrpc":"2.0","id":0} { metadata: undefined }
+node:internal/modules/cjs/loader:1368
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\gyb07\projects\mcp-servers\servers\src\git\dist\index.js'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
+    at Function._load (node:internal/modules/cjs/loader:1175:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.18.0
+2025-08-30T09:55:49.095Z [git] [info] Server transport closed { metadata: undefined }
+2025-08-30T09:55:49.095Z [git] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:55:49.095Z [git] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2025-08-30T09:55:49.095Z [git] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2025-08-30T09:55:49.095Z [git] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:56:04.258Z [git] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:56:04.258Z [git] [info] Shutting down server... { metadata: undefined }
+2025-08-30T09:56:04.285Z [git] [info] Initializing server... { metadata: undefined }
+2025-08-30T09:56:04.323Z [git] [info] Using MCP server command: C:\Program Files\nodejs\node.exe with args and path: {
+  metadata: {
+    args: [
+      'C:/Users/gyb07/projects/mcp-servers/servers/src/git/dist/index.js',
+      'C:/Users/gyb07/projects',
+      [length]: 2
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Program Files\\Google\\Chrome\\Application',
+      'C:\\Program Files\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Program Files\\PuTTY\\',
+      'C:\\Program Files\\GitHub CLI\\',
+      'C:\\Users\\gyb07\\.venv\\Scripts',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Users\\gyb07\\anaconda3',
+      'C:\\Users\\gyb07\\anaconda3\\Scripts',
+      'C:\\Users\\gyb07\\anaconda3\\Library\\bin',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\Users\\gyb07\\dev\\flutter\\bin',
+      'C:\\Program Files\\Git\\cmd',
+      'C:\\Program Files\\Git\\bin',
+      '',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WindowsApps',
+      'C:\\Users\\gyb07\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\GitHubDesktop\\bin',
+      'C:\\Users\\gyb07\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe\\platform-tools',
+      '',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\npm',
+      'C:\\Users\\gyb07\\AppData\\Local\\Pandoc\\',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      'C:\\Users\\gyb07\\AppData\\Roaming\\TinyTeX\\bin\\windows',
+      [length]: 45
+    ]
+  }
+} %o
+2025-08-30T09:56:04.327Z [git] [info] Server started and connected successfully { metadata: undefined }
+2025-08-30T09:56:04.361Z [git] [info] Message from client: {"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"claude-ai","version":"0.1.0"}},"jsonrpc":"2.0","id":0} { metadata: undefined }
+node:internal/modules/cjs/loader:1368
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\gyb07\projects\mcp-servers\servers\src\git\dist\index.js'
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
+    at Function._load (node:internal/modules/cjs/loader:1175:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.18.0
+2025-08-30T09:56:04.474Z [git] [info] Server transport closed { metadata: undefined }
+2025-08-30T09:56:04.474Z [git] [info] Client transport closed { metadata: undefined }
+2025-08-30T09:56:04.474Z [git] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2025-08-30T09:56:04.474Z [git] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2025-08-30T09:56:04.474Z [git] [info] Client transport closed { metadata: undefined }
