@@ -43,9 +43,9 @@ ORDER BY role, username;
 
 -- 7. 권한 확인
 SELECT 
-    tablename,
+    table_name,
     privilege_type,
     grantee
 FROM information_schema.table_privileges
-WHERE tablename = 'admins'
+WHERE table_name = 'admins'
 ORDER BY grantee, privilege_type;
