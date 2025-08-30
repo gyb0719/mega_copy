@@ -5,6 +5,7 @@ import { ArrowLeft, Package, Users } from 'lucide-react';
 import Link from 'next/link';
 import ProductManagementMobile from '../components/ProductManagementMobile';
 import AdminManagement from '../components/AdminManagement';
+import { authenticateAdmin, validateSession, logout } from '../../lib/auth';
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState('products');
@@ -12,51 +13,45 @@ export default function AdminPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [adminRole, setAdminRole] = useState('');
+  const [loginError, setLoginError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  // 간단한 인증 체크 (실제로는 서버 인증 필요)
+  // 세션 체크
   useEffect(() => {
-    const isAdmin = localStorage.getItem('isAdmin');
-    const role = localStorage.getItem('adminRole');
-    if (isAdmin === 'true') {
+    const session = validateSession();
+    if (session) {
       setIsAuthenticated(true);
-      setAdminRole(role || '');
+      setAdminRole(session.role);
     }
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoginError('');
+    setIsLoading(true);
     
-    // 관리자 계정 목록 (DB와 동기화)
-    const adminAccounts = [
-      // Supabase DB의 실제 계정들
-      { username: 'admin', password: 'admin123', role: 'main' },
-      { username: 'manager', password: 'manager123', role: 'main' },
-      { username: 'test', password: 'test123', role: 'sub' },
-      // 기존 계정 (호환성 유지)
-      { username: 'martin18', password: '0601', role: 'main' },
-      { username: 'mega', password: '0601', role: 'main' },
-    ];
-    
-    // 계정 확인
-    const account = adminAccounts.find(
-      acc => acc.username === username && acc.password === password
-    );
-    
-    if (account) {
-      setIsAuthenticated(true);
-      localStorage.setItem('isAdmin', 'true');
-      localStorage.setItem('adminRole', account.role);
-      localStorage.setItem('adminUsername', account.username);
-    } else {
-      alert('로그인 정보가 올바르지 않습니다.');
+    try {
+      const result = await authenticateAdmin(username, password);
+      
+      if (result.success && result.data) {
+        setIsAuthenticated(true);
+        setAdminRole(result.data.role);
+        setUsername('');
+        setPassword('');
+      } else {
+        setLoginError('아이디 또는 비밀번호가 올바르지 않습니다.');
+      }
+    } catch (error) {
+      setLoginError('로그인 처리 중 오류가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleLogout = () => {
+    logout();
     setIsAuthenticated(false);
-    localStorage.removeItem('isAdmin');
-    localStorage.removeItem('adminRole');
-    localStorage.removeItem('adminUsername');
+    setAdminRole('');
   };
 
   // 로그인 화면
@@ -69,6 +64,13 @@ export default function AdminPage() {
             <span className="text-3xl font-black text-black">COPY</span>
           </div>
           <h2 className="text-xl font-bold text-center mb-6 text-gray-800">관리자 로그인</h2>
+          
+          {loginError && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+              {loginError}
+            </div>
+          )}
+          
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-2">
@@ -81,6 +83,8 @@ export default function AdminPage() {
                 className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-mega-yellow transition-colors"
                 placeholder="아이디를 입력하세요"
                 required
+                disabled={isLoading}
+                autoComplete="username"
               />
             </div>
             <div>
@@ -94,13 +98,16 @@ export default function AdminPage() {
                 className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-mega-yellow transition-colors"
                 placeholder="비밀번호를 입력하세요"
                 required
+                disabled={isLoading}
+                autoComplete="current-password"
               />
             </div>
             <button
               type="submit"
-              className="w-full py-3 bg-mega-yellow text-black rounded-lg hover:bg-yellow-400 active:bg-yellow-500 transition-colors font-black text-base"
+              disabled={isLoading}
+              className="w-full py-3 bg-mega-yellow text-black rounded-lg hover:bg-yellow-400 active:bg-yellow-500 transition-colors font-black text-base disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              로그인
+              {isLoading ? '로그인 중...' : '로그인'}
             </button>
           </form>
           <div className="mt-6 text-center">
@@ -151,32 +158,25 @@ export default function AdminPage() {
               <Package className="w-4 h-4 inline mr-2" />
               상품 관리
             </button>
-            {(adminRole === 'main' || true) && (
-              <button
-                onClick={() => setActiveTab('admins')}
-                className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors font-bold ${
-                  activeTab === 'admins'
-                    ? 'bg-black text-white'
-                    : 'bg-gray-100 hover:bg-gray-200'
-                }`}
-              >
-                <Users className="w-4 h-4 inline mr-2" />
-                관리자 관리
-              </button>
-            )}
+            <button
+              onClick={() => setActiveTab('admins')}
+              className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors font-bold ${
+                activeTab === 'admins'
+                  ? 'bg-black text-white'
+                  : 'bg-gray-100 hover:bg-gray-200'
+              }`}
+            >
+              <Users className="w-4 h-4 inline mr-2" />
+              관리자 관리
+            </button>
           </div>
         </div>
       </div>
 
-      {/* 컨텐츠 영역 */}
+      {/* 컨텐츠 */}
       <div className="container mx-auto px-4 py-6">
-        {activeTab === 'products' && (
-          <ProductManagementMobile />
-        )}
-
-        {activeTab === 'admins' && (
-          <AdminManagement />
-        )}
+        {activeTab === 'products' && <ProductManagementMobile />}
+        {activeTab === 'admins' && <AdminManagement currentUserRole={adminRole} />}
       </div>
     </div>
   );

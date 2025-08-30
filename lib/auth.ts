@@ -1,0 +1,88 @@
+import { supabase } from './supabase';
+
+// 브라우저에서 SHA256 해싱 함수
+export async function hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+}
+
+// 관리자 인증 함수
+export async function authenticateAdmin(username: string, password: string) {
+  try {
+    // Supabase에서 관리자 정보 조회
+    const { data, error } = await supabase
+      .from('admins')
+      .select('*')
+      .eq('username', username)
+      .single();
+
+    if (error || !data) {
+      return { success: false, message: '인증 실패' };
+    }
+
+    // 비밀번호 검증
+    const hashedPassword = await hashPassword(password);
+    if (data.password_hash !== hashedPassword) {
+      return { success: false, message: '인증 실패' };
+    }
+
+    // 세션 토큰 생성 (브라우저용)
+    const tokenString = `${username}-${Date.now()}-${Math.random()}`;
+    const sessionToken = await hashPassword(tokenString);
+
+    // 세션 정보 저장 (실제로는 Redis나 DB에 저장)
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('adminSession', JSON.stringify({
+        token: sessionToken,
+        username: data.username,
+        role: data.role || 'admin',
+        expiresAt: Date.now() + (4 * 60 * 60 * 1000) // 4시간
+      }));
+    }
+
+    return { 
+      success: true, 
+      data: {
+        username: data.username,
+        role: data.role || 'admin',
+        token: sessionToken
+      }
+    };
+  } catch (error) {
+    console.error('Authentication error:', error);
+    return { success: false, message: '인증 처리 중 오류 발생' };
+  }
+}
+
+// 세션 검증 함수
+export function validateSession() {
+  if (typeof window === 'undefined') return false;
+  
+  const sessionStr = sessionStorage.getItem('adminSession');
+  if (!sessionStr) return false;
+  
+  try {
+    const session = JSON.parse(sessionStr);
+    if (Date.now() > session.expiresAt) {
+      sessionStorage.removeItem('adminSession');
+      return false;
+    }
+    return session;
+  } catch {
+    return false;
+  }
+}
+
+// 로그아웃 함수
+export function logout() {
+  if (typeof window !== 'undefined') {
+    sessionStorage.removeItem('adminSession');
+    localStorage.removeItem('isAdmin');
+    localStorage.removeItem('adminRole');
+    localStorage.removeItem('adminUsername');
+  }
+}

@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MEGA COPY - 명품 레플리카 쇼핑몰",
-  description: "최고급 명품 레플리카 전문 쇼핑몰 MEGA COPY",
-  keywords: "명품 레플리카, 명품 복제품, 럭셔리 브랜드",
+  title: "MEGA COPY - 프리미엄 패션 쇼핑몰",
+  description: "고품질 패션 제품 전문 쇼핑몰 MEGA COPY",
+  keywords: "패션, 가방, 신발, 시계, 액세서리",
   manifest: "/manifest.json",
   icons: {
     icon: "/mega_copy_logo.png",
@@ -19,8 +19,8 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: "MEGA COPY - 명품 레플리카 쇼핑몰",
-    description: "최고급 명품 레플리카 전문 쇼핑몰",
+    title: "MEGA COPY - 프리미엄 패션 쇼핑몰",
+    description: "고품질 패션 제품 전문 쇼핑몰",
     type: "website",
     locale: "ko_KR",
   },

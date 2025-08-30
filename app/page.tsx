@@ -7,13 +7,14 @@ import CategorySection from './components/CategorySection';
 import NoticeBanner from './components/NoticeBanner';
 import ProductGridOptimized from './components/ProductGridOptimized';
 import PWAInstallButton from './components/PWAInstallButton';
+import Footer from './components/Footer';
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('전체');
   const [searchTerm, setSearchTerm] = useState('');
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <Header />
       <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
       <PWAInstallButton />
@@ -22,7 +23,10 @@ export default function Home() {
         onCategorySelect={setSelectedCategory}
       />
       <NoticeBanner />
-      <ProductGridOptimized category={selectedCategory} searchTerm={searchTerm} />
+      <div className="flex-grow">
+        <ProductGridOptimized category={selectedCategory} searchTerm={searchTerm} />
+      </div>
+      <Footer />
     </div>
   );
 }
