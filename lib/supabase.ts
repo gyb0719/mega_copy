@@ -92,18 +92,21 @@ export type Database = {
           id: string;
           username: string;
           password_hash: string;
+          role: string;
           created_at: string;
         };
         Insert: {
           id?: string;
           username: string;
           password_hash: string;
+          role?: string;
           created_at?: string;
         };
         Update: {
           id?: string;
           username?: string;
           password_hash?: string;
+          role?: string;
           created_at?: string;
         };
       };

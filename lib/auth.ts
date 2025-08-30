@@ -13,6 +13,8 @@ export async function hashPassword(password: string): Promise<string> {
 // 관리자 인증 함수
 export async function authenticateAdmin(username: string, password: string) {
   try {
+    console.log('인증 시도:', username);
+    
     // Supabase에서 관리자 정보 조회
     const { data, error } = await supabase
       .from('admins')
@@ -20,13 +22,21 @@ export async function authenticateAdmin(username: string, password: string) {
       .eq('username', username)
       .single();
 
+    console.log('DB 조회 결과:', data, error);
+
     if (error || !data) {
+      console.error('DB 조회 실패:', error);
       return { success: false, message: '인증 실패' };
     }
 
     // 비밀번호 검증
     const hashedPassword = await hashPassword(password);
+    console.log('입력된 비밀번호 해시:', hashedPassword);
+    console.log('DB 비밀번호 해시:', data.password_hash);
+    console.log('일치 여부:', data.password_hash === hashedPassword);
+    
     if (data.password_hash !== hashedPassword) {
+      console.error('비밀번호 불일치');
       return { success: false, message: '인증 실패' };
     }
 
