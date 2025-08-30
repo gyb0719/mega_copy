@@ -51,7 +51,10 @@
       "Bash(then echo \"Found nested mega-copy folder\")",
       "Bash(else echo \"No nested folder\")",
       "Bash(fi)",
-      "Bash(npm install)"
+      "Bash(npm install)",
+      "Bash(npx next dev:*)",
+      "Bash(git remote get-url:*)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": [],
