@@ -100,7 +100,7 @@ export default function TermsOfService() {
 
           <div className="pt-4 border-t">
             <p className="text-gray-600 text-sm">
-              본 약관은 2025년 1월 1일부터 시행됩니다.
+              본 약관은 2025년 9월 1일부터 시행됩니다.
             </p>
           </div>
         </div>

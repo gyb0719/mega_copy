@@ -80,15 +80,15 @@ export default function PrivacyPolicy() {
           <div>
             <h2 className="text-xl font-bold mb-3">7. 개인정보 보호책임자</h2>
             <p className="text-gray-700">
-              성명: MEGA COPY 고객센터<br/>
-              연락처: 카카오톡 채널 @megacopy
+              성명: 김병일<br/>
+              연락처: 010-9958-0601
             </p>
           </div>
 
           <div>
             <h2 className="text-xl font-bold mb-3">8. 개인정보처리방침 변경</h2>
             <p className="text-gray-700">
-              이 개인정보처리방침은 2025년 1월 1일부터 적용됩니다.
+              이 개인정보처리방침은 2025년 9월 1일부터 적용됩니다.
             </p>
           </div>
         </div>
