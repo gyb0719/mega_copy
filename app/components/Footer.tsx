@@ -9,8 +9,7 @@ export default function Footer() {
           <div>
             <h3 className="font-bold text-lg mb-3">MEGA COPY</h3>
             <p className="text-gray-400 text-sm">
-              고품질 패션 제품 전문 쇼핑몰<br/>
-              카카오톡 채널: @megacopy
+              프리미엄 패션 제품 전문 쇼핑몰
             </p>
           </div>
 
@@ -25,9 +24,6 @@ export default function Footer() {
                    className="text-gray-400 hover:text-white transition-colors">
                   카카오톡 문의
                 </a>
-              </li>
-              <li>
-                <span className="text-gray-400">운영시간: 10:00 - 19:00</span>
               </li>
             </ul>
           </div>
