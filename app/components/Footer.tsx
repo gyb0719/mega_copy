@@ -9,7 +9,7 @@ export default function Footer() {
           <div>
             <h3 className="font-bold text-lg mb-3">MEGA COPY</h3>
             <p className="text-gray-400 text-sm">
-              프리미엄 패션 제품 전문 쇼핑몰
+              프리미엄 패션 전문 쇼핑몰
             </p>
           </div>
 
