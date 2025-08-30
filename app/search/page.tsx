@@ -59,7 +59,6 @@ export default function SearchPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // Update URL to maintain search history
       window.history.pushState({}, '', `/search?q=${encodeURIComponent(searchQuery.trim())}`);
       handleSearch(searchQuery.trim());
     }

@@ -1,24 +1,13 @@
-// ========================================
-// Supabase RPC API Client
-// Edge Functions 없이 Database Functions 직접 호출
-// ========================================
 
 import { createClient } from '@supabase/supabase-js'
 
-// Supabase Client 초기화
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://nzmscqfrmxqcukhshsok.supabase.co'
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56bXNjcWZybXhxY3VraHNoc29rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyMTg1NDMsImV4cCI6MjA3MTc5NDU0M30.o0zQtPEjsuJnfQnY2MiakuM2EvTlVuRO9yeoajrwiLU'
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-// ========================================
-// Products API
-// ========================================
 
 export const productsAPI = {
-  /**
-   * 전체 상품 조회
-   */
   async getAll(params?: {
     limit?: number
     offset?: number
@@ -34,19 +23,13 @@ export const productsAPI = {
 
     if (error) throw error
     
-    // get_products returns {data: [...], count: n} OR just array
-    // Handle both formats
     if (data && typeof data === 'object' && 'data' in data) {
       return Array.isArray(data.data) ? data.data : []
     }
     
-    // If it's already an array, return it
     return Array.isArray(data) ? data : []
   },
 
-  /**
-   * 상품 상세 조회
-   */
   async getById(id: string) {
     const { data, error } = await supabase.rpc('get_product_by_id', {
       product_id: id
@@ -68,7 +51,6 @@ export const productsAPI = {
     stock?: number
     additional_images?: string[]
   }) {
-    // RPC 대신 직접 INSERT 사용
     const { data, error } = await supabase
       .from('products')
       .insert({
@@ -88,9 +70,6 @@ export const productsAPI = {
     return data
   },
 
-  /**
-   * 상품 수정
-   */
   async update(id: string, updates: any) {
     const { data, error } = await supabase.rpc('update_product', {
       product_id: id,
@@ -101,11 +80,7 @@ export const productsAPI = {
     return data
   },
 
-  /**
-   * 상품 삭제
-   */
   async delete(id: string) {
-    // RPC 대신 직접 UPDATE 사용 (소프트 삭제)
     const { data, error } = await supabase
       .from('products')
       .update({ is_active: false })
@@ -117,9 +92,6 @@ export const productsAPI = {
     return data
   },
 
-  /**
-   * 상품 검색 (고급)
-   */
   async search(params: {
     term?: string
     category?: string
@@ -139,9 +111,6 @@ export const productsAPI = {
     return data
   },
 
-  /**
-   * 카테고리 목록
-   */
   async getCategories() {
     const { data, error } = await supabase.rpc('get_categories')
 
@@ -150,14 +119,8 @@ export const productsAPI = {
   }
 }
 
-// ========================================
-// Admin API
-// ========================================
 
 export const adminAPI = {
-  /**
-   * 관리자 로그인
-   */
   async login(username: string, password: string) {
     const { data, error } = await supabase.rpc('admin_login', {
       username_input: username,
