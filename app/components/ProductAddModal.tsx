@@ -35,6 +35,8 @@ export default function ProductAddModal({ onClose, onSave }: ProductAddModalProp
   const [isLoading, setIsLoading] = useState(false);
   const [uploadingImages, setUploadingImages] = useState(false);
   const [compressionProgress, setCompressionProgress] = useState(0);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadStatus, setUploadStatus] = useState('');
 
   // 메인 이미지 선택 처리
   const handleMainImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,21 +163,24 @@ export default function ProductAddModal({ onClose, onSave }: ProductAddModalProp
       
       console.log('메인 이미지 업로드 성공:', mainImageUrl);
       
-      // 2. 세부 이미지 업로드 (있는 경우)
+      // 2. 세부 이미지 병렬 업로드 (있는 경우)
       let detailImageUrls: string[] = [];
       if (detailImages.length > 0) {
-        console.log(`세부 이미지 ${detailImages.length}개 업로드 시작...`);
+        console.log(`세부 이미지 ${detailImages.length}개 병렬 업로드 시작...`);
+        console.time('parallel-upload'); // 성능 측정
+        setUploadStatus(`세부 이미지 ${detailImages.length}개 병렬 업로드 시작...`);
+        setUploadProgress(0);
         
-        for (let i = 0; i < detailImages.length; i++) {
+        // 병렬 업로드 함수
+        const uploadSingleImage = async (detailImage: File, index: number): Promise<string | null> => {
           try {
-            const detailImage = detailImages[i];
-            const detailTimestamp = Date.now() + i;
+            const detailTimestamp = Date.now() + index;
             const detailRandomString = Math.random().toString(36).substring(2, 15);
             const detailFileExt = detailImage.name.split('.').pop();
             const detailFileName = `${detailTimestamp}-${detailRandomString}.${detailFileExt}`;
             const detailFilePath = `products/${detailFileName}`;
             
-            const { data: detailUploadData, error: detailUploadError } = await supabase.storage
+            const { error: detailUploadError } = await supabase.storage
               .from('product-images')
               .upload(detailFilePath, detailImage, {
                 contentType: detailImage.type,
@@ -187,18 +192,60 @@ export default function ProductAddModal({ onClose, onSave }: ProductAddModalProp
               const { data: { publicUrl } } = supabase.storage
                 .from('product-images')
                 .getPublicUrl(detailFilePath);
-              detailImageUrls.push(publicUrl);
-              console.log(`세부 이미지 ${i + 1} 업로드 성공`);
+              console.log(`세부 이미지 ${index + 1} 업로드 성공`);
+              return publicUrl;
             } else {
-              console.warn(`세부 이미지 ${i + 1} 업로드 실패:`, detailUploadError);
+              console.warn(`세부 이미지 ${index + 1} 업로드 실패:`, detailUploadError);
+              return null;
             }
           } catch (err) {
-            console.warn(`세부 이미지 ${i + 1} 처리 실패:`, err);
+            console.warn(`세부 이미지 ${index + 1} 처리 실패:`, err);
+            return null;
           }
+        };
+        
+        // 3개씩 청크로 나누어 병렬 처리
+        const CONCURRENT_UPLOADS = 3;
+        const chunks: File[][] = [];
+        
+        for (let i = 0; i < detailImages.length; i += CONCURRENT_UPLOADS) {
+          chunks.push(detailImages.slice(i, i + CONCURRENT_UPLOADS));
         }
         
-        console.log(`세부 이미지 ${detailImageUrls.length}개 업로드 성공`);
+        // 각 청크를 순차적으로 처리하되, 청크 내에서는 병렬 처리
+        for (let chunkIndex = 0; chunkIndex < chunks.length; chunkIndex++) {
+          const chunk = chunks[chunkIndex];
+          const chunkStartIndex = chunkIndex * CONCURRENT_UPLOADS;
+          
+          console.log(`청크 ${chunkIndex + 1}/${chunks.length} 처리 중... (${chunk.length}개 이미지)`);
+          
+          const uploadPromises = chunk.map((image, localIndex) => 
+            uploadSingleImage(image, chunkStartIndex + localIndex)
+          );
+          
+          const chunkResults = await Promise.all(uploadPromises);
+          const successfulUrls = chunkResults.filter((url): url is string => url !== null);
+          detailImageUrls.push(...successfulUrls);
+          
+          const progress = Math.round(((chunkIndex + 1) / chunks.length) * 100);
+          setUploadProgress(progress);
+          setUploadStatus(`청크 ${chunkIndex + 1}/${chunks.length} 완료: ${successfulUrls.length}/${chunk.length}개 성공`);
+          
+          console.log(`청크 ${chunkIndex + 1} 완료: ${successfulUrls.length}/${chunk.length}개 성공`);
+        }
+        
+        console.timeEnd('parallel-upload'); // 성능 측정 종료
+        const finalMessage = `✅ 세부 이미지 병렬 업로드 완료: ${detailImageUrls.length}/${detailImages.length}개 성공`;
+        console.log(finalMessage);
+        setUploadStatus(finalMessage);
+        setUploadProgress(100);
       }
+      
+      // 업로드 상태 초기화 (3초 후)
+      setTimeout(() => {
+        setUploadProgress(0);
+        setUploadStatus('');
+      }, 3000);
       
       setUploadingImages(false);
 
@@ -435,6 +482,23 @@ export default function ProductAddModal({ onClose, onSave }: ProductAddModalProp
           </div>
         </form>
 
+        {/* 업로드 진행률 표시 */}
+        {uploadingImages && uploadStatus && (
+          <div className="bg-blue-50 border-t px-4 py-3">
+            <div className="text-sm text-blue-700 mb-2">{uploadStatus}</div>
+            <div className="w-full bg-blue-200 rounded-full h-2">
+              <div 
+                className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                style={{width: `${uploadProgress}%`}}
+              ></div>
+            </div>
+            <div className="text-xs text-blue-600 mt-1 text-right">{uploadProgress}%</div>
+            <div className="text-xs text-gray-500 mt-1">
+              💡 테스트: 브라우저 콘솔을 열어 성능 측정 결과를 확인하세요 (F12)
+            </div>
+          </div>
+        )}
+
         {/* 하단 버튼 */}
         <div className="sticky bottom-0 bg-white border-t px-4 py-3 flex gap-2">
           <button
@@ -453,7 +517,13 @@ export default function ProductAddModal({ onClose, onSave }: ProductAddModalProp
             {isLoading ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                {uploadingImages ? '이미지 업로드 중...' : '등록 중...'}
+                {uploadingImages ? 
+                  (uploadStatus ? 
+                    `업로드 중 ${uploadProgress}%` : 
+                    '이미지 업로드 중...'
+                  ) : 
+                  '등록 중...'
+                }
               </>
             ) : (
               '상품 등록'
