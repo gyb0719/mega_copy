@@ -2,11 +2,15 @@
   "name": "mega-copy",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --port 3004",
     "build": "next build",
     "start": "next start --port 3004",
-    "lint": "next lint"
+    "lint": "next lint",
+    "backup:download": "node scripts/download-backup.js",
+    "backup:upload": "node scripts/backup-to-drive.js",
+    "backup:status": "node scripts/backup-to-drive.js --status"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",

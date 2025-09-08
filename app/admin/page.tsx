@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Package, Users } from 'lucide-react';
+import { ArrowLeft, Package, Users, Shield } from 'lucide-react';
 import Link from 'next/link';
 import ProductManagementMobile from '../components/ProductManagementMobile';
 import AdminManagement from '../components/AdminManagement';
@@ -169,6 +169,13 @@ export default function AdminPage() {
               <Users className="w-4 h-4 inline mr-2" />
               관리자 관리
             </button>
+            <Link
+              href="/admin/backup"
+              className="px-4 py-2 rounded-lg whitespace-nowrap transition-colors font-bold bg-blue-100 hover:bg-blue-200 text-blue-800"
+            >
+              <Shield className="w-4 h-4 inline mr-2" />
+              백업 관리
+            </Link>
           </div>
         </div>
       </div>
