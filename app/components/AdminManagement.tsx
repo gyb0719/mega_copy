@@ -270,6 +270,7 @@ export default function AdminManagement({ currentUserRole = 'main' }: AdminManag
                   onChange={(e) => setNewUsername(e.target.value)}
                   className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-mega-yellow"
                   placeholder="관리자 아이디"
+                  suppressHydrationWarning
                 />
               </div>
               <div>
@@ -280,6 +281,7 @@ export default function AdminManagement({ currentUserRole = 'main' }: AdminManag
                   onChange={(e) => setNewPassword(e.target.value)}
                   className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-mega-yellow"
                   placeholder="비밀번호 (최소 4자)"
+                  suppressHydrationWarning
                 />
               </div>
               <div>
@@ -333,6 +335,7 @@ export default function AdminManagement({ currentUserRole = 'main' }: AdminManag
                   onChange={(e) => setChangePassword(e.target.value)}
                   className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-mega-yellow"
                   placeholder="새 비밀번호 (최소 4자)"
+                  suppressHydrationWarning
                 />
               </div>
               <div>
@@ -343,6 +346,7 @@ export default function AdminManagement({ currentUserRole = 'main' }: AdminManag
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-mega-yellow"
                   placeholder="비밀번호 재입력"
+                  suppressHydrationWarning
                 />
               </div>
             </div>

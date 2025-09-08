@@ -3,13 +3,8 @@
 // Edge Functions 없이 Database Functions 직접 호출
 // ========================================
 
-import { createClient } from '@supabase/supabase-js'
-
-// Supabase Client 초기화
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://nzmscqfrmxqcukhshsok.supabase.co'
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56bXNjcWZybXhxY3VraHNoc29rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyMTg1NDMsImV4cCI6MjA3MTc5NDU0M30.o0zQtPEjsuJnfQnY2MiakuM2EvTlVuRO9yeoajrwiLU'
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// 중앙화된 Supabase 클라이언트 사용 (중복 인스턴스 방지)
+import { supabase } from './supabase'
 
 // ========================================
 // Products API

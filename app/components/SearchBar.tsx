@@ -25,6 +25,7 @@ export default function SearchBar({ searchTerm, onSearchChange }: SearchBarProps
           onChange={handleChange}
           placeholder="상품명, 설명 검색..."
           className="w-full px-4 py-2 pr-20 border rounded-lg focus:outline-none focus:ring-2 focus:ring-mega-yellow"
+          suppressHydrationWarning
         />
         <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
           {searchTerm && (

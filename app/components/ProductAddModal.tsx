@@ -470,6 +470,7 @@ export default function ProductAddModal({ onClose, onSave }: ProductAddModalProp
                     accept="image/*"
                     onChange={handleMainImageChange}
                     className="hidden"
+                    suppressHydrationWarning
                   />
                 </label>
               )}
@@ -512,6 +513,7 @@ export default function ProductAddModal({ onClose, onSave }: ProductAddModalProp
                     multiple
                     onChange={handleDetailImagesChange}
                     className="hidden"
+                    suppressHydrationWarning
                   />
                 </label>
               )}
@@ -529,6 +531,7 @@ export default function ProductAddModal({ onClose, onSave }: ProductAddModalProp
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-mega-yellow"
                 placeholder="상품명을 입력하세요"
                 required
+                suppressHydrationWarning
               />
             </div>
 
@@ -541,6 +544,7 @@ export default function ProductAddModal({ onClose, onSave }: ProductAddModalProp
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-mega-yellow"
                 placeholder="0"
                 required
+                suppressHydrationWarning
               />
             </div>
 

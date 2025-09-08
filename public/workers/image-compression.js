@@ -27,70 +27,58 @@ function getAdaptiveSettings(imageIndex, totalImages) {
 }
 
 /**
- * 이미지 압축 함수
+ * 이미지 압축 함수 (WebWorker용)
  */
-async function compressImage(imageData, settings) {
-  return new Promise((resolve, reject) => {
-    try {
-      // Canvas 생성
-      const canvas = new OffscreenCanvas(settings.maxWidth, settings.maxHeight);
-      const ctx = canvas.getContext('2d');
+async function compressImage(imageBlob, settings) {
+  try {
+    // Blob에서 ImageBitmap 생성 (WebWorker에서 사용 가능)
+    const imageBitmap = await createImageBitmap(imageBlob);
+    
+    // 원본 크기
+    const originalWidth = imageBitmap.width;
+    const originalHeight = imageBitmap.height;
+    
+    // 크기 계산 (비율 유지)
+    let targetWidth = originalWidth;
+    let targetHeight = originalHeight;
+    
+    if (originalWidth > settings.maxWidth || originalHeight > settings.maxHeight) {
+      const aspectRatio = originalWidth / originalHeight;
       
-      if (!ctx) {
-        reject(new Error('Canvas context를 생성할 수 없습니다'));
-        return;
+      if (originalWidth > originalHeight) {
+        targetWidth = settings.maxWidth;
+        targetHeight = targetWidth / aspectRatio;
+      } else {
+        targetHeight = settings.maxHeight;
+        targetWidth = targetHeight * aspectRatio;
       }
-
-      // 이미지 생성
-      const img = new Image();
-      
-      img.onload = () => {
-        try {
-          // 이미지 크기 계산 (비율 유지)
-          let { width, height } = img;
-          
-          if (width > settings.maxWidth || height > settings.maxHeight) {
-            const aspectRatio = width / height;
-            
-            if (width > height) {
-              width = settings.maxWidth;
-              height = width / aspectRatio;
-            } else {
-              height = settings.maxHeight;
-              width = height * aspectRatio;
-            }
-          }
-          
-          // Canvas 크기 조정
-          canvas.width = width;
-          canvas.height = height;
-          
-          // 이미지 그리기
-          ctx.drawImage(img, 0, 0, width, height);
-          
-          // Blob으로 변환
-          canvas.convertToBlob({
-            type: 'image/jpeg',
-            quality: settings.quality
-          }).then(blob => {
-            resolve(blob);
-          }).catch(reject);
-          
-        } catch (error) {
-          reject(new Error(`이미지 처리 실패: ${error.message}`));
-        }
-      };
-      
-      img.onerror = () => {
-        reject(new Error('이미지 로드 실패'));
-      };
-      
-      img.src = imageData;
-      
-    } catch (error) {
-      reject(new Error(`압축 초기화 실패: ${error.message}`));
     }
-  });
+    
+    // OffscreenCanvas 생성
+    const canvas = new OffscreenCanvas(targetWidth, targetHeight);
+    const ctx = canvas.getContext('2d');
+    
+    if (!ctx) {
+      throw new Error('Canvas context를 생성할 수 없습니다');
+    }
+    
+    // 이미지 그리기
+    ctx.drawImage(imageBitmap, 0, 0, targetWidth, targetHeight);
+    
+    // Blob으로 변환
+    const compressedBlob = await canvas.convertToBlob({
+      type: 'image/jpeg',
+      quality: settings.quality
+    });
+    
+    // ImageBitmap 해제
+    imageBitmap.close();
+    
+    return compressedBlob;
+    
+  } catch (error) {
+    throw new Error(`압축 처리 실패: ${error.message}`);
+  }
 }
 
 /**
@@ -101,7 +89,7 @@ self.onmessage = async function(e) {
   
   try {
     if (type === 'COMPRESS_IMAGE') {
-      const { imageData, imageIndex, totalImages, fileName } = data;
+      const { imageBlob, imageIndex, totalImages, fileName, originalSize } = data;
       
       // 적응형 압축 설정 계산
       const settings = getAdaptiveSettings(imageIndex, totalImages);
@@ -123,7 +111,7 @@ self.onmessage = async function(e) {
       const startTime = performance.now();
       
       // 이미지 압축 수행
-      const compressedBlob = await compressImage(imageData, settings);
+      const compressedBlob = await compressImage(imageBlob, settings);
       
       const endTime = performance.now();
       const compressionTime = Math.round(endTime - startTime);
@@ -136,9 +124,9 @@ self.onmessage = async function(e) {
           imageIndex,
           compressedBlob,
           stats: {
-            originalSize: data.originalSize,
+            originalSize: originalSize,
             compressedSize: compressedBlob.size,
-            compressionRatio: Math.round((1 - compressedBlob.size / data.originalSize) * 100),
+            compressionRatio: Math.round((1 - compressedBlob.size / originalSize) * 100),
             compressionTime,
             tier: settings.tier
           }
@@ -155,7 +143,7 @@ self.onmessage = async function(e) {
         
         try {
           const settings = getAdaptiveSettings(i, images.length);
-          const compressedBlob = await compressImage(image.data, settings);
+          const compressedBlob = await compressImage(image.blob, settings);
           
           results.push({
             index: i,

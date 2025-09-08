@@ -15,9 +15,11 @@ export default function AdminPage() {
   const [adminRole, setAdminRole] = useState('');
   const [loginError, setLoginError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-  // 세션 체크
+  // 세션 체크 및 마운트 상태 관리
   useEffect(() => {
+    setIsMounted(true);
     const session = validateSession();
     if (session) {
       setIsAuthenticated(true);
@@ -54,7 +56,15 @@ export default function AdminPage() {
     setAdminRole('');
   };
 
-  // 로그인 화면
+  // 로그인 화면 (클라이언트 마운트 후에만 렌더링)
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-mega-yellow"></div>
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -85,6 +95,7 @@ export default function AdminPage() {
                 required
                 disabled={isLoading}
                 autoComplete="username"
+                suppressHydrationWarning
               />
             </div>
             <div>
@@ -100,6 +111,7 @@ export default function AdminPage() {
                 required
                 disabled={isLoading}
                 autoComplete="current-password"
+                suppressHydrationWarning
               />
             </div>
             <button
@@ -107,7 +119,7 @@ export default function AdminPage() {
               disabled={isLoading}
               className="w-full py-3 bg-mega-yellow text-black rounded-lg hover:bg-yellow-400 active:bg-yellow-500 transition-colors font-black text-base disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? '로그인 중...' : '로그인'}
+              {isMounted ? (isLoading ? '로그인 중...' : '로그인') : '로그인'}
             </button>
           </form>
           <div className="mt-6 text-center">

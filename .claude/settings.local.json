@@ -18,7 +18,11 @@
       "Bash(npm audit:*)",
       "Bash(claude mcp add:*)",
       "Bash(npx @playwright/mcp@latest:*)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(git rm:*)",
+      "Bash(npm run server:*)",
+      "Bash(npm run:*)",
+      "Bash(ipconfig)"
     ],
     "deny": [],
     "ask": []

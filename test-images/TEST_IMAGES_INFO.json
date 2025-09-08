@@ -1,0 +1,126 @@
+{
+  "generated": "2025-09-08T15:45:57.794Z",
+  "description": "MEGA COPY 20장 이미지 업로드 테스트용 더미 이미지",
+  "images": {
+    "main": {
+      "filename": "main-product.jpg",
+      "type": "main",
+      "description": "메인 상품 이미지 (1200x800)"
+    },
+    "details": [
+      {
+        "filename": "detail-01.jpg",
+        "type": "detail",
+        "description": "상세 이미지 1"
+      },
+      {
+        "filename": "detail-02.jpg",
+        "type": "detail",
+        "description": "상세 이미지 2"
+      },
+      {
+        "filename": "detail-03.jpg",
+        "type": "detail",
+        "description": "상세 이미지 3"
+      },
+      {
+        "filename": "detail-04.jpg",
+        "type": "detail",
+        "description": "상세 이미지 4"
+      },
+      {
+        "filename": "detail-05.jpg",
+        "type": "detail",
+        "description": "상세 이미지 5"
+      },
+      {
+        "filename": "detail-06.jpg",
+        "type": "detail",
+        "description": "상세 이미지 6"
+      },
+      {
+        "filename": "detail-07.jpg",
+        "type": "detail",
+        "description": "상세 이미지 7"
+      },
+      {
+        "filename": "detail-08.jpg",
+        "type": "detail",
+        "description": "상세 이미지 8"
+      },
+      {
+        "filename": "detail-09.jpg",
+        "type": "detail",
+        "description": "상세 이미지 9"
+      },
+      {
+        "filename": "detail-10.jpg",
+        "type": "detail",
+        "description": "상세 이미지 10"
+      },
+      {
+        "filename": "detail-11.jpg",
+        "type": "detail",
+        "description": "상세 이미지 11"
+      },
+      {
+        "filename": "detail-12.jpg",
+        "type": "detail",
+        "description": "상세 이미지 12"
+      },
+      {
+        "filename": "detail-13.jpg",
+        "type": "detail",
+        "description": "상세 이미지 13"
+      },
+      {
+        "filename": "detail-14.jpg",
+        "type": "detail",
+        "description": "상세 이미지 14"
+      },
+      {
+        "filename": "detail-15.jpg",
+        "type": "detail",
+        "description": "상세 이미지 15"
+      },
+      {
+        "filename": "detail-16.jpg",
+        "type": "detail",
+        "description": "상세 이미지 16"
+      },
+      {
+        "filename": "detail-17.jpg",
+        "type": "detail",
+        "description": "상세 이미지 17"
+      },
+      {
+        "filename": "detail-18.jpg",
+        "type": "detail",
+        "description": "상세 이미지 18"
+      },
+      {
+        "filename": "detail-19.jpg",
+        "type": "detail",
+        "description": "상세 이미지 19"
+      },
+      {
+        "filename": "detail-20.jpg",
+        "type": "detail",
+        "description": "상세 이미지 20"
+      }
+    ]
+  },
+  "testInstructions": [
+    "1. http://localhost:3004/admin 접속",
+    "2. 관리자 로그인",
+    "3. 상품 추가 클릭",
+    "4. F12로 콘솔 열기",
+    "5. main-product.jpg를 메인 이미지로 선택",
+    "6. detail-01.jpg ~ detail-20.jpg를 세부 이미지로 선택",
+    "7. 상품 등록 버튼 클릭",
+    "8. 콘솔에서 다음 로그 확인:",
+    "   - 🚀 4단계: WebWorker로 X개 이미지 압축 시작",
+    "   - 🔄 업로드 큐 시스템으로 X개 이미지 처리 시작",
+    "   - 🏆 4단계 테스트 결과: ✅ 모든 테스트 통과"
+  ]
+}

@@ -183,6 +183,7 @@ export default function ProductEditModal({ product, onClose, onSave }: ProductEd
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-mega-yellow"
               required
+              suppressHydrationWarning
             />
           </div>
 
@@ -197,6 +198,7 @@ export default function ProductEditModal({ product, onClose, onSave }: ProductEd
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-mega-yellow"
               required
               min="0"
+              suppressHydrationWarning
             />
           </div>
 
@@ -271,6 +273,7 @@ export default function ProductEditModal({ product, onClose, onSave }: ProductEd
                   accept="image/*"
                   onChange={handleImageChange}
                   className="hidden"
+                  suppressHydrationWarning
                 />
               </label>
               {images.length > 0 && (

@@ -106,33 +106,17 @@ export class WebWorkerCompressionManager {
         reject
       });
 
-      // FileReader로 이미지 데이터 읽기
-      const reader = new FileReader();
-      
-      reader.onload = () => {
-        if (!this.worker) {
-          reject(new Error('WebWorker를 사용할 수 없습니다'));
-          return;
+      // Worker에게 압축 작업 요청 (File을 Blob으로 직접 전송)
+      this.worker.postMessage({
+        type: 'COMPRESS_IMAGE',
+        data: {
+          imageBlob: file, // File은 Blob의 서브클래스이므로 직접 전송 가능
+          imageIndex,
+          totalImages,
+          fileName: file.name,
+          originalSize: file.size
         }
-
-        // Worker에게 압축 작업 요청
-        this.worker.postMessage({
-          type: 'COMPRESS_IMAGE',
-          data: {
-            imageData: reader.result,
-            imageIndex,
-            totalImages,
-            fileName: file.name,
-            originalSize: file.size
-          }
-        });
-      };
-
-      reader.onerror = () => {
-        reject(new Error(`파일 읽기 실패: ${file.name}`));
-      };
-
-      reader.readAsDataURL(file);
+      });
     });
   }
 
