@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 MEGA COPY 완전 백업 가이드</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            margin: 0 0 15px 0;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        
+        .header p {
+            margin: 0;
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+        
+        .toc {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .toc h2 {
+            color: #5a67d8;
+            border-bottom: 3px solid #e6f3ff;
+            padding-bottom: 10px;
+        }
+        
+        .toc ol {
+            font-size: 1.1em;
+            line-height: 2;
+        }
+        
+        .toc a {
+            color: #4a5568;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .toc a:hover {
+            color: #5a67d8;
+        }
+        
+        .section {
+            background: white;
+            margin-bottom: 30px;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .section h1 {
+            color: #2d3748;
+            font-size: 2.2em;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #e6f3ff;
+        }
+        
+        .section h2 {
+            color: #4a5568;
+            font-size: 1.6em;
+            margin: 30px 0 20px 0;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 8px;
+        }
+        
+        .section h3 {
+            color: #5a67d8;
+            font-size: 1.3em;
+            margin: 25px 0 15px 0;
+            padding: 10px 0;
+            border-bottom: 2px solid #e6f3ff;
+        }
+        
+        .code-block {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.7;
+            overflow-x: auto;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3cd, #ffe69c);
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #f39c12;
+        }
+        
+        .emergency-box {
+            background: linear-gradient(135deg, #ffe6e6, #ffb3b3);
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .success-box {
+            background: linear-gradient(135deg, #e6ffe6, #b3ffb3);
+            border: 2px solid #6bff6b;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #27ae60;
+        }
+        
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+        
+        .step-list li {
+            counter-increment: step-counter;
+            padding: 15px 20px 15px 50px;
+            margin: 15px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            position: relative;
+            border-left: 4px solid #5a67d8;
+        }
+        
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            background: #5a67d8;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .checklist {
+            background: #f0f8ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .checklist input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        
+        .checklist label {
+            cursor: pointer;
+            padding: 5px 0;
+            display: block;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .table td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .table tr:hover {
+            background: #f7fafc;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin: 2px;
+        }
+        
+        .badge-bronze {
+            background: #cd7f32;
+            color: white;
+        }
+        
+        .badge-silver {
+            background: #c0c0c0;
+            color: #333;
+        }
+        
+        .badge-gold {
+            background: #ffd700;
+            color: #333;
+        }
+        
+        .badge-platinum {
+            background: #e5e4e2;
+            color: #333;
+        }
+        
+        .quick-ref {
+            background: #2d3748;
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.8;
+        }
+        
+        .quick-ref h3 {
+            color: #ffd700;
+            margin-top: 0;
+        }
+        
+        .contact-info {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .print-only {
+            display: none;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+            
+            .print-only {
+                display: block;
+            }
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📚 MEGA COPY 완전 백업 가이드</h1>
+        <p><strong>🎯 목표</strong>: IT 지식이 없어도 쉽게 백업하고 복원할 수 있는 완전 가이드</p>
+    </div>
+
+    <div class="toc">
+        <h2>📖 목차</h2>
+        <ol>
+            <li><a href="#section1">백업 기본 이해하기</a></li>
+            <li><a href="#section2">일상 백업하기 (매월 5분)</a></li>
+            <li><a href="#section3">긴급 복원하기</a></li>
+            <li><a href="#section4">월간 체크리스트</a></li>
+            <li><a href="#section5">문제 해결하기</a></li>
+            <li><a href="#section6">백업 마스터 되기</a></li>
+        </ol>
+    </div>
+
+    <div class="section" id="section1">
+        <h1>1. 백업 기본 이해하기</h1>
+        
+        <h2>🤔 백업이 왜 중요한가요?</h2>
+        
+        <div class="highlight-box">
+            <h3>💡 백업은 '디지털 보험'입니다!</h3>
+            
+            <h4>🏪 실제 상황 예시:</h4>
+            <ul>
+                <li>상품 1000개가 갑자기 사라졌어요</li>
+                <li>관리자 로그인이 안 돼요</li>
+                <li>고객이 "사이트가 안 열려요"라고 해요</li>
+                <li>실수로 중요한 데이터를 삭제했어요</li>
+            </ul>
+            
+            <div class="success-box">
+                <p><strong>✅ 백업이 있다면</strong>: 10분 만에 복구!</p>
+            </div>
+            
+            <div class="emergency-box">
+                <p><strong>❌ 백업이 없다면</strong>: 며칠 동안 사업 중단...</p>
+            </div>
+        </div>
+
+        <h2>🎯 우리의 백업 전략</h2>
+        
+        <h3>이중 보안 체계 (두 개의 백업!)</h3>
+        
+        <div class="code-block">
+            <strong>1단계 백업 - Supabase Pro (자동):</strong><br>
+            &nbsp;&nbsp;주기: 매일 자동<br>
+            &nbsp;&nbsp;보관: 30일<br>
+            &nbsp;&nbsp;장점: 완전 자동, 즉시 복원<br>
+            &nbsp;&nbsp;용도: 최근 문제 해결<br><br>
+            
+            <strong>2단계 백업 - Google Drive (수동):</strong><br>
+            &nbsp;&nbsp;주기: 매월 1회<br>
+            &nbsp;&nbsp;보관: 영구<br>
+            &nbsp;&nbsp;장점: 장기 보관, 무료<br>
+            &nbsp;&nbsp;용도: 오래된 문제 해결
+        </div>
+
+        <h3>골든 룰 🏆</h3>
+        <ol class="step-list">
+            <li><strong>📅 매월 1일 = 백업 데이</strong> (절대 미루지 말기!)</li>
+            <li><strong>🚨 문제 발견 = 즉시 복원</strong> (늦으면 더 복잡해짐)</li>
+            <li><strong>📞 30분 내 해결 안 되면 개발자 연락</strong></li>
+        </ol>
+    </div>
+
+    <div class="section" id="section2">
+        <h1>2. 일상 백업하기 (매월 5분)</h1>
+        
+        <h2>📅 매월 첫째 날 루틴</h2>
+        
+        <div class="highlight-box">
+            <p><strong>⏰ 소요시간</strong>: 5-10분</p>
+            <p><strong>📅 일정</strong>: 매월 1일 오전 10시</p>
+            <p><strong>🎯 목표</strong>: Google Drive에 백업 파일 저장</p>
+        </div>
+
+        <h3>STEP 1: 휴대폰 알림 설정 (처음 한 번만)</h3>
+        
+        <div class="code-block">
+            <strong>📱 휴대폰 설정:</strong><br>
+            1. 기본 캘린더 앱 열기<br>
+            2. 새 일정 추가<br>
+            3. 제목: "🔐 MEGA COPY 백업하기"<br>
+            4. 날짜: 매월 1일<br>
+            5. 시간: 오전 10시<br>
+            6. 반복: 매월<br>
+            7. 알림: 1시간 전, 30분 전<br>
+            8. 저장
+        </div>
+
+        <h3>STEP 2: Supabase 백업 다운로드 (3분)</h3>
+        
+        <ol class="step-list">
+            <li>크롬 브라우저 열기</li>
+            <li>주소창에 입력: supabase.com</li>
+            <li>[Sign in] 버튼 클릭 (오른쪽 상단 초록색)</li>
+            <li>이메일/비밀번호로 로그인</li>
+            <li>프로젝트 선택: "MEGA COPY" 또는 "nzmscqfrmxqcukhshsok" 클릭</li>
+            <li>백업 다운로드:
+                <ul>
+                    <li>왼쪽 메뉴 → ⚙️ Settings</li>
+                    <li>Database 클릭</li>
+                    <li>Backups 탭 클릭</li>
+                    <li>맨 위 최신 백업의 [Download] 버튼 클릭</li>
+                </ul>
+            </li>
+            <li>파일 저장 확인:
+                <ul>
+                    <li>컴퓨터 다운로드 폴더에 파일 저장됨</li>
+                    <li>파일명: backup-2025-01-08-123456.sql</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>STEP 3: Google Drive 업로드 (2분)</h3>
+        
+        <ol class="step-list">
+            <li>새 탭에서 drive.google.com 접속</li>
+            <li>Google 계정 로그인 (Gmail 계정)</li>
+            <li>폴더 준비 (처음에만):
+                <ul>
+                    <li>[+ 새로 만들기] → [폴더]</li>
+                    <li>폴더명: "MEGA_백업"</li>
+                    <li>만들기</li>
+                </ul>
+            </li>
+            <li>백업 업로드:
+                <ul>
+                    <li>MEGA_백업 폴더 들어가기</li>
+                    <li>[+ 새로 만들기] → [파일 업로드]</li>
+                    <li>방금 다운로드한 backup 파일 선택</li>
+                    <li>업로드 완료 대기 (1-5분)</li>
+                </ul>
+            </li>
+            <li>파일명 변경:
+                <ul>
+                    <li>업로드된 파일 우클릭</li>
+                    <li>[이름 바꾸기] 선택</li>
+                    <li>새 이름: "2025_01월_backup.sql"</li>
+                    <li>완료</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>STEP 4: 완료 확인 (1분)</h3>
+        
+        <div class="checklist">
+            <h4>✅ 체크리스트:</h4>
+            <label><input type="checkbox"> Supabase에서 파일 다운로드 완료</label>
+            <label><input type="checkbox"> Google Drive에 업로드 완료</label>
+            <label><input type="checkbox"> 파일명 "YYYY_MM월_backup.sql"로 변경</label>
+            <label><input type="checkbox"> 파일 크기 1MB 이상 확인</label>
+            <label><input type="checkbox"> 백업 날짜 캘린더에 기록</label>
+            <label><input type="checkbox"> 다음 달 1일 알림 확인</label>
+        </div>
+        
+        <div class="success-box">
+            <h3>🎉 완료! 이제 한 달간 안심하세요!</h3>
+        </div>
+    </div>
+
+    <div class="section" id="section3">
+        <h1>3. 긴급 복원하기</h1>
+        
+        <h2>🚨 이런 상황이면 즉시 복원하세요!</h2>
+        
+        <div class="emergency-box">
+            <ul>
+                <li>❌ 웹사이트가 열리지 않아요</li>
+                <li>❌ 상품이 모두 사라졌어요</li>
+                <li>❌ 관리자 로그인이 안 돼요</li>
+                <li>❌ 실수로 데이터를 삭제했어요</li>
+            </ul>
+        </div>
+
+        <h2>⚡ 복원 방법 A: 빠른 복원 (최근 30일 문제)</h2>
+        
+        <div class="highlight-box">
+            <p><strong>언제</strong>: 오늘, 어제, 이번 주에 생긴 문제</p>
+            <p><strong>시간</strong>: 5-10분</p>
+            <p><strong>성공률</strong>: 95%</p>
+        </div>
+
+        <h3>즉시 실행 단계:</h3>
+        
+        <ol class="step-list">
+            <li>침착하게 10초 심호흡</li>
+            <li>supabase.com 로그인</li>
+            <li>MEGA COPY 프로젝트 선택</li>
+            <li>Settings → Database → Backups</li>
+            <li>시점 선택:
+                <ul>
+                    <li>문제 생기기 직전 시간 찾기</li>
+                    <li>예: "어제 오후 3시" 클릭</li>
+                    <li>[Restore to this point] 버튼 클릭</li>
+                </ul>
+            </li>
+            <li>확인:
+                <ul>
+                    <li>"정말 복원하시겠습니까?" 창</li>
+                    <li>[Confirm] 클릭</li>
+                    <li>5-15분 대기</li>
+                </ul>
+            </li>
+            <li>완료 확인:
+                <ul>
+                    <li>"Restoration complete" 메시지</li>
+                    <li>웹사이트 접속 테스트</li>
+                    <li>정상 작동 확인</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2>🛠️ 복원 방법 B: 전체 복원 (오래된 문제)</h2>
+        
+        <div class="highlight-box">
+            <p><strong>언제</strong>: 30일 이상 된 문제 또는 방법 A 실패 시</p>
+            <p><strong>시간</strong>: 15-30분</p>
+            <p><strong>준비물</strong>: Google Drive 백업 파일</p>
+        </div>
+
+        <h3>복원 단계:</h3>
+        
+        <ol class="step-list">
+            <li><strong>1단계 - 백업 파일 준비:</strong>
+                <ul>
+                    <li>drive.google.com 접속</li>
+                    <li>MEGA_백업 폴더로 이동</li>
+                    <li>복원하고 싶은 날짜의 파일 찾기</li>
+                    <li>우클릭 → "다운로드"</li>
+                    <li>컴퓨터에 저장 완료</li>
+                </ul>
+            </li>
+            <li><strong>2단계 - 파일 내용 복사:</strong>
+                <ul>
+                    <li>다운로드한 파일을 메모장으로 열기</li>
+                    <li>전체 선택 (Ctrl+A)</li>
+                    <li>복사 (Ctrl+C)</li>
+                </ul>
+            </li>
+            <li><strong>3단계 - Supabase에서 실행:</strong>
+                <ul>
+                    <li>Supabase 프로젝트 페이지</li>
+                    <li>왼쪽 메뉴 → SQL Editor</li>
+                    <li>[+ New Query] 클릭</li>
+                    <li>큰 입력창에 붙여넣기 (Ctrl+V)</li>
+                    <li>[Run] 버튼 클릭 (오른쪽 하단 초록색)</li>
+                    <li>1-5분 대기</li>
+                </ul>
+            </li>
+            <li><strong>4단계 - 복원 확인:</strong>
+                <ul>
+                    <li>"Success" 초록색 메시지 확인</li>
+                    <li>웹사이트 접속 테스트</li>
+                    <li>모든 기능 정상 작동 확인</li>
+                    <li>🎉 복원 완료!</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="section" id="section4">
+        <h1>4. 월간 체크리스트</h1>
+        
+        <h2>📋 인쇄용 체크리스트</h2>
+        
+        <div class="code-block">
+┌─────────────────────────────────────────────────┐
+│              🔐 MEGA COPY 백업 기록              │
+├─────────────────────────────────────────────────┤
+│                                                 │
+│ 📅 백업 날짜: 2025년 ___월 ___일                │
+│                                                 │
+│ ✅ 완료 체크:                                   │
+│    □ 휴대폰 알림 확인                           │
+│    □ Supabase 로그인 성공                       │
+│    □ 백업 파일 다운로드                         │
+│    □ Google Drive 업로드                        │
+│    □ 파일명 변경 완료                           │
+│    □ 파일 크기 정상 (1MB 이상)                  │
+│    □ 백업 기록 작성                             │
+│                                                 │
+│ 📁 파일 정보:                                   │
+│    크기: _______MB                              │
+│    업로드 시간: _______분                       │
+│                                                 │
+│ 👤 실행자: _________________                    │
+│                                                 │
+│ 📝 특이사항:                                    │
+│    ____________________________                │
+│    ____________________________                │
+│                                                 │
+│ ⭐ 평가: ☆☆☆☆☆ (5점 만점)                      │
+│                                                 │
+│ 🔄 다음 백업: ___월 ___일                       │
+│                                                 │
+└─────────────────────────────────────────────────┘
+        </div>
+
+        <h2>📊 연간 백업 현황표</h2>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>월</th>
+                    <th>완료</th>
+                    <th>파일크기</th>
+                    <th>소요시간</th>
+                    <th>평가</th>
+                    <th>특이사항</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1월</td><td>□</td><td>___MB</td><td>___분</td><td>⭐⭐⭐⭐⭐</td><td>_______</td></tr>
+                <tr><td>2월</td><td>□</td><td>___MB</td><td>___분</td><td>⭐⭐⭐⭐⭐</td><td>_______</td></tr>
+                <tr><td>3월</td><td>□</td><td>___MB</td><td>___분</td><td>⭐⭐⭐⭐⭐</td><td>_______</td></tr>
+                <tr><td>4월</td><td>□</td><td>___MB</td><td>___분</td><td>⭐⭐⭐⭐⭐</td><td>_______</td></tr>
+                <tr><td>5월</td><td>□</td><td>___MB</td><td>___분</td><td>⭐⭐⭐⭐⭐</td><td>_______</td></tr>
+                <tr><td>6월</td><td>□</td><td>___MB</td><td>___분</td><td>⭐⭐⭐⭐⭐</td><td>_______</td></tr>
+                <tr><td>7월</td><td>□</td><td>___MB</td><td>___분</td><td>⭐⭐⭐⭐⭐</td><td>_______</td></tr>
+                <tr><td>8월</td><td>□</td><td>___MB</td><td>___분</td><td>⭐⭐⭐⭐⭐</td><td>_______</td></tr>
+                <tr><td>9월</td><td>□</td><td>___MB</td><td>___분</td><td>⭐⭐⭐⭐⭐</td><td>_______</td></tr>
+                <tr><td>10월</td><td>□</td><td>___MB</td><td>___분</td><td>⭐⭐⭐⭐⭐</td><td>_______</td></tr>
+                <tr><td>11월</td><td>□</td><td>___MB</td><td>___분</td><td>⭐⭐⭐⭐⭐</td><td>_______</td></tr>
+                <tr><td>12월</td><td>□</td><td>___MB</td><td>___분</td><td>⭐⭐⭐⭐⭐</td><td>_______</td></tr>
+            </tbody>
+        </table>
+        
+        <div class="success-box">
+            <h3>🏆 연간 백업 성공률: ___/12개월 (___%))</h3>
+        </div>
+    </div>
+
+    <div class="section" id="section5">
+        <h1>5. 문제 해결하기</h1>
+        
+        <h2>🔍 자가 진단 체크리스트 (5분)</h2>
+        
+        <h3>1단계: 기본 확인</h3>
+        
+        <div class="checklist">
+            <h4>💡 먼저 이것부터 확인하세요:</h4>
+            <label><input type="checkbox"> 다른 웹사이트는 잘 열리나요? (네이버, 구글)</label>
+            <label><input type="checkbox"> 휴대폰에서도 같은 문제인가요?</label>
+            <label><input type="checkbox"> 언제부터 문제가 시작되었나요?</label>
+            <label><input type="checkbox"> 마지막 정상 작동 시간을 기억하시나요?</label>
+            <label><input type="checkbox"> 최근에 뭔가 변경한 것이 있나요?</label>
+        </div>
+
+        <h3>2단계: 브라우저 문제 해결</h3>
+        
+        <div class="checklist">
+            <h4>🖥️ 브라우저 문제일 수 있어요:</h4>
+            <label><input type="checkbox"> F5 키로 새로고침</label>
+            <label><input type="checkbox"> Ctrl+F5로 강력 새로고침</label>
+            <label><input type="checkbox"> 다른 브라우저로 접속 (크롬 → 엣지)</label>
+            <label><input type="checkbox"> 시크릿 모드로 접속 (Ctrl+Shift+N)</label>
+            <label><input type="checkbox"> 브라우저 재시작</label>
+            <label><input type="checkbox"> 컴퓨터 재시작</label>
+        </div>
+
+        <h3>3단계: 서비스 상태 확인</h3>
+        
+        <ol class="step-list">
+            <li><strong>status.supabase.com</strong> 접속
+                <ul>
+                    <li>모든 항목이 "Operational" 인지 확인</li>
+                    <li>빨간색이 있으면 Supabase 장애중</li>
+                </ul>
+            </li>
+            <li><strong>downforeveryoneorjustme.com</strong> 접속
+                <ul>
+                    <li>"megacopy.shop" 입력</li>
+                    <li>전체 장애인지 나만의 문제인지 확인</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2>🚨 상황별 문제 해결</h2>
+
+        <h3>문제 1: "로그인이 안 돼요" 🔐</h3>
+        
+        <div class="highlight-box">
+            <p><strong>원인</strong>: 쿠키 문제 또는 세션 만료</p>
+            
+            <h4>🔧 해결 순서:</h4>
+            <ol>
+                <li>비밀번호 정확히 다시 입력 (대소문자 주의)</li>
+                <li>쿠키 삭제:
+                    <ul>
+                        <li>크롬: 설정 → 개인정보 → 인터넷 사용기록 삭제</li>
+                        <li>"쿠키 및 사이트 데이터" 체크 ✅</li>
+                        <li>삭제하기</li>
+                    </ul>
+                </li>
+                <li>브라우저 완전 종료 후 재시작</li>
+                <li>시크릿 모드로 로그인 시도</li>
+                <li>여전히 안 되면 → 복원 방법 A 실행</li>
+            </ol>
+        </div>
+
+        <h3>문제 2: "상품이 안 보여요" 📦</h3>
+        
+        <div class="highlight-box">
+            <p><strong>원인</strong>: 데이터베이스 문제 또는 연결 끊김</p>
+            
+            <h4>🔧 해결 순서:</h4>
+            <ol>
+                <li>페이지 새로고침 (F5)</li>
+                <li>다른 카테고리 확인</li>
+                <li>휴대폰에서 접속 시도</li>
+                <li>관리자 페이지에서 상품 확인:
+                    <ul><li>/admin 접속 → 상품 관리</li></ul>
+                </li>
+                <li>상품이 정말 없으면 → 복원 방법 A 실행</li>
+            </ol>
+        </div>
+
+        <h3>문제 3: "사이트가 아예 안 열려요" 🌐</h3>
+        
+        <div class="emergency-box">
+            <p><strong>원인</strong>: 서버 다운 또는 DNS 문제</p>
+            
+            <h4>🔧 해결 순서:</h4>
+            <ol>
+                <li>10분 대기 (일시적 장애일 수 있음)</li>
+                <li>휴대폰 4G로 접속 시도</li>
+                <li>status.supabase.com 상태 확인</li>
+                <li>다른 사람에게 접속 요청</li>
+                <li><strong>30분 이상 계속 안 되면 → 개발자 즉시 연락</strong></li>
+            </ol>
+        </div>
+
+        <h2>📞 도움 요청하기</h2>
+        
+        <div class="emergency-box">
+            <h3>30분 룰: 혼자 30분 시도했는데 해결 안 되면 즉시 연락!</h3>
+            
+            <h4>📝 연락할 때 준비할 정보:</h4>
+            
+            <h5>✅ 기본 정보:</h5>
+            <ul>
+                <li>"안녕하세요, MEGA COPY 긴급상황입니다"</li>
+                <li>문제 발생 정확한 시간</li>
+                <li>어떤 문제인지 (로그인/상품/전체 사이트)</li>
+                <li>마지막 정상 작동 시간</li>
+            </ul>
+            
+            <h5>✅ 시도한 방법:</h5>
+            <ul>
+                <li>새로고침, 다른 브라우저 시도했는지</li>
+                <li>복원 방법 A/B 시도했는지</li>
+                <li>에러 메시지 있으면 스크린샷</li>
+            </ul>
+            
+            <h5>✅ 긴급도:</h5>
+            <ul>
+                <li>높음: 사이트 완전 다운, 주문 불가</li>
+                <li>보통: 일부 기능 오류</li>
+                <li>낮음: 사소한 불편사항</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section" id="section6">
+        <h1>6. 백업 마스터 되기</h1>
+        
+        <h2>🎖️ 백업 레벨 시스템</h2>
+
+        <div class="highlight-box">
+            <h3><span class="badge badge-bronze">🥉 브론즈 레벨</span> (초급자)</h3>
+            
+            <h4>달성 조건:</h4>
+            <div class="checklist">
+                <label><input type="checkbox"> 3개월 연속 백업 성공</label>
+                <label><input type="checkbox"> 이 가이드 완독</label>
+                <label><input type="checkbox"> 복원 방법 A 이해</label>
+            </div>
+            
+            <h4>혜택:</h4>
+            <ul>
+                <li>✅ 기본 데이터 안전성 확보</li>
+                <li>✅ 간단한 문제 스스로 해결</li>
+                <li>✅ 백업 스트레스 해소</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h3><span class="badge badge-silver">🥈 실버 레벨</span> (중급자)</h3>
+            
+            <h4>달성 조건:</h4>
+            <div class="checklist">
+                <label><input type="checkbox"> 6개월 연속 백업 성공</label>
+                <label><input type="checkbox"> 복원 테스트 1회 성공</label>
+                <label><input type="checkbox"> 긴급상황 1회 경험 후 해결</label>
+            </div>
+            
+            <h4>혜택:</h4>
+            <ul>
+                <li>✅ 모든 복원 방법 마스터</li>
+                <li>✅ 다른 사람도 도울 수 있음</li>
+                <li>✅ 백업 프로세스 개선 제안 가능</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h3><span class="badge badge-gold">🥇 골드 레벨</span> (고급자)</h3>
+            
+            <h4>달성 조건:</h4>
+            <div class="checklist">
+                <label><input type="checkbox"> 1년 연속 백업 성공</label>
+                <label><input type="checkbox"> 복원 방법 A, B 모두 경험</label>
+                <label><input type="checkbox"> 백업 관련 문제 0건</label>
+            </div>
+            
+            <h4>혜택:</h4>
+            <ul>
+                <li>✅ 완전 자립 가능</li>
+                <li>✅ 백업 시스템 커스터마이징</li>
+                <li>✅ 백업 컨설팅 가능</li>
+            </ul>
+        </div>
+
+        <div class="success-box">
+            <h3><span class="badge badge-platinum">💎 플래티넘 레벨</span> (마스터)</h3>
+            
+            <h4>달성 조건:</h4>
+            <div class="checklist">
+                <label><input type="checkbox"> 2년 연속 백업 성공</label>
+                <label><input type="checkbox"> 자동화 도구 활용</label>
+                <label><input type="checkbox"> 백업 프로세스 완전 최적화</label>
+            </div>
+            
+            <h4>혜택:</h4>
+            <ul>
+                <li>✅ 백업 걱정 Zero</li>
+                <li>✅ 완벽한 비즈니스 연속성</li>
+                <li>✅ 다른 쇼핑몰 컨설팅 가능</li>
+            </ul>
+        </div>
+
+        <h2>🚀 백업 고수 팁</h2>
+
+        <h3>시간 단축 팁</h3>
+        
+        <div class="code-block">
+            <strong>⏱️ 5분 → 3분으로 단축:</strong><br><br>
+            
+            <strong>1. 북마크 설정:</strong><br>
+            &nbsp;&nbsp;- Supabase 대시보드 북마크<br>
+            &nbsp;&nbsp;- Google Drive MEGA_백업 폴더 북마크<br><br>
+            
+            <strong>2. 브라우저 탭 활용:</strong><br>
+            &nbsp;&nbsp;- Supabase와 Drive를 별도 탭으로 열어두기<br>
+            &nbsp;&nbsp;- 로그인 상태 유지<br><br>
+            
+            <strong>3. 파일명 템플릿 준비:</strong><br>
+            &nbsp;&nbsp;- "YYYY_MM월_backup.sql" 형태 미리 복사<br>
+            &nbsp;&nbsp;- 필요할 때 날짜만 수정
+        </div>
+
+        <h3>완벽 백업 팁</h3>
+        
+        <div class="code-block">
+            <strong>🎯 100% 성공률 달성:</strong><br><br>
+            
+            <strong>1. 고정 스케줄:</strong><br>
+            &nbsp;&nbsp;- 매월 1일 오전 10시 고정<br>
+            &nbsp;&nbsp;- 절대 미루지 않기<br>
+            &nbsp;&nbsp;- 여행 중이면 전날 미리 실행<br><br>
+            
+            <strong>2. 체크리스트 활용:</strong><br>
+            &nbsp;&nbsp;- 인쇄된 체크리스트 사용<br>
+            &nbsp;&nbsp;- 단계별로 체크하며 진행<br>
+            &nbsp;&nbsp;- 완료 후 반드시 기록<br><br>
+            
+            <strong>3. 이중 확인:</strong><br>
+            &nbsp;&nbsp;- 파일 크기 확인 (1MB 이상)<br>
+            &nbsp;&nbsp;- Google Drive에서 다운로드 테스트<br>
+            &nbsp;&nbsp;- 파일명 일관성 유지
+        </div>
+
+        <h2>🏆 최종 목표</h2>
+        
+        <div class="success-box">
+            <h3>💎 궁극의 백업 마스터가 되면:</h3>
+            
+            <ul>
+                <li>✅ 더 이상 데이터 손실 걱정 없음</li>
+                <li>✅ 어떤 문제든 30분 내 해결</li>
+                <li>✅ 백업이 습관이 되어 스트레스 Zero</li>
+                <li>✅ 다른 사람들에게 도움 제공 가능</li>
+                <li>✅ 완벽한 비즈니스 연속성 확보</li>
+            </ul>
+            
+            <h3>🎉 당신도 백업 마스터가 될 수 있습니다!</h3>
+        </div>
+    </div>
+
+    <div class="quick-ref">
+        <h2>📌 빠른 참조 (인쇄용)</h2>
+        
+        <h3>🚨 긴급상황 체크리스트</h3>
+        
+        <div class="code-block">
+┌─────────────── 긴급 상황 대응 ──────────────────┐
+│                                                │
+│ 🔥 10초 진단:                                  │
+│   □ 다른 사이트 작동하나? (네이버, 구글)       │
+│   □ 휴대폰에서도 같은 문제?                    │
+│                                                │
+│ ⚡ 5분 해결 시도:                              │
+│   □ F5 새로고침                                │
+│   □ 다른 브라우저 시도                         │
+│   □ 시크릿 모드 시도                           │
+│                                                │
+│ 🔧 복원 실행 (문제 계속되면):                  │
+│   1. supabase.com 로그인                      │
+│   2. Settings → Database → Backups            │
+│   3. 문제 전 시점 선택 → Restore               │
+│   4. 10분 대기 후 확인                         │
+│                                                │
+│ 📞 30분 내 해결 안 되면 개발자 즉시 연락!       │
+│                                                │
+└────────────────────────────────────────────────┘
+        </div>
+
+        <h3>📅 월간 백업 미니 가이드</h3>
+        
+        <div class="code-block">
+┌───────────── 월간 백업 (5분) ─────────────────┐
+│                                               │
+│ 📅 매월 1일 오전 10시                         │
+│                                               │
+│ 1. supabase.com 로그인                       │
+│ 2. Settings → Database → Backups             │
+│ 3. 최신 백업 Download                        │
+│ 4. drive.google.com 접속                     │
+│ 5. MEGA_백업 폴더에 업로드                    │
+│ 6. 파일명: "YYYY_MM월_backup.sql"            │
+│ 7. 체크리스트에 완료 표시                     │
+│                                               │
+│ ✅ 완료! 다음 달까지 안심!                    │
+│                                               │
+└───────────────────────────────────────────────┘
+        </div>
+    </div>
+
+    <div class="contact-info">
+        <h2>🎉 마지막 당부</h2>
+        
+        <div class="highlight-box">
+            <h3>💝 백업은 사랑입니다.</h3>
+            
+            <p>👥 고객들을 사랑한다면<br>
+            📊 쌓아온 데이터를 사랑한다면<br>
+            💼 사업을 사랑한다면</p>
+            
+            <h3>📅 매월 5분의 백업으로 모든 것을 지키세요.</h3>
+            
+            <p>🛡️ 백업이 있는 한, 어떤 문제도 해결할 수 있습니다!<br>
+            🌟 당신의 MEGA COPY가 영원히 안전하길 바랍니다!</p>
+        </div>
+        
+        <h3>📄 이 가이드를 인쇄해서 컴퓨터 옆에 비치하세요!</h3>
+
+        <h2>📞 도움이 필요할 때</h2>
+        
+        <p>이 가이드로도 해결되지 않으면:</p>
+        
+        <ol>
+            <li>📷 문제 상황 스크린샷 찍기</li>
+            <li>📝 언제부터 문제인지 메모</li>
+            <li>📞 개발자에게 "MEGA COPY 백업 가이드 봤는데 ○○ 문제입니다" 라고 연락</li>
+            <li>🤝 전화나 원격으로 함께 해결</li>
+        </ol>
+        
+        <h3>🎯 목표: 백업 걱정 없는 안전한 쇼핑몰 운영!</h3>
+        <h3>🚀 화이팅!</h3>
+    </div>
+
+    <script>
+        // 체크리스트 기능 추가
+        document.querySelectorAll('.checklist input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const label = this.parentElement;
+                if (this.checked) {
+                    label.style.opacity = '0.7';
+                    label.style.textDecoration = 'line-through';
+                } else {
+                    label.style.opacity = '1';
+                    label.style.textDecoration = 'none';
+                }
+            });
+        });
+
+        // 진행률 바 애니메이션 (예시)
+        function updateProgress(percentage) {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach(bar => {
+                bar.style.width = percentage + '%';
+            });
+        }
+
+        // 인쇄 기능
+        function printGuide() {
+            window.print();
+        }
+
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

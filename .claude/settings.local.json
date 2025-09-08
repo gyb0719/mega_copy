@@ -22,7 +22,10 @@
       "Bash(git rm:*)",
       "Bash(npm run server:*)",
       "Bash(npm run:*)",
-      "Bash(ipconfig)"
+      "Bash(ipconfig)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Read(//c/Users/gyb07/Downloads/**)"
     ],
     "deny": [],
     "ask": []
