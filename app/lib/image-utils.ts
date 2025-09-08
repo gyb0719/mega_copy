@@ -135,6 +135,80 @@ export async function createThumbnail(file: File): Promise<File> {
 }
 
 /**
+ * 적응형 세부 이미지 압축 (이미지 순서에 따라 차등 압축)
+ * @param file 압축할 이미지 파일
+ * @param imageIndex 이미지 순서 (0부터 시작)
+ * @param totalImages 전체 이미지 개수
+ */
+export async function compressDetailImageAdaptive(
+  file: File, 
+  imageIndex: number, 
+  totalImages: number
+): Promise<File> {
+  // 이미지 순서에 따른 적응형 압축 설정
+  let settings;
+  
+  if (imageIndex < 5) {
+    // 첫 5장: 고품질 유지 (중요한 이미지들)
+    settings = {
+      maxWidth: 1000,
+      maxHeight: 1000,
+      quality: 0.80, // 높은 품질
+      tier: 'premium'
+    };
+  } else if (imageIndex < 10) {
+    // 6-10장: 중간 품질 (일반적인 세부 이미지)
+    settings = {
+      maxWidth: 800,
+      maxHeight: 800,
+      quality: 0.70, // 표준 품질
+      tier: 'standard'
+    };
+  } else if (imageIndex < 15) {
+    // 11-15장: 최적화 우선 (추가 세부 이미지)
+    settings = {
+      maxWidth: 600,
+      maxHeight: 600,
+      quality: 0.60, // 최적화 품질
+      tier: 'optimized'
+    };
+  } else {
+    // 16-20장: 최대 압축 (보조 이미지)
+    settings = {
+      maxWidth: 500,
+      maxHeight: 500,
+      quality: 0.55, // 최대 압축
+      tier: 'compressed'
+    };
+  }
+  
+  const originalSize = file.size;
+  console.log(`이미지 ${imageIndex + 1}/${totalImages} - ${settings.tier} 품질로 압축 (${settings.maxWidth}px, ${Math.round(settings.quality * 100)}%)`);
+  
+  const compressedFile = await compressImage(file, {
+    maxWidth: settings.maxWidth,
+    maxHeight: settings.maxHeight,
+    quality: settings.quality,
+    outputType: 'file'
+  }) as File;
+  
+  const compressedSize = compressedFile.size;
+  const compressionRatio = Math.round((1 - compressedSize / originalSize) * 100);
+  
+  console.log(`✅ 압축 결과 ${imageIndex + 1}: ${formatFileSize(originalSize)} → ${formatFileSize(compressedSize)} (${compressionRatio}% 절약)`);
+  
+  // 압축 품질 검증
+  if (compressionRatio < 10) {
+    console.warn(`⚠️ 이미지 ${imageIndex + 1}: 압축률이 낮습니다 (${compressionRatio}%)`);
+  }
+  if (compressedSize > originalSize) {
+    console.error(`❌ 이미지 ${imageIndex + 1}: 압축 후 용량이 증가했습니다`);
+  }
+  
+  return compressedFile;
+}
+
+/**
  * 파일 크기 포맷팅
  */
 export function formatFileSize(bytes: number): string {
