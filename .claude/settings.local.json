@@ -14,7 +14,11 @@
       "Bash(npm run backup:status:*)",
       "Bash(npm run backup:download:*)",
       "Bash(curl:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(npm audit:*)",
+      "Bash(claude mcp add:*)",
+      "Bash(npx @playwright/mcp@latest:*)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": [],
     "ask": []
