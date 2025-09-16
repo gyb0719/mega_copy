@@ -20,7 +20,7 @@ export default function NoticeBanner() {
                 </p>
               </div>
               <a
-                href="https://open.kakao.com/o/smsyINOh"
+                href="https://open.kakao.com/o/gz9UQqSh"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 bg-mega-yellow active:bg-yellow-500 text-black px-4 py-3 rounded-lg font-black text-base w-full transition-colors"
@@ -46,7 +46,7 @@ export default function NoticeBanner() {
                 </p>
                 <div className="w-px h-4 bg-gray-600" />
                 <a
-                  href="https://open.kakao.com/o/smsyINOh"
+                  href="https://open.kakao.com/o/gz9UQqSh"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-mega-yellow hover:bg-yellow-400 text-black px-5 py-2 rounded-md font-black text-sm transition-all hover:scale-105"

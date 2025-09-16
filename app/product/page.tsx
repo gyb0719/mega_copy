@@ -277,7 +277,7 @@ export default function ProductDetail() {
         {/* 문의 버튼 */}
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4">
           <a 
-            href="https://open.kakao.com/o/smsyINOh"
+            href="https://open.kakao.com/o/gz9UQqSh"
             target="_blank"
             rel="noopener noreferrer"
             className="block w-full bg-mega-yellow text-black font-bold py-3 rounded-lg text-center flex items-center justify-center gap-2 hover:bg-yellow-400 transition-colors"

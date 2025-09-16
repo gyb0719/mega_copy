@@ -18,7 +18,7 @@ export default function Footer() {
             <h3 className="font-bold text-lg mb-3">고객 지원</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="https://open.kakao.com/o/smsyINOh" 
+                <a href="https://open.kakao.com/o/gz9UQqSh" 
                    target="_blank" 
                    rel="noopener noreferrer"
                    className="text-gray-400 hover:text-white transition-colors">
