@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Header from '../components/Header';
 import { MessageCircle, ChevronLeft, ChevronRight, Loader2, AlertCircle } from 'lucide-react';
@@ -25,7 +25,7 @@ interface Product {
   product_images?: ProductImage[];
 }
 
-export default function ProductDetail() {
+function ProductDetailContent() {
   const searchParams = useSearchParams();
   const productId = searchParams.get('id');
 
@@ -290,5 +290,20 @@ export default function ProductDetail() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProductDetail() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50">
+        <Header hideAdminButton={true} />
+        <div className="flex justify-center items-center h-[calc(100vh-60px)]">
+          <Loader2 className="w-8 h-8 animate-spin text-mega-yellow" />
+        </div>
+      </div>
+    }>
+      <ProductDetailContent />
+    </Suspense>
   );
 }
