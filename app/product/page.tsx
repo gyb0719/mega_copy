@@ -28,6 +28,7 @@ interface Product {
 export default function ProductDetail() {
   const searchParams = useSearchParams();
   const productId = searchParams.get('id');
+
   const [product, setProduct] = useState<Product | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -139,9 +140,10 @@ export default function ProductDetail() {
           <div className="bg-white rounded-lg p-6 text-center">
             <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
             <p className="text-gray-600 mb-4">{error || '상품을 찾을 수 없습니다.'}</p>
-            <Link 
+            <Link
               href="/"
               className="inline-block px-6 py-2 bg-mega-yellow text-black font-bold rounded-lg hover:bg-yellow-400 transition-colors"
+              scroll={false}
             >
               홈으로 돌아가기
             </Link>

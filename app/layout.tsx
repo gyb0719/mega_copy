@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import ScrollRestorer from "./components/ScrollRestorer";
 
 export const metadata: Metadata = {
   title: "MEGA COPY - 프리미엄 패션 쇼핑몰",
@@ -49,6 +50,7 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/mega_copy_logo.png" />
       </head>
       <body className="bg-gray-50">
+        <ScrollRestorer />
         {children}
         {}
       </body>

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import LoadingSpinner from './LoadingSpinner';
 import { productsAPI } from '../../lib/supabase-rpc-api';
+import { useScrollToProduct } from '../hooks/useScrollToProduct';
 
 interface ProductImage {
   id: string;
@@ -34,7 +35,12 @@ function ProductCard({ product }: { product: Product }) {
   const mainImage = product.product_images?.[0]?.image_url || product.image_url;
 
   return (
-    <Link href={`/product?id=${product.id}`} className="group cursor-pointer block h-full">
+    <Link
+      href={`/product?id=${product.id}`}
+      className="group cursor-pointer block h-full"
+      scroll={false}
+      data-product-id={product.id}
+    >
       <div className="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
         <div className="aspect-square bg-gray-100 relative overflow-hidden">
           {mainImage ? (
@@ -62,14 +68,36 @@ function ProductCard({ product }: { product: Product }) {
 }
 
 export default function ProductGridOptimized({ category, searchTerm = '' }: ProductGridOptimizedProps) {
+  useScrollToProduct(); // 상품 기반 스크롤 복원 활성화
   const [products, setProducts] = useState<Product[]>([]);
   const [displayProducts, setDisplayProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(1);
+
+  // 페이지 상태 복원 - sessionStorage에서 저장된 값 읽기
+  const getStorageKey = () => `product-grid-page:${category}:${searchTerm}`;
+
+  const getInitialPage = () => {
+    if (typeof window === 'undefined') return 1;
+
+    try {
+      const stored = sessionStorage.getItem(getStorageKey());
+      const parsed = stored ? parseInt(stored, 10) : 1;
+      console.log('[ProductGrid] 저장된 페이지 복원:', parsed, 'for', getStorageKey());
+      return isNaN(parsed) ? 1 : parsed;
+    } catch {
+      return 1;
+    }
+  };
+
+  const [page, setPage] = useState(() => getInitialPage());
   const itemsPerPage = 18; // 6 rows * 3 columns
   const observerTarget = useRef<HTMLDivElement>(null);
+  const isInitialLoad = useRef(true);  // 초기 로드 추적
+  const prevCategoryRef = useRef(category);
+  const prevSearchTermRef = useRef(searchTerm);
+  const isNavigatingBack = useRef(false);
 
   // 상품 데이터 가져오기
   const fetchProducts = useCallback(async () => {
@@ -112,25 +140,31 @@ export default function ProductGridOptimized({ category, searchTerm = '' }: Prod
 
   // 카테고리 및 검색어 필터링, 페이지네이션
   useEffect(() => {
-    let filtered = category === '전체' 
-      ? products 
+    let filtered = category === '전체'
+      ? products
       : products.filter(p => p.category === category);
-    
+
     // 검색어 필터링 (제목과 설명에서 검색)
     if (searchTerm.trim()) {
       const searchLower = searchTerm.toLowerCase();
-      filtered = filtered.filter(p => 
+      filtered = filtered.filter(p =>
         p.name.toLowerCase().includes(searchLower) ||
         (p.description && p.description.toLowerCase().includes(searchLower))
       );
     }
-    
+
     const startIndex = 0;
     const endIndex = page * itemsPerPage;
     const paginatedProducts = filtered.slice(startIndex, endIndex);
-    
+
     setDisplayProducts(paginatedProducts);
     setHasMore(filtered.length > endIndex);
+
+    // 초기 로드 시 페이지가 2 이상이면 모든 상품을 즉시 로드
+    if (isInitialLoad.current && page > 1 && products.length > 0) {
+      console.log('[ProductGrid] 초기 로드 - 저장된 페이지 상태 복원 중:', page);
+      isInitialLoad.current = false;
+    }
   }, [products, category, searchTerm, page]);
 
   // 더 많은 아이템 로드
@@ -167,9 +201,61 @@ export default function ProductGridOptimized({ category, searchTerm = '' }: Prod
     };
   }, [loadMore]);
 
-  // 카테고리 또는 검색어 변경 시 페이지 리셋
+  // 페이지 상태가 변경될 때마다 sessionStorage에 저장
   useEffect(() => {
-    setPage(1);
+    if (typeof window !== 'undefined') {
+      try {
+        sessionStorage.setItem(getStorageKey(), page.toString());
+        console.log('[ProductGrid] 페이지 상태 저장:', page, 'for', getStorageKey());
+      } catch (error) {
+        console.error('[ProductGrid] 페이지 상태 저장 실패:', error);
+      }
+    }
+  }, [page, category, searchTerm]);
+
+  // popstate 이벤트 핸들러 - 브라우저 네비게이션 감지
+  useEffect(() => {
+    const handlePopState = () => {
+      console.log('[ProductGrid] popstate 이벤트 감지');
+      isNavigatingBack.current = true;
+
+      // sessionStorage에서 현재 URL에 맞는 페이지 상태 복원
+      const storedPage = getInitialPage();
+      if (storedPage > 1) {
+        console.log('[ProductGrid] 뒤로가기 - 페이지 상태 복원:', storedPage);
+        setPage(storedPage);
+        // 페이지가 2 이상이면 초기 로드로 처리하여 모든 상품 로드
+        isInitialLoad.current = true;
+      }
+
+      setTimeout(() => {
+        isNavigatingBack.current = false;
+      }, 100);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [category, searchTerm]);
+
+  // 카테고리 또는 검색어 변경 시 페이지 리셋 (popstate가 아닌 경우만)
+  useEffect(() => {
+    // 이전 값과 비교하여 실제로 변경되었는지 확인
+    const categoryChanged = prevCategoryRef.current !== category;
+    const searchTermChanged = prevSearchTermRef.current !== searchTerm;
+
+    if ((categoryChanged || searchTermChanged) && !isNavigatingBack.current) {
+      console.log('[ProductGrid] 카테고리/검색어 변경 감지 - 페이지 리셋');
+      setPage(1);
+      // 카테고리나 검색어가 바뀌면 저장된 페이지도 초기화
+      if (typeof window !== 'undefined') {
+        try {
+          sessionStorage.removeItem(getStorageKey());
+        } catch {}
+      }
+    }
+
+    prevCategoryRef.current = category;
+    prevSearchTermRef.current = searchTerm;
   }, [category, searchTerm]);
 
   if (isLoading) {
