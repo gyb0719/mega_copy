@@ -34,9 +34,14 @@ function ProductCard({ product }: { product: Product }) {
   // 이미지 우선순위: product_images > image_url
   const mainImage = product.product_images?.[0]?.image_url || product.image_url;
 
+  // 현재 페이지 URL을 from 파라미터로 전달
+  const currentUrl = typeof window !== 'undefined'
+    ? encodeURIComponent(window.location.pathname + window.location.search)
+    : encodeURIComponent('/');
+
   return (
     <Link
-      href={`/product?id=${product.id}`}
+      href={`/product?id=${product.id}&from=${currentUrl}`}
       className="group cursor-pointer block h-full"
       scroll={false}
       data-product-id={product.id}

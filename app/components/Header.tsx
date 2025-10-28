@@ -1,8 +1,8 @@
 'use client';
 
-import { Settings } from 'lucide-react';
+import { Settings, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 interface HeaderProps {
   hideAdminButton?: boolean;
@@ -10,18 +10,33 @@ interface HeaderProps {
 
 export default function Header({ hideAdminButton = false }: HeaderProps) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const isProductPage = pathname === '/product';
   const shouldHideAdmin = hideAdminButton || isProductPage;
-  
+
+  // 상품 상세 페이지에서 from 파라미터 가져오기
+  const fromUrl = isProductPage ? (searchParams.get('from') || '/') : null;
+
   return (
     <header className="sticky top-0 z-50 bg-white shadow-md" suppressHydrationWarning>
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          {/* 로고 */}
-          <Link href="/" className="flex items-center gap-2" suppressHydrationWarning>
-            <span className="text-xl md:text-2xl font-black text-mega-yellow">MEGA</span>
-            <span className="text-xl md:text-2xl font-black text-black">COPY</span>
-          </Link>
+          {/* 로고 또는 뒤로가기 버튼 */}
+          {isProductPage && fromUrl ? (
+            <Link
+              href={decodeURIComponent(fromUrl)}
+              className="flex items-center gap-1 hover:text-mega-yellow transition-colors"
+              scroll={false}
+            >
+              <ChevronLeft className="w-5 h-5" />
+              <span className="text-sm font-bold">뒤로가기</span>
+            </Link>
+          ) : (
+            <Link href="/" className="flex items-center gap-2" suppressHydrationWarning>
+              <span className="text-xl md:text-2xl font-black text-mega-yellow">MEGA</span>
+              <span className="text-xl md:text-2xl font-black text-black">COPY</span>
+            </Link>
+          )}
 
           {/* 관리자 메뉴 버튼 - 상세 페이지에서는 숨김 */}
           {!shouldHideAdmin && (
