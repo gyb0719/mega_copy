@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Header from './components/Header';
 import SearchBar from './components/SearchBar';
@@ -14,7 +13,18 @@ export default function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedCategory = searchParams.get('category') || '전체';
-  const [searchTerm, setSearchTerm] = useState('');
+  const searchTerm = searchParams.get('search') || '';
+
+  const handleSearchChange = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value) {
+      params.set('search', value);
+    } else {
+      params.delete('search');
+    }
+    const queryString = params.toString();
+    router.replace(queryString ? `/?${queryString}` : '/', { scroll: false });
+  };
 
   const handleCategorySelect = (category: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -30,7 +40,7 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+      <SearchBar searchTerm={searchTerm} onSearchChange={handleSearchChange} />
       <PWAInstallButton />
       <CategorySection
         selectedCategory={selectedCategory}
